@@ -1,0 +1,27 @@
+<div ui-view>
+	<div id='main-wrapper'>
+		<div id='logo'>Anti<span>Pad</span></div>
+		<div id='user'>{{ miss[user.missId].name }}</div>
+	</div>
+<div id='signin'>
+    <div>         
+        <form action="/signup" method="post">
+            <div>
+                <label>Name:</label>
+                <input type="text" name="name"/>
+            </div>
+            <div>
+                <label>Email:</label>
+                <input type="text" name="username"/>
+            </div>
+            <div>
+                <label>Password:</label>
+                <input type="password" name="password"/>
+            </div>
+            <div>
+                <input type="submit" value="Log In"/>
+            </div>
+        </form>
+    </div>
+</div>
+</div>

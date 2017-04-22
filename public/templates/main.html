@@ -1,0 +1,9 @@
+<div ui-view>
+	<div id='main-wrapper'>
+		<div id='logo'>Area<span>Book</span></div>
+    <a href="/logout" class="logout"><i class="material-icons" ng-click="logout()">exit_to_app</i></a>
+		<div id='user'>{{ $root.name }}</div>
+	</div>
+	<div ui-view='menu' id='menu' ng-style="resizeWithOffset(40)" resize notifier="notifyServiceOnChage(params)">
+	</div>
+</div>

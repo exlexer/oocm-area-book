@@ -1,0 +1,25 @@
+<div ui-view class="flex">
+	<div class="content-wrapper flex-child">
+		<div class="area-book-title">
+			<h1>Investigators</h1>
+		</div>
+		<div ng-repeat="(key, value) in inv" class="area-book-row" ng-click="openInv(key)">
+			Name:	{{ value.name }}
+		</div>
+		<div class="area-book-title">
+			<h1>Recent Converts</h1>
+		</div>
+		<div ng-repeat="(key, value) in rc" class="area-book-row" ng-click="openRc(key)">
+			Name:	{{ value.name }}
+		</div>
+	</div>
+	<div class="flex-child" ng-show="specificOpen">
+		<h1>{{ current.name }}</h1>
+		<p>Age: {{ current.age }} Gender: {{ current.gender }} Baptismal Date: {{ current.bd }}</p>
+		<div ng-repeat="l in lessons" ng-show="l.id === current.id">
+			{{ l.summary }}
+			{{ l.lesson }}
+			{{ l.OrderDate }}
+		</div>
+	</div>
+</div>

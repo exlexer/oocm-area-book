@@ -1,0 +1,31 @@
+<div ui-view>
+	<div class="content-wrapper">
+		<div ng-repeat="(key, value) in stakes" class="line-items">
+			<div class="main-line-item">
+				<div>
+					{{ value.name }}
+					<i class="material-icons" ng-class="{flip: activeStake === value.id }" ng-click='show(value.id)'>keyboard_arrow_down</i>
+				</div>
+			</div>
+			<div ng-show='activeStake === value.id'>
+				<div ng-repeat='(key, value) in filtered(units)' class='secondary-line-item'>
+					{{ value.name }}
+					<i class="material-icons" ng-click=''>edit</i>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- <div class="add" ng-click="add()" ng-class="{adding: adding}">+</div>
+	<div class="add-box" ng-show="adding">
+			<p>
+			<input type='text' ng-model='newUnit.name' placeholder='Unit Name'>
+			</p>
+			<p>
+			<select ng-model="newUnit.stakeId">
+  			<option ng-repeat='(key, value) in stakes' value="{{ key }}">{{ value.name }}</option>
+			</select>
+			</p>
+			<button ng-click="addUnit()">Add</button>
+	</div> -->
+</div>
