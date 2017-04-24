@@ -1,24 +1,20 @@
-<div ui-view>
-	<div id='main-wrapper'>
-		<div id='logo'>Anti<span>Pad</span></div>
-		<div id='user'>{{ miss[user.missId].name }}</div>
-	</div>
-<div id='signin'>
+<div ui-view id='auth'>
+	<div id='logo'>Area<span>Book</span></div>
     <div>         
-        <form action="/login" method="post">
-            <div>
-                <label>Email:</label>
-                <input type="text" name="username"/>
+        <form action="/login" method="post" id="authForm">
+            <div ng-show="signup">
+                <input type="text" name="name" placeholder='Name'/>
             </div>
             <div>
-                <label>Password:</label>
-                <input type="password" name="password"/>
+                <input type="text" name="username" placeholder='Email'/>
             </div>
             <div>
-                <input type="submit" value="Log In"/>
+                <input type="password" name="password" placeholder='Password'/>
+            </div>
+            <div>
+                <button type="button" ng-click="redirect()" id="signup">Sign Up</button>
+                <button type="submit" ng-click="redirect()" id="login">Login</button>
             </div>
         </form>
     </div>
-<button ng-click="signupRed()">Sign Up</button>
-</div>
 </div>

@@ -1,12 +1,8 @@
 <div ui-view>
-<div id='sub-wrapper'>
+<div id='menu'>
 	<ul>
-		<li ng-click='showTab("church")' ng-show="menuCreate(0)">Church Units</li>
-		<li ng-click='showTab("areas")' ng-show="menuCreate(1)">Areas</li>
-		<li ng-click='showTab("totals")' ng-show="menuCreate(2)">Totals</li>
-		<li ng-click='showTab("areaBook")' ng-show="menuCreate(3)">Area Book</li>
-		<li ng-click='showTab("miss")' ng-show="menuCreate(4)">Missionaries</li>
+		<li ng-repeat="item in menu"><a ng-click="showTab(item[1])">{{ item[0] }}</a></li>
 	</ul>
 </div>
-	<div ui-view='content' id='content' ng-style="resizeWithOffset(40, 'sub-wrapper')" resize notifier="notifyServiceOnChage(params)"></div>
+	<div ui-view='content' id='content-view' ng-style="resizeWithOffset(40, 'menu')" resize notifier="notifyServiceOnChage(params)"></div>
 </div>

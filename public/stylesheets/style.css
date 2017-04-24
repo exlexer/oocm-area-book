@@ -1,21 +1,14 @@
+/* Misc Styling */
 body {
 	margin: 0;
 	padding: 0;
 	font-family: 'Roboto', sans-serif;
 }
-*:focus {
-  outline: none;
-}
-#signin{
-	background-color: #C62828;
-	width: 50%;
-	margin: auto;
-	padding: 20px;
-	border-radius: 0 0 3px 3px;
-}
 a {
 	text-decoration: none;
-	color: white;
+}
+h1 {
+	text-align: center;
 }
 input {
 	border: none;
@@ -35,7 +28,74 @@ select {
 	border: none;
 	width: 100%;
 }
-#main-wrapper {
+i:hover {
+	cursor: pointer;
+}
+i {
+	transition: .5s;
+}
+.flip {
+	transform: rotate(180deg);
+	transition: .5s;
+}
+.flex {
+	display: flex;
+}
+.flex-child {
+	flex: 1;
+}
+*:focus {
+  outline: none;
+}
+
+
+
+/* Auth Styling */
+#auth{
+	background: #C62828 url("../img/img.jpg") no-repeat center;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+}
+#auth #logo {
+	padding-top: 25%;
+	font-size: 60px;
+	float: none;
+	margin: 0;
+	color: #C62828
+}
+#auth input {
+	color: #C62828;
+	line-height: 30px
+}
+#auth input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: #C62828;
+}
+#auth input::-moz-placeholder { /* Firefox 19+ */
+  color: #C62828;
+}
+#auth input:-ms-input-placeholder { /* IE 10+ */
+  color: #C62828;
+}
+#auth input:-moz-placeholder { /* Firefox 18- */
+  color: #C62828;
+}
+#auth button {
+	margin-top: 20px;
+	padding: 7px 19px;
+	color: #C62828;
+}
+#auth button:hover {
+	background-color: #fff
+}
+
+
+
+/* Header Styling */
+#header a {
+	color: white;
+}
+#header {
   box-shadow: 0px 0px 5px #888888;
 	width: 100%;
 	left: 0;
@@ -52,21 +112,25 @@ select {
 	margin: 10px;
 }
 #logo span {
-	color: #64B5F6;
+	color: #497da7;
 }
 #user {
 	color: white;
 	float: right;
 	margin: 10px;
 }
-#menu ul li{
-	padding: 10px;
-	list-style: none;
+.logout {
+	float: right;
+	margin: 10px;
 }
-#menu ul li:hover {
-	color: white;
+
+
+
+/* Menu Styling */
+#menu-view {
+	margin: 0;
 }
-#sub-wrapper {
+#menu {
 	height: 100%;
 	clear: left;
 	float: left;
@@ -74,31 +138,74 @@ select {
 	background-color: #d6d6d6;
 	border-right: 1px solid #c6c6c6;
 }
-#sub-wrapper ul {
+#menu ul {
 	margin: 0;
-	padding: 10px;
+	padding: 10px 10px 10px 0px;
 }
-#sub-wrapper ul li:hover {
+#menu ul li{
+	padding: 10px;
+	list-style: none;
+}
+#menu ul li:hover {
 	color: #B71C1C;
 	padding-left: 6px;
 	border-left: 4px solid #B71C1C;
 }
-#menu {
-	margin: 0;
-}
-#content {
+
+
+
+/* Content Styling */
+#content-view {
   position: absolute;
   right: 0;
   overflow-y: scroll;
 }
-.content-wrapper{
+.content{
 	margin-left: auto;
 	margin-right: auto;
-	flex-wrap: wrap;
-	display: flex;
-	flex-direction: row;
-	padding: 10px
+	padding: 0 10px;
 }
+
+
+
+/* List Styling Styling */
+.row-box {
+	width: 100%;
+	margin: 0;
+}
+.row {
+	padding: 5px;
+}
+.row i{
+	float: right;
+	border: none;
+}
+.main {
+	background-color: grey;	
+}
+.main h2 {
+	text-align: left;
+	padding: 5px;
+	margin: 0;
+}
+.secondary {
+	background-color: lightgray;
+	margin: 0 5px;
+}
+.third {
+	background-color: lightblue;
+	margin: 0 10px;
+	display: flex;
+}
+.missionary {
+	background-color: #e6e6e6;
+	border-radius: 10px;
+	margin: 0 5px;
+	padding: 0 5px;
+}
+
+
+/* Bottom Right Button Styling - Possibly soon to be depricated */
 .add {
 	color: white;
 	font-size: 30px;
@@ -143,68 +250,4 @@ select {
 	right: 10px;
 	padding: 10px;
 	color: white;
-}
-.area-book-title {
-	background-color: grey;
-	width: 100%;
-}
-.area-book-title h1 {
-	padding: 5px;
-	margin: 0;
-}
-.area-book-row {
-	background-color: lightgrey;
-	padding: 5px;
-	width: 100%;
-	margin: 0 10px;
-}
-.flex-child {
-	flex: 1;
-}
-.line-items {
-	width: 100%;
-	margin: 0;
-}
-.main-line-item {
-	padding: 5px;
-	background-color: grey;
-}
-.main-line-item i{
-	float: right;
-	border: none;
-}
-.secondary-line-item i{
-	float: right;
-	border: none;
-}
-.secondary-line-item {
-	margin: 0 5px;
-	padding: 5px;
-	background-color: lightgray;
-}
-.third-line-item i{
-	float: right;
-	border: none;
-}
-.third-line-item {
-	margin: 0 10px;
-	padding: 5px;
-	background-color: lightblue;
-}
-i:hover {
-	cursor: pointer;
-}
-i {
-	transition: .5s;
-}
-.flip {
-	transform: rotate(180deg);
-	transition: .5s;
-}
-.flex {
-	display: flex;
-}
-.logout {
-	float: right;
-	margin: 10px;
 }

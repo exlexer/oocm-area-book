@@ -1,9 +1,11 @@
 <div ui-view>
-	<div class="content-wrapper">
+	<div class="content">
 		
+		<h1>Mission Areas</h1>
+
 		<!-- Zone Div -->
-		<div ng-repeat="(key, val) in zones"  ng-drop="changing === 'dist'" ng-drop-success="distDrop($data,$event,val.id)" class="line-items">
-			<div class="main-line-item">
+		<div ng-repeat="(key, val) in zones" class="row-box" ng-drop="changing === 'dist'" ng-drop-success="distDrop($data,$event,val.id)">
+			<div class="main row">
 				<div>
 					{{ val.name }}
 					<i class="material-icons" ng-class="{flip: activeZone === val.id }" ng-click='showZone(val.id)'>keyboard_arrow_down</i>
@@ -13,28 +15,43 @@
 
 				<!-- District Div -->
 				<div ng-repeat='val in filter(districts, activeZone, "zoneId")' ng-drop="changing === 'area'">
-					<div class="secondary-line-item" ng-drag="true" ng-drag-data="{ id: val.id, type : 'dist' }" ng-drag-start="onDrag($data,$event)">
+					<div class="secondary row" ng-drag="true" ng-drag-data="{ id: val.id, type : 'dist' }" ng-drag-start="onDrag($data,$event)">
 						{{ val.name }}
-						<i class="material-icons" ng-class="{ flip: activeDistrict === val.id }" ng-click='showArea(val.id)'>keyboard_arrow_down</i>
+						<i class="material-icons" ng-class="{ flip: activeDistrict === val.id }" ng-click='showDistrict(val.id)'>keyboard_arrow_down</i>
 					</div>
 					<div ng-show='activeDistrict === val.id'>
 
 						<!-- Area Div -->
-						<div ng-repeat='val in filter(areas, activeDistrict, "districtId")' class='third-line-item' ng-drag="true" ng-drag-data="{ id: val.id, type : 'dist' }" ng-drag-start="onDrag($data,$event)">
+						<div ng-repeat='val in filter(areas, activeDistrict, "districtId")' class='third row' ng-drag="true" ng-drag-data="{ id: val.id, type : 'dist' }" ng-drag-start="onDrag($data,$event)">
 							{{ val.name }}
 
 
 							<!-- District Div -->
-							<div ng-repeat='val in filter(miss, val.id, "areaId")'></div>
+							<div ng-repeat='val in filter(miss, val.id, "areaId")' class="missionary">{{val.name}}</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+
+		<h1>Church Units</h1>
+	
+		<div ng-repeat="(key, value) in stakes" class="row-box">
+			<div class="main row">
+				<div>
+					{{ value.name }}
+					<i class="material-icons" ng-class="{flip: activeStake === value.id }" ng-click='showStake(value.id)'>keyboard_arrow_down</i>
+				</div>
+			</div>
+			<div ng-show='activeStake === value.id'>
+				<div ng-repeat='(key, value) in filter(units, activeStake, "stakeId")' class='secondary row'>
+					{{ value.name }}
+					<i class="material-icons" ng-click=''>edit</i>
+				</div>
+			</div>
+		</div>
+
 	</div>
-</div>
-
-
 
 
 <!-- SECTION FOR ADDING NEW AREA -->

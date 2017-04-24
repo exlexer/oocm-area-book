@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('antiPad.areaBook',[])
+angular.module('areaBook.areaBook',[])
 	.controller('areaBookController', ['$scope','$rootScope','$http','$state','$stateParams', function($scope, $rootScope, $http, $state, $stateParams) {
 		
 		function update() {
@@ -15,15 +15,13 @@ angular.module('antiPad.areaBook',[])
 			}, function() {});
 		};
 		update();
-		
-
 
 		$scope.openInv = function (id) {
-			$scope.specificOpen = true;
+			$scope.focus = true;
 			$scope.current = $scope.inv[id];
 		}
 		$scope.openRc = function (id) {
-			$scope.specificOpen = true;
+			$scope.focus = true;
 			$scope.current = $scope.rc[id];
 		}
 

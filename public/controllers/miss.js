@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('antiPad.miss',[])
+angular.module('areaBook.miss',[])
 	.controller('missController', ['$scope','$http', function ($scope,$http) {
 		 
 		function update() {
@@ -15,7 +15,6 @@ angular.module('antiPad.miss',[])
 			for (var i = 0; i < resp.data.length; i++) {
 				$scope.areas[resp.data[i].id] = resp.data[i];
 			};
-				console.log($scope.areas)
 		}, function() {});	
 
 		$scope.newMiss = {};
@@ -25,7 +24,6 @@ angular.module('antiPad.miss',[])
 
 		$scope.edit = function(key) {
 			if ($scope.editing === key) {
-				console.log($scope.data[key])
 				$http.post('/miss', $scope.data[key]).then(function (resp) {
 					update();
 				})

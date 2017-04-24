@@ -1,5 +1,5 @@
 <div ui-view>
-	<div class="content-wrapper">
+	<div class="content">
 		<div ng-repeat="(key, value) in data" class="content">
 			<i class="material-icons" ng-show='editing !== key' ng-click="edit(key)">edit</i>
 			<i class="material-icons" ng-show='editing === key' ng-click="edit(key)">save</i>

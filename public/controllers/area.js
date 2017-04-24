@@ -1,10 +1,11 @@
 'use strict';
 
-angular.module('antiPad.area',[])
+angular.module('areaBook.area',[])
 	.controller('areaController', ['$scope','$http', function($scope,$http) {
 		
 		$scope.activeZone = false;
 		$scope.activeDistrict = false;
+		$scope.activeStake = false;
 		$scope.districts = [];
 		$scope.areas = [];
 		$scope.updating = [undefined, undefined];
@@ -18,16 +19,15 @@ angular.module('antiPad.area',[])
 		};
 		reset();
 
-		// gets stakes and units at startup
-		$http.get('/stakes').then(function (resp) { $scope.stakes = resp.data; });
-		$http.get('/units').then(function (resp) { $scope.units = resp.data; });
 
-		// function to update all Zones, Districts, and Areas, ran at startup
+		// function to update all Zones, Districts, Areas, Stakes, and Units ran at startup
 		function update() {
 			$http.get('/zones').then(function (resp) { $scope.zones = resp.data; });
 			$http.get('/districts').then(function (resp) { $scope.districts = resp.data; });
 			$http.get('/areas').then(function (resp) { $scope.areas = resp.data; });
 			$http.get('/miss').then(function (resp) { $scope.miss = resp.data; });
+			$http.get('/stakes').then(function (resp) { $scope.stakes = resp.data; });
+			$http.get('/units').then(function (resp) { $scope.units = resp.data; });
 		};
 		update();
 
@@ -39,10 +39,13 @@ angular.module('antiPad.area',[])
 		};
 
 
-		$scope.showArea = function (id) {
+		$scope.showDistrict = function (id) {
 			$scope.activeDistrict = $scope.activeDistrict !== id ? id : false;
 		};
-		
+
+		$scope.showStake = function (id) {
+			$scope.activeStake = $scope.activeStake !== id ? id : false;
+		};		
 
 
 		$scope.filter = function (arr, active, id) {

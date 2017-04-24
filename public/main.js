@@ -1,16 +1,16 @@
 'use strict';
 
-angular.module('antiPad',[
+angular.module('areaBook',[
   'ui.router',
   'ngDraggable',
-  'antiPad.auth',
-  'antiPad.totals',
-	'antiPad.church',
-  'antiPad.area',
-  'antiPad.areaBook',
-	'antiPad.miss',
-	'antiPad.main',
-  'antiPad.menu'])
+  'areaBook.resize',
+  'areaBook.auth',
+  'areaBook.totals',
+  'areaBook.area',
+  'areaBook.areaBook',
+	'areaBook.miss',
+	'areaBook.main',
+  'areaBook.menu'])
   .run(['$rootScope','$location','$http', function ($rootScope, $location, $http) {
     $rootScope.$on('$stateChangeStart', function (e, toState) {
       var check = false;
@@ -29,11 +29,6 @@ angular.module('antiPad',[
       .state('auth', {
         url: '/auth',
         templateUrl: 'templates/auth.html',
-        controller: 'authController'
-      })
-      .state('signup', {
-        url: '/signup',
-        templateUrl: 'templates/signup.html',
         controller: 'authController'
       })
       .state('app', {

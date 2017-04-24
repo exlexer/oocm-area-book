@@ -302,17 +302,15 @@ module.exports = function(app) {
 		});
 
 	app.route('/numbers')
-		.get(function (req, res) {
-			console.log(req.session.passport);
+		.post(function (req, res) {
 			db.query('SELECT n.bd, n.ni, n.bap, n.OrderDate FROM nums n INNER JOIN missionaries m ON n.areaId = m.areaId WHERE m.id = ?',
 				req.session.passport.user,
 				function (error, results, fields) {
 					console.log(error, results);
-					res.send(results);
 				});
-		})
-		.post(function (req, res) {
-			console.log(req.body);
+			if (req.body.leadership !== 'miss' || undefined) {
+				// get numbers for dominion
+			}
 		});
 
 	// Routes to get from and post to the missionary table in the db
