@@ -7,7 +7,7 @@
 			<h2>Investigators</h2>
 		</div>
 		<div ng-repeat="(key, value) in inv" class="secondary row" ng-click="openInv(key)">
-			Name:	{{ value.name }}
+			{{ value.name }}
 		</div>
 
 		<!-- Recent Converts -->
@@ -15,7 +15,7 @@
 			<h2>Recent Converts</h2>
 		</div>
 		<div ng-repeat="(key, value) in rc" class="secondary row" ng-click="openRc(key)">
-			Name:	{{ value.name }}
+			{{ value.name }}
 		</div>
 	</div>
 

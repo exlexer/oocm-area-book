@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('areaBook.area',[])
-	.controller('areaController', ['$scope','$http', function($scope,$http) {
+	.controller('areaController', ['$scope','$http','$filter', function($scope,$http,$filter) {
 		
 		$scope.activeZone = false;
 		$scope.activeDistrict = false;
@@ -31,7 +31,6 @@ angular.module('areaBook.area',[])
 		};
 		update();
 
-		
 
 
 		$scope.showZone = function (id) {
@@ -46,19 +45,7 @@ angular.module('areaBook.area',[])
 		$scope.showStake = function (id) {
 			$scope.activeStake = $scope.activeStake !== id ? id : false;
 		};		
-
-
-		$scope.filter = function (arr, active, id) {
-			var ret = [];
-
-			for (var i = 0; i < arr.length; i++) {
-				if(arr[i][id] === active) {
-					ret.push(arr[i]);
-				};
-			}
-
-			return ret;
-		};
+		
 
     $scope.onDrag=function(data,evt){
     	$scope.changing = data.type;
@@ -72,7 +59,6 @@ angular.module('areaBook.area',[])
 					$scope.districts[k].zoneId = zoneId;
 		    	$scope.changed = true;
 		    	changes.push(['/districts', {id : id, zoneId: zoneId, update: true}]);
-    			console.log(changes);
     		}
     	}
 		}
@@ -82,7 +68,6 @@ angular.module('areaBook.area',[])
 				var change = changes[i];
 				console.log(change)
 				$http.post(change[0], change[1]).then(function (resp) {
-					console.log(resp);
 				})
 			};
 		}
@@ -96,4 +81,17 @@ angular.module('areaBook.area',[])
 					reset();
 			}), function() {};
 		};
+
+		$scope.subset = function(active, type) {
+			return function (val) {
+				return val[type] == active;
+			}
+		}
+
+		$scope.unassigned = function() {
+			return function (val) {
+				return !val.areaId;
+			}
+		}
+
 	}]);

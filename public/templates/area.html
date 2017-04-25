@@ -3,35 +3,42 @@
 		
 		<h1>Mission Areas</h1>
 
+
 		<!-- Zone Div -->
-		<div ng-repeat="(key, val) in zones" class="row-box" ng-drop="changing === 'dist'" ng-drop-success="distDrop($data,$event,val.id)">
+		<div ng-repeat="(key, val) in zones" class="row-box">
 			<div class="main row">
 				<div>
-					{{ val.name }}
+					{{ val.name }} Zone
 					<i class="material-icons" ng-class="{flip: activeZone === val.id }" ng-click='showZone(val.id)'>keyboard_arrow_down</i>
 				</div>
 			</div>
 			<div ng-show='activeZone === val.id'>
 
+
 				<!-- District Div -->
-				<div ng-repeat='val in filter(districts, activeZone, "zoneId")' ng-drop="changing === 'area'">
-					<div class="secondary row" ng-drag="true" ng-drag-data="{ id: val.id, type : 'dist' }" ng-drag-start="onDrag($data,$event)">
-						{{ val.name }}
+				<div ng-repeat="val in districts | filter:subset(activeZone,'zoneId')">
+					<div class="secondary row">
+						{{ val.name }} District
 						<i class="material-icons" ng-class="{ flip: activeDistrict === val.id }" ng-click='showDistrict(val.id)'>keyboard_arrow_down</i>
 					</div>
 					<div ng-show='activeDistrict === val.id'>
 
+
 						<!-- Area Div -->
-						<div ng-repeat='val in filter(areas, activeDistrict, "districtId")' class='third row' ng-drag="true" ng-drag-data="{ id: val.id, type : 'dist' }" ng-drag-start="onDrag($data,$event)">
+						<div ng-repeat='val in areas | filter:subset(activeDistrict, "districtId")' class='third row flex'>
 							{{ val.name }}
 
 
-							<!-- District Div -->
-							<div ng-repeat='val in filter(miss, val.id, "areaId")' class="missionary">{{val.name}}</div>
+							<!-- Missionary Div -->
+							<div ng-repeat='val in miss | filter:subset(val.id, "areaId")' class="missionary">{{val.name}}</div>
 						</div>
 					</div>
 				</div>
 			</div>
+		</div>
+
+		<div class="unassigned flex">
+			<div ng-repeat="val in miss | filter:unassigned()" class="missionary">{{val.name}}</div>
 		</div>
 
 		<h1>Church Units</h1>
@@ -39,14 +46,13 @@
 		<div ng-repeat="(key, value) in stakes" class="row-box">
 			<div class="main row">
 				<div>
-					{{ value.name }}
+					{{ value.name }} Stake
 					<i class="material-icons" ng-class="{flip: activeStake === value.id }" ng-click='showStake(value.id)'>keyboard_arrow_down</i>
 				</div>
 			</div>
 			<div ng-show='activeStake === value.id'>
-				<div ng-repeat='(key, value) in filter(units, activeStake, "stakeId")' class='secondary row'>
-					{{ value.name }}
-					<i class="material-icons" ng-click=''>edit</i>
+				<div ng-repeat='value in units | filter:subset(activeStake, "stakeId")' class='secondary row'>
+					{{ value.name }} Unit
 				</div>
 			</div>
 		</div>
@@ -55,8 +61,8 @@
 
 
 <!-- SECTION FOR ADDING NEW AREA -->
-<div class="save" ng-click="save()" ng-show="changed">+</div>
-<div class="add" ng-click="add()" ng-class="{adding: adding}">+</div>
+	<i class="save material-icons" ng-click="save()" ng-show="changed">save</i>
+	<i ng-class="{adding: adding}" class="add material-icons" ng-click="add()">add</i>
 	<div class="add-box" ng-show="adding">
 		<p>
 			<select ng-model='types'>

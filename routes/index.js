@@ -2,6 +2,7 @@
 
 var db = require('../db/index.js');
 var dbRoutes = require('../db/routes.js');
+var ssUtils = require('../sheets/utils.js');
 var passport = require('passport');
 var debug = require('debug')('app');
 
