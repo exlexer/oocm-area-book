@@ -12,12 +12,11 @@ angular.module('areaBook.area',[])
 		$scope.changed = false;
 		var changes = [];
 
-		function reset() {
-			$scope.types = undefined;
+		function resetAdd() {
 			$scope.adding = false;
 			$scope.newArea = {};
 		};
-		reset();
+		resetAdd();
 
 
 		// function to update all Zones, Districts, Areas, Stakes, and Units ran at startup
@@ -76,10 +75,11 @@ angular.module('areaBook.area',[])
 
 		$scope.addArea = function() {
 			var types = ['/zones', '/districts', '/areas'];
-					$http.post(types[$scope.types], $scope.newArea).then(function(resp) {
-					update();
-					reset();
-			}), function() {};
+			console.log($scope.newArea);
+			$http.post(types[$scope.newArea.type], $scope.newArea).then(function(resp) {
+				update();
+				resetAdd();
+			});
 		};
 
 		$scope.subset = function(active, type) {

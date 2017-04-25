@@ -65,39 +65,39 @@
 	<i ng-class="{adding: adding}" class="add material-icons" ng-click="add()">add</i>
 	<div class="add-box" ng-show="adding">
 		<p>
-			<select ng-model='types'>
+			<select ng-model='newArea.type'>
 				<option value="0">Zone</option>
 				<option value="1">District</option>
 				<option value="2">Area</option>
 			</select>
 		</p>
-			<p ng-show="types == 0 || types == 1 || types == 2">
+			<p ng-show="newArea.type == 0 || newArea.type == 1 || newArea.type == 2">
 				<input type='text' ng-model='newArea.name' placeholder='Name'>
 			</p>
-			<p ng-show="types == 0">
+			<p ng-show="newArea.type == 0">
 				<select ng-model="newArea.stakeId">
   				<option ng-repeat='(key, value) in stakes' value="{{ value.id  }}">{{ value.name }}</option>
 				</select>
 			</p>
-			<p ng-show="types == 1">
+			<p ng-show="newArea.type == 1">
 				<select ng-model="newArea.zoneId">
   				<option ng-repeat='(key, value) in zones' value="{{ value.id }}">{{ value.name }}</option>
 				</select>
 			</p>
-			<p ng-show="types == 2">
+			<p ng-show="newArea.type == 2">
 				<select ng-model="newArea.districtId">
   				<option ng-repeat='(key, value) in districts' value="{{ value.id }}">{{ value.name }}</option>
 				</select>
 			</p>
-			<p ng-show="types == 2">
+			<p ng-show="newArea.type == 2">
 				<select ng-model="newArea.unitId" multiple>
   				<option ng-repeat='(key, value) in units' value="{{ value.id }}">{{ value.name }}</option>
 				</select>
 			</p>
-			<p ng-show="types == 2">
+			<p ng-show="newArea.type == 2">
 				<input ng-model='newArea.phone' placeholder='Phone Number'>
 			</p>
-			<p ng-show="types == 2">
+			<p ng-show="newArea.type == 2">
 				<input ng-model='newArea.phoneTwo' placeholder='Secondary Phone Number'>
 			</p>
 			<button ng-click="addArea()">Add</button>
