@@ -7,15 +7,15 @@ angular.module('areaBook.auth',[])
 
 		$scope.redirect = function() {
 			if ($scope.signup) {
+				$scope.signup = false;
 				setTimeout(function(){
-					$scope.signup = false;
 					setAttr('authForm', 'action', '/login')
 					setAttr('signup', 'type', 'button');
 					setAttr('login', 'type', 'submit');
 				}, 10);
 			} else {
+				$scope.signup = true;
 				setTimeout(function(){
-					$scope.signup = true;
 					setAttr('authForm', 'action', '/signup');
 					setAttr('signup', 'type', 'submit');
 					setAttr('login', 'type', 'button')
