@@ -89,6 +89,16 @@ i {
 	background-color: #fff
 }
 
+.code-entry {
+	background: lightgrey;
+	border-radius: 0 0 5px 5px;
+	padding: 10px;
+	box-shadow: 0 0 3px #2f2f2f;
+}
+.code-input {
+	margin: 5px;
+}
+
 
 
 /* Header Styling */

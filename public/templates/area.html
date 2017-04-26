@@ -1,9 +1,9 @@
 <div ui-view>
 	<div class='content'>
 		
-		<div ng-show='codeEntry'>
-			<input ng-model='authCode'>
-			<button ng-click='suthSubmit()'>Authorize</button>
+		<div ng-show='codeEntry' class='code-entry flex'>
+			<input ng-model='authCode' class='flex-child code-input'>
+			<button ng-click='authSubmit()'>Authorize</button>
 		</div>
 
 		<h1>Mission Areas</h1>
