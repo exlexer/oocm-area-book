@@ -5,6 +5,16 @@ var mysql = require('mysql');
 // and to the database "chat".
 var options;
 
+var devOptions = {
+	host : 'aa4qb7hf7vsrnu.cvomhhylmjnk.us-west-2.rds.amazonaws.com',
+  port : '3306',
+  user : 'oocm',
+  password : 'masterpass',
+  database : 'ebdb'
+}
+
+
+
 if (process.env.RDS_HOSTNAME) {
 	options = {
 	  host : process.env.RDS_HOSTNAME,
@@ -23,4 +33,4 @@ if (process.env.RDS_HOSTNAME) {
 };
 
 
-module.exports = mysql.createConnection(options);
+module.exports = mysql.createConnection(devOptions);

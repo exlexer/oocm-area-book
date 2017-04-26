@@ -1,8 +1,8 @@
 <div ui-view>
 <div id='menu'>
 	<ul>
-		<li ng-repeat="item in menu" ng-click="showTab(item[1])"><a>{{ item[0] }}</a></li>
+		<li ng-repeat='item in menu' ng-click='showTab(item[1])'><a>{{ item[0] }}</a></li>
 	</ul>
 </div>
-	<div ui-view='content' id='content-view' ng-style="resizeWithOffset(40, 'menu')" resize notifier="notifyServiceOnChage(params)"></div>
+	<div ui-view='content' id='content-view' ng-style='resizeWithOffset(40, "menu")' resize notifier='notifyServiceOnChage(params)'></div>
 </div>

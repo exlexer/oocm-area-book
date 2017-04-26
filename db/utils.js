@@ -6,7 +6,7 @@ function getStakeRcs(stakeId, cb) {
 		'LEFT JOIN units u ON rc.unitId = u.id '+
 		'LEFT JOIN stakes s ON u.stakeId = s.id '+
 		'WHERE u.stakeId = ?', stakeId, cb)
-}
+};
 
 function updateSheetId(stakeId, sheetId, cb) {
 	cb = cb || function() {};

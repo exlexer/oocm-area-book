@@ -1,32 +1,35 @@
-<div ui-view class="flex">
-	<div class="content flex-child">
+<div ui-view class='flex'>
+	<div class='content flex-child'>
 		<h1>Area Book</h1>
 
 		<!-- Investigators -->
-		<div class="main row">
+		<div class='main row'>
 			<h2>Investigators</h2>
 		</div>
-		<div ng-repeat="(key, value) in inv" class="secondary row" ng-click="openInv(key)">
+		<div ng-repeat='(key, value) in inv' class='secondary row' ng-click='openInv(key)'>
 			{{ value.name }}
 		</div>
 
 		<!-- Recent Converts -->
-		<div class="main row">
+		<div class='main row'>
 			<h2>Recent Converts</h2>
 		</div>
-		<div ng-repeat="(key, value) in rc" class="secondary row" ng-click="openRc(key)">
+		<div ng-repeat='(key, value) in rc' class='secondary row' ng-click='openRc(key)'>
 			{{ value.name }}
 		</div>
 	</div>
 
 	<!-- Focus -->
-	<div class="flex-child" ng-show="focus">
+	<div class='flex-child' ng-show='focus'>
 		<h1>{{ current.name }}</h1>
 		<p>Age: {{ current.age }} Gender: {{ current.gender }} Baptismal Date: {{ current.bd }}</p>
-		<div ng-repeat="l in lessons" ng-show="l.id === current.id">
+		<div ng-repeat='l in lessons' ng-show='l.id === current.id'>
 			{{ l.summary }}
 			{{ l.lesson }}
 			{{ l.OrderDate }}
 		</div>
+		<button class='close'  ng-click='closeFocus()'>
+			<i class='material-icons'>close</i>
+		</button>
 	</div>
 </div>

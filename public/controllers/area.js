@@ -46,21 +46,13 @@ angular.module('areaBook.area',[])
 		};		
 		
 
-    $scope.onDrag=function(data,evt){
-    	$scope.changing = data.type;
-    	console.log($scope.changing);
+    $scope.exportStake = function (id) {
+    	$http.post('/exportStake', {id: id}).then(function (resp) {
+    		console.log(resp)
+    		window.open(resp.data)
+    	})
     }
 
-    $scope.distDrop = function(data, evt, zoneId){
-    	for (var k in $scope.districts) {
-    		if($scope.districts[k].id = data.id) {
-    			var id = $scope.districts[k].id
-					$scope.districts[k].zoneId = zoneId;
-		    	$scope.changed = true;
-		    	changes.push(['/districts', {id : id, zoneId: zoneId, update: true}]);
-    		}
-    	}
-		}
 
 		$scope.save = function () {
 			for (var i = 0; i < changes.length; i++) {

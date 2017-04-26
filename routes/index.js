@@ -94,6 +94,13 @@ module.exports = function(app) {
 			});
 		});
 
+	app.route('/exportStake')
+		.post(function (req, res) {
+			ssUtils.exportRc(req.body.id, function (url) {
+				res.send(url);
+			})
+		})
+
 	// Routes to get from and post to the units table in the db
 	app.route('/units')
 		.get(function (req, res) {

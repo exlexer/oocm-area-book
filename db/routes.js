@@ -119,6 +119,10 @@ function routeData(params, from) {
 							[inv.id],
 							blankCb
 						);
+						db.query(
+							'INSERT INTO bap (areaId, rcId) VALUES (?,?)',
+							[from, results.insertId],
+							blankCb);
 					}
 				);
 			});

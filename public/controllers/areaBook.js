@@ -20,6 +20,12 @@ angular.module('areaBook.areaBook',[])
 			$scope.focus = true;
 			$scope.current = $scope.inv[id];
 		}
+
+		$scope.closeFocus = function () {
+			$scope.focus = false;
+			$scope.current = null;
+		}
+
 		$scope.openRc = function (id) {
 			$scope.focus = true;
 			$scope.current = $scope.rc[id];
