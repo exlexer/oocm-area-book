@@ -99,6 +99,7 @@ module.exports = function(app) {
 			ssUtils.exportRc(req.body.id, function (url) {
 				res.send(url);
 			}, function (url) {
+				console.log("RAN!", url)
 				res.send(url);
 			})
 		});

@@ -49,28 +49,31 @@ function getNewToken (oauth2Client, cb, authCb) {
     scope: SCOPES
   });
 
-  if(!!authUrl) {
+  console.log('Number 3', authCb)
+
+
+  if(!!authCb) {
     authCb(authUrl);
   }
   // needs to redirect to authUrl
 
-  console.log(authUrl);
-  var rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-  rl.question('Enter the code from that page here: ', function(code) {
-    rl.close();
-    oauth2Client.getToken(code, function(err, token) {
-      if (err) {
-        console.log('Error while trying to retrieve access token', err);
-        return;
-      }
-      oauth2Client.credentials = token;
-      storeToken(token);
-      cb(oauth2Client);
-    });
-  });
+  // console.log(authUrl);
+  // var rl = readline.createInterface({
+  //   input: process.stdin,
+  //   output: process.stdout
+  // });
+  // rl.question('Enter the code from that page here: ', function(code) {
+  //   rl.close();
+  //   oauth2Client.getToken(code, function(err, token) {
+  //     if (err) {
+  //       console.log('Error while trying to retrieve access token', err);
+  //       return;
+  //     }
+  //     oauth2Client.credentials = token;
+  //     storeToken(token);
+  //     cb(oauth2Client);
+  //   });
+  // });
 }
 
 /**
