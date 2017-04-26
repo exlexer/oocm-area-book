@@ -96,9 +96,9 @@ module.exports = function(app) {
 
 	app.route('/exportStake')
 		.post(function (req, res) {
-			ssUtils.exportRc(req.body.id, function (url, client) {
+			ssUtils.exportRc(req.body.id, function (url) {
 				res.send({ url : url, success : true });
-			}, function (url) {
+			}, function (url, client) {
 				res.send({ url : url, success : false, client : client });
 			})
 		});
