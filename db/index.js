@@ -33,4 +33,4 @@ if (process.env.RDS_HOSTNAME) {
 };
 
 
-module.exports = mysql.createConnection(devOptions);
+module.exports = mysql.createConnection(options);

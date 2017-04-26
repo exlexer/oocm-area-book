@@ -17,7 +17,7 @@ var TOKEN_PATH = TOKEN_DIR + 'sheets.googleapis.com-nodejs-quickstart.json';
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
- var authorize = function(credentials, callback) {
+function authorize(credentials, cb, authCb) {
   var clientSecret = credentials.installed.client_secret;
   var clientId = credentials.installed.client_id;
   var redirectUrl = credentials.installed.redirect_uris[0];
@@ -27,13 +27,13 @@ var TOKEN_PATH = TOKEN_DIR + 'sheets.googleapis.com-nodejs-quickstart.json';
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, function(err, token) {
     if (err) {
-      getNewToken(oauth2Client, callback);
+      getNewToken(oauth2Client, cb, authCb);
     } else {
       oauth2Client.credentials = JSON.parse(token);
-      callback(oauth2Client);
+      cb(oauth2Client);
     }
   });
-}
+};
 
 /**
  * Get and store new token after prompting for user authorization, and then
@@ -43,11 +43,17 @@ var TOKEN_PATH = TOKEN_DIR + 'sheets.googleapis.com-nodejs-quickstart.json';
  * @param {getEventsCallback} callback The callback to call with the authorized
  *     client.
  */
-var getNewToken = function(oauth2Client, callback) {
+function getNewToken (oauth2Client, cb, authCb) {
   var authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: SCOPES
   });
+
+  if(!!authUrl) {
+    authCb(authUrl);
+  }
+  // needs to redirect to authUrl
+
   console.log(authUrl);
   var rl = readline.createInterface({
     input: process.stdin,
@@ -62,7 +68,7 @@ var getNewToken = function(oauth2Client, callback) {
       }
       oauth2Client.credentials = token;
       storeToken(token);
-      callback(oauth2Client);
+      cb(oauth2Client);
     });
   });
 }
@@ -72,7 +78,7 @@ var getNewToken = function(oauth2Client, callback) {
  *
  * @param {Object} token The token to store to disk.
  */
-var storeToken = function(token) {
+function storeToken (token) {
   try {
     fs.mkdirSync(TOKEN_DIR);
   } catch (err) {

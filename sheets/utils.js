@@ -5,6 +5,16 @@ var google = require('googleapis');
 var googleAuth = require('google-auth-library');
 var sheets = google.sheets('v4');
 
+var run = function(cb, authCb) {
+	fs.readFile('./sheets/client_secret.json', function processClientSecrets(err, content) {
+    if (err) {
+      console.log('Error loading client secret file: ' + err);
+      return;
+    }
+    ss(JSON.parse(content), cb, authCb)
+  });
+};
+
 // Creates new sheet, accepts a title for the sheet and a callback taking params of err and response
 var createSheet = function (title, cb) {
 	run(function (auth) {
@@ -17,20 +27,11 @@ var createSheet = function (title, cb) {
 			auth: auth
 			}, cb);
   	});
-}
-
-var run = function(cb) {
-	fs.readFile('./sheets/client_secret.json', function processClientSecrets(err, content) {
-    if (err) {
-      console.log('Error loading client secret file: ' + err);
-      return;
-    }
-    ss(JSON.parse(content), cb)
-  });
-}
+};
 
 // WORKS!
-function exportRc(stakeId, cb) {
+function exportRc(stakeId, cb, authCb) {
+	run(null, authCb);
 	dbUtils.getStakeRcs(stakeId, function (error, response) {
 		if (!response[0].sheetId) {
 			createSheet(response[0].stakeName, function(err,res) {
@@ -43,7 +44,7 @@ function exportRc(stakeId, cb) {
   		cb('https://docs.google.com/spreadsheets/d/' + response[0].sheetId + '/edit');
 		}
 	})
-}
+};
 
 function updateSheet (id, range, vals, cb) {
 	run(function(auth) {
@@ -57,7 +58,7 @@ function updateSheet (id, range, vals, cb) {
 			auth: auth
 		}, cb);
 	})
-}
+};
 
 
 function createValMatrix (rcs) {
@@ -68,8 +69,7 @@ function createValMatrix (rcs) {
 		matrix.push([rc.unit, rc.name,, rc.age, rc.gender, rc.bd,,, rc.hters, rc.vters,]);
 	};
 	return matrix;
-
-}
+};
 
 module.exports = {
 	exportRc: exportRc
