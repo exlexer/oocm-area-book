@@ -49,13 +49,10 @@ function getNewToken (oauth2Client, cb, authCb) {
     scope: SCOPES
   });
 
-  console.log('Number 3', authCb)
-
 
   if(!!authCb) {
-    authCb(authUrl);
+    authCb(authUrl, oauth2Client);
   }
-  // needs to redirect to authUrl
 
   // console.log(authUrl);
   // var rl = readline.createInterface({
@@ -64,17 +61,21 @@ function getNewToken (oauth2Client, cb, authCb) {
   // });
   // rl.question('Enter the code from that page here: ', function(code) {
   //   rl.close();
-  //   oauth2Client.getToken(code, function(err, token) {
-  //     if (err) {
-  //       console.log('Error while trying to retrieve access token', err);
-  //       return;
-  //     }
-  //     oauth2Client.credentials = token;
-  //     storeToken(token);
-  //     cb(oauth2Client);
-  //   });
   // });
 }
+
+function recieveCode (code, client) {
+  client.getToken(code, function (err, token) {
+    if (err) {
+      console.log('Error while trying to retrieve access token', err);
+      return;
+    }
+    client.credentials = token;
+    storeToken(token);
+    // cb(client);
+  });
+}
+
 
 /**
  * Store token to disk be used in later program executions.
@@ -93,4 +94,7 @@ function storeToken (token) {
   console.log('Token stored to ' + TOKEN_PATH);
 }
 
-module.exports = authorize;
+module.exports = {
+  auth : authorize,
+  recieveCode: recieveCode
+};

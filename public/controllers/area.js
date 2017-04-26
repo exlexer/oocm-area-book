@@ -49,7 +49,17 @@ angular.module('areaBook.area',[])
     $scope.exportStake = function (id) {
     	$http.post('/exportStake', {id: id}).then(function (resp) {
     		console.log(resp)
-    		window.open(resp.data)
+    		window.open(resp.data.url);
+    		if (!resp.data.success) {
+    			$scope.codeEntry = true;
+    			$scope.client = resp.data.client;
+    		};
+    	})
+    };
+
+    $scope.authSubmit = function () {
+    	$http.post('/authGoogle', { id : $scope.authCode, client: $scope.client }).then(function (resp) {
+    		console.log(resp);
     	})
     }
 

@@ -1,6 +1,11 @@
 <div ui-view>
 	<div class='content'>
 		
+		<div ng-show='codeEntry'>
+			<input ng-model='authCode'>
+			<button ng-click='suthSubmit()'>Authorize</button>
+		</div>
+
 		<h1>Mission Areas</h1>
 
 

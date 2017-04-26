@@ -96,14 +96,17 @@ module.exports = function(app) {
 
 	app.route('/exportStake')
 		.post(function (req, res) {
-			ssUtils.exportRc(req.body.id, function (url) {
-				res.send(url);
+			ssUtils.exportRc(req.body.id, function (url, client) {
+				res.send({ url : url, success : true });
 			}, function (url) {
-				console.log("RAN!", url)
-				res.send(url);
+				res.send({ url : url, success : false, client : client });
 			})
 		});
 
+	app.route('/authGoogle')
+		.post(function (req, res) {
+			ssUtils.getToken()
+		})
 	// Routes to get from and post to the units table in the db
 	app.route('/units')
 		.get(function (req, res) {

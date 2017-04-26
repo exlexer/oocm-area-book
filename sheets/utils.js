@@ -6,14 +6,12 @@ var googleAuth = require('google-auth-library');
 var sheets = google.sheets('v4');
 
 var run = function(cb, authCb) {
-	console.log('Number 2', authCb)
-
 	fs.readFile('./sheets/client_secret.json', function processClientSecrets(err, content) {
     if (err) {
       console.log('Error loading client secret file: ' + err);
       return;
     }
-    ss(JSON.parse(content), cb, authCb)
+    ss.auth(JSON.parse(content), cb, authCb)
   });
 };
 
@@ -31,9 +29,11 @@ var createSheet = function (title, cb) {
   	});
 };
 
-// WORKS!
+function getToken (code, client) {
+	ss.recieveCode(code, client);
+}
+
 function exportRc(stakeId, cb, authCb) {
-	console.log('Number 1', authCb)
 	run(null, authCb);
 	dbUtils.getStakeRcs(stakeId, function (error, response) {
 		if (!response[0].sheetId) {
@@ -75,6 +75,7 @@ function createValMatrix (rcs) {
 };
 
 module.exports = {
-	exportRc: exportRc
+	exportRc: exportRc,
+	getToken: getToken
 };
 
