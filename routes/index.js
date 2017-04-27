@@ -103,9 +103,16 @@ module.exports = function(app) {
 			})
 		});
 
+	app.route('/redirectOAuth')
+		.get(function (req, res) {
+			console.log(req);
+		});
+
 	app.route('/authGoogle')
 		.post(function (req, res) {
-			ssUtils.getToken()
+			ssUtils.getToken(req.body.authCode, req.body.client, function(client) {
+				res.send();
+			})
 		})
 	// Routes to get from and post to the units table in the db
 	app.route('/units')

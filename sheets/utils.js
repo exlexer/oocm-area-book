@@ -29,8 +29,8 @@ var createSheet = function (title, cb) {
   	});
 };
 
-function getToken (code, client) {
-	ss.recieveCode(code, client);
+function getToken (code, client, cb) {
+	ss.recieveCode(code, client, cb);
 }
 
 function exportRc(stakeId, cb, authCb) {

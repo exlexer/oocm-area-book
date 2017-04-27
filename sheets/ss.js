@@ -18,9 +18,9 @@ var TOKEN_PATH = TOKEN_DIR + 'sheets.googleapis.com-nodejs-quickstart.json';
  * @param {function} callback The callback to call with the authorized client.
  */
 function authorize(credentials, cb, authCb) {
-  var clientSecret = credentials.installed.client_secret;
-  var clientId = credentials.installed.client_id;
-  var redirectUrl = credentials.installed.redirect_uris[0];
+  var clientSecret = process.env.OAUTH_CLIENT_SECRET;
+  var clientId = process.env.OAUTH_CLIENT_SECRET;
+  var redirectUrl = 'http://development.etttcqu2nb.us-west-2.elasticbeanstalk.com/redirectOAuth';
   var auth = new googleAuth();
   var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
@@ -65,6 +65,7 @@ function getNewToken (oauth2Client, cb, authCb) {
 }
 
 function recieveCode (code, client) {
+  console.log("HERE I AM!", code, client)
   client.getToken(code, function (err, token) {
     if (err) {
       console.log('Error while trying to retrieve access token', err);
@@ -72,7 +73,7 @@ function recieveCode (code, client) {
     }
     client.credentials = token;
     storeToken(token);
-    // cb(client);
+    cb(client);
   });
 }
 
