@@ -2,7 +2,6 @@
 
 angular.module('areaBook',[
   'ui.router',
-  'ngDraggable',
   'areaBook.resize',
   'areaBook.auth',
   'areaBook.totals',

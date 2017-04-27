@@ -6,12 +6,7 @@ var googleAuth = require('google-auth-library');
 var sheets = google.sheets('v4');
 
 var run = function(cb, authCb) {
-	fs.readFile('./sheets/client_secret.json', function processClientSecrets(err, content) {
-    if (err) {
-      console.log('Error loading client secret file: ' + err);
-      return;
-    }
-    ss.auth(JSON.parse(content), cb, authCb)
+    ss.auth(cb, authCb)
   });
 };
 

@@ -17,7 +17,7 @@ var TOKEN_PATH = TOKEN_DIR + 'sheets.googleapis.com-nodejs-quickstart.json';
  * @param {Object} credentials The authorization client credentials.
  * @param {function} callback The callback to call with the authorized client.
  */
-function authorize(credentials, cb, authCb) {
+function authorize(cb, authCb) {
   var clientSecret = process.env.OAUTH_CLIENT_SECRET;
   var clientId = process.env.OAUTH_CLIENT_SECRET;
   var redirectUrl = 'http://development.etttcqu2nb.us-west-2.elasticbeanstalk.com/redirectOAuth';
