@@ -1,19 +1,136 @@
 var db = require('./index.js');
 
-function getStakeRcs(stakeId, cb) { 
-	db.query(
-		'SELECT rc.name name, u.name unit, rc.age age, rc.gender gender, rc.bd bd, rc.hters hters, s.id stakeId, s.name stakeName, s.sheetId sheetId, rc.vters vters FROM rc '+
-		'LEFT JOIN units u ON rc.unitId = u.id '+
-		'LEFT JOIN stakes s ON u.stakeId = s.id '+
-		'WHERE u.stakeId = ?', stakeId, cb)
-};
-
-function updateSheetId(stakeId, sheetId, cb) {
-	cb = cb || function() {};
-	db.query('UPDATE stakes SET sheetId = ? WHERE id = ?', [sheetId, stakeId], cb )
-};
-
 module.exports = {
-	getStakeRcs: getStakeRcs,
-	updateSheetId: updateSheetId
+
+	getUser: function (id, cb) {
+		db.query('SELECT name, email, leadership FROM missionaries WHERE id = ?', [id], cb);
+	},
+
+	getStakeRcs: function (stakeId, cb) { 
+		db.query(
+			'SELECT rc.name name, u.name unit, rc.age age, rc.gender gender, rc.bd bd, rc.hters hters, s.id stakeId, s.name stakeName, s.sheetId sheetId, rc.vters vters FROM rc '+
+			'LEFT JOIN units u ON rc.unitId = u.id '+
+			'LEFT JOIN stakes s ON u.stakeId = s.id '+
+			'WHERE u.stakeId = ?', [stakeId], cb
+		)
+	},
+
+	getMissionaries: function (cb) {
+		db.query('SELECT name, email, id, areaId, leadership FROM missionaries', cb);
+	},
+
+	newMissionary: function (name, email, cb) {
+		db.query('INSERT INTO missionaries (name, email) VALUES (?,?)', [name, email], cb);
+	},
+
+	updateMissionary: function (name, email, leadership, areaId, id, cb) {
+		db.query('UPDATE missionaries SET name = ?, email = ?, leadership = ?, areaId = ? WHERE id = ?', [name, email, leadership, areaId, id], cb)
+	},
+
+	getAreas: function (cb) {
+		db.query('SELECT * FROM areas', cb);
+	},
+
+	findArea: function (from, cb) {
+		db.query('SELECT id, name FROM areas WHERE phone = ? OR phoneTwo = ?', [from, from], cb);
+	},
+
+	getAreaRcs: function (missId, cb) {
+		db.query(
+			'SELECT rc.name name, u.name unit, rc.age age, rc.gender gender, rc.bd bd, rc.hters hters, rc.vters vters FROM rc '+
+			'LEFT JOIN units u ON rc.unitId = u.id '+
+			'LEFT JOIN area_unit au ON u.id = au.unitId '+
+			'LEFT JOIN areas a ON au.areaId = a.id '+
+			'LEFT JOIN missionaries m ON a.id = m.areaId '+
+			'WHERE m.id = ?', [missId], cb
+		)
+	},
+
+	newArea: function (name, phone, phoneTwo, districtId, unitArr, cb) {
+		db.query('INSERT INTO areas (name, phone, phoneTwo, districtId) VALUES (?,?,?,?)',
+			[name, phone, phoneTwo, districtId], function (error, results) {
+				for (var i = 0, j = 0; i < unitArr.length; i++) {
+					db.query('INSERT INTO area_unit (areaId, unitId) VALUES (?,?)',
+						[res.insertId, unitArr[i]],
+						function (err, res) {
+							j++;
+							if (j === unitArr.length) {
+								cb(error, results)
+							}
+						})
+				};
+			})
+	},
+	
+	getDistricts: function (cb) {
+		db.query('SELECT * FROM districts', cb);
+	},
+
+	newDistrict: function (name, zoneId, cb) {
+		db.query('INSERT INTO districts (name, zoneId) VALUES (?,?)', [name, zoneId], cb);
+	},
+
+	updateDistrict: function (zoneId, districtId) {
+		db.query("UPDATE districts SET zoneId = ? WHERE id = ?", [zoneId, districtId], cb)
+	},
+
+	getZones: function (cb) {
+		db.query('SELECT * FROM zones', cb);
+	},
+
+	newZone: function (name, stakeId, cb) {
+		db.query('INSERT INTO zones (name, stakeId) VALUES (?, ?)', [name, stakeId], cb);
+	},
+
+	getLessons: function (missionaryId, cb) {
+	  db.query(
+	    'SELECT l.summary, l.lesson, l.OrderDate, rc.id, rc.unitId, rc.name FROM lessons l '+
+	    'INNER JOIN rc ON l.rcId = rc.id '+
+	    'LEFT JOIN area_unit au ON rc.unitId = au.unitId '+
+	    'LEFT JOIN missionaries m ON au.areaId = m.areaId '+
+	    'WHERE m.id = ? '+
+	    'UNION '+
+	    'SELECT l.summary, l.lesson, l.OrderDate, inv.id, inv.areaId, inv.name FROM lessons l '+
+	    'INNER JOIN inv ON l.invId = inv.id '+
+	    'LEFT JOIN missionaries m ON inv.areaId = m.areaId '+
+	    'WHERE m.id = ?',
+    	[missionaryId, missionaryId], cb)
+	},
+
+	getInv: function (missionaryId, cb) {
+		db.query(
+			'SELECT * FROM inv '+
+			'LEFT JOIN missionaries m ON inv.areaId = m.areaId '+
+			'WHERE m.id = ?',
+			[missionaryId], cb)
+	},
+
+	newInv: function (name, phoneNumber, areaId, cb) {
+		db.query('INSERT INTO inv (name, phoneNumber, areaId) VALUES (?,?,?)', [name, phoneNumber, areaId], db);
+	},
+
+	getAreaNums: function (missionaryId, cb) {
+		db.query(
+			'SELECT n.bd, n.ni, n.bap, n.OrderDate FROM nums n '+
+			'INNER JOIN missionaries m ON n.areaId = m.areaId '+
+			'WHERE m.id = ?',
+			[missionaryId], cb);
+	},
+
+	getDominionNums: function () {
+
+	},
+
+	updateSheetId: function (stakeId, sheetId, cb) {
+		cb = cb || function() {};
+		db.query('UPDATE stakes SET sheetId = ? WHERE id = ?', [sheetId, stakeId], cb)
+	},
+	
+	deleteUnit: function (id, cb) {
+		db.query('DELETE FROM units WHERE id = ?', [id], cb)
+	},
+
+	updateUnit: function (name, stakeId, unitId, cb) {
+		db.query('UPDATE units SET name = ?, stakeId = ? WHERE id = ?', [name, stakeId, unitId], cb);
+	}
 };

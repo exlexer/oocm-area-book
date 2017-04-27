@@ -5,14 +5,10 @@ var google = require('googleapis');
 var googleAuth = require('google-auth-library');
 var sheets = google.sheets('v4');
 
-var run = function(cb, authCb) {
-    ss.auth(cb, authCb)
-  });
-};
 
 // Creates new sheet, accepts a title for the sheet and a callback taking params of err and response
 var createSheet = function (title, cb) {
-	run(function (auth) {
+	ss.auth(function (auth) {
 			sheets.spreadsheets.create({
 			resource: {
 				properties: {
@@ -29,7 +25,6 @@ function getToken (code, client, cb) {
 }
 
 function exportRc(stakeId, cb, authCb) {
-	run(null, authCb);
 	dbUtils.getStakeRcs(stakeId, function (error, response) {
 		if (!response[0].sheetId) {
 			createSheet(response[0].stakeName, function(err,res) {
@@ -45,7 +40,7 @@ function exportRc(stakeId, cb, authCb) {
 };
 
 function updateSheet (id, range, vals, cb) {
-	run(function(auth) {
+	ss.auth(function(auth) {
 		sheets.spreadsheets.values.append({
 			spreadsheetId:id,
 			range: range,
