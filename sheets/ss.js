@@ -19,16 +19,19 @@ var TOKEN_PATH = TOKEN_DIR + 'sheets.googleapis.com-nodejs-quickstart.json';
  */
 function authorize(cb, authCb) {
 
-  var clientSecret = process.env.OAUTH_CLIENT_SECRET;
-  var clientId = process.env.OAUTH_CLIENT_SECRET;
+
+  var clientId = process.env.OAUTH_CLIENT_SECRET || "980683034451-l7k9t1h6sr82v4il32rruks7sh5gmkvj.apps.googleusercontent.com";
+  var clientSecret = process.env.OAUTH_CLIENT_SECRET || "GQeQd6eoAEjD1RAMi-rMJXuh";
+  // var redirectUrl = 'http://localhost:3000/redirectOAuth';
   var redirectUrl = 'http://development.etttcqu2nb.us-west-2.elasticbeanstalk.com/redirectOAuth';
   var auth = new googleAuth();
   var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
+
   // Check if we have previously stored a token.
   fs.readFile(TOKEN_PATH, function(err, token) {
     if (err) {
-      getNewToken(oauth2Client, cb, authCb);
+      getNewToken(oauth2Client, authCb);
     } else {
       oauth2Client.credentials = JSON.parse(token);
       cb(oauth2Client);
@@ -44,37 +47,34 @@ function authorize(cb, authCb) {
  * @param {getEventsCallback} callback The callback to call with the authorized
  *     client.
  */
-function getNewToken (oauth2Client, cb, authCb) {
+function getNewToken (oauth2Client, cb) {
+  console.log('I"m in auth!', authCb)
   var authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: SCOPES
   });
 
+  cb(authUrl, oauth2Client);
+};
 
-  if(!!authCb) {
-    authCb(authUrl, oauth2Client);
-  }
+function recieveToken (code) {
 
-  // console.log(authUrl);
-  // var rl = readline.createInterface({
-  //   input: process.stdin,
-  //   output: process.stdout
-  // });
-  // rl.question('Enter the code from that page here: ', function(code) {
-  //   rl.close();
-  // });
-}
+  var clientId = process.env.OAUTH_CLIENT_SECRET || "980683034451-l7k9t1h6sr82v4il32rruks7sh5gmkvj.apps.googleusercontent.com";
+  var clientSecret = process.env.OAUTH_CLIENT_SECRET || "GQeQd6eoAEjD1RAMi-rMJXuh";
+  // var redirectUrl = 'http://localhost:3000/redirectOAuth';
+  var redirectUrl = 'http://development.etttcqu2nb.us-west-2.elasticbeanstalk.com/redirectOAuth';
+  var auth = new googleAuth();
+  var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
-function recieveCode (code, client) {
-  console.log("HERE I AM!", code, client)
-  client.getToken(code, function (err, token) {
+  console.log("HERE I AM!", code)
+
+  oauth2Client.getToken(code, function (err, token) {
     if (err) {
       console.log('Error while trying to retrieve access token', err);
       return;
     }
-    client.credentials = token;
+    oauth2Client.credentials = token;
     storeToken(token);
-    cb(client);
   });
 }
 
@@ -98,5 +98,5 @@ function storeToken (token) {
 
 module.exports = {
   auth : authorize,
-  recieveCode: recieveCode
+  recieveToken: recieveToken
 };

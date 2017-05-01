@@ -86,7 +86,7 @@ i {
 	color: #C62828;
 }
 #auth button:hover {
-	background-color: #fff
+	background: #fff
 }
 
 .code-entry {
@@ -110,7 +110,7 @@ i {
 	width: 100%;
 	left: 0;
 	top: 0;
-	background-color: #B71C1C;
+	background: #B71C1C;
 	height: 40px;
 	position: relative;
 }
@@ -145,7 +145,7 @@ i {
 	clear: left;
 	float: left;
 	margin-top: -4px;
-	background-color: #d6d6d6;
+	background: #d6d6d6;
 	border-right: 1px solid #c6c6c6;
 }
 #menu ul {
@@ -191,7 +191,7 @@ i {
 	border: none;
 }
 .main {
-	background-color: grey;	
+	background: grey;	
 }
 .main h2 {
 	text-align: left;
@@ -199,27 +199,51 @@ i {
 	margin: 0;
 }
 .secondary {
-	background-color: lightgray;
+	background: lightgray;
 	margin: 0 5px;
 }
 .third {
-	background-color: lightblue;
+	background: lightblue;
 	margin: 0 10px;
 }
+.area-name {
+	padding: 5px;
+}
 .missionary {
-	background-color: #e6e6e6;
+	background: #e6e6e6;
 	border-radius: 20px;
 	margin: 0 5px;
 	padding: 5px 10px;
+	display: inherit;
+}
+.missionary i {
+	font-size: 13px;
+	padding: 3px;
+	vertical-align: middle;
+	margin-left: 5px;
+	background: grey;
+	border-radius: 10px;
 }
 .unassigned {
 	padding: 10px;
+}
+.dl {
+
+}
+.zl {
+	background: red;
+}
+.stl {
+
+}
+.asst {
+
 }
 
 /* Area Book Focus Styling */
 .close {
 	position: absolute;
-	background-color: red;
+	background: red;
 	width: 25px;
 	height: 25px;
 	top: 10px;
@@ -247,7 +271,7 @@ i {
 	font-size: 30px;
 	padding: 0;
 	text-align: center;
-	background-color: #0D47A1;
+	background: #0D47A1;
 	vertical-align: middle;
 	line-height: 26px !important;
 	transition: .25s;
@@ -258,7 +282,7 @@ i {
 	font-size: 20px;
 	position: fixed;
 	text-align: center;
-	background-color: lightgrey;
+	background: lightgrey;
 	bottom: 10px;
 	right: 55px;
 	border-radius: 12.5px;
@@ -274,7 +298,7 @@ i {
   box-shadow: 0px 0px 5px #888888;
 	position: fixed;
 	border-radius: 15px 15px 2px 15px;
-	background-color: #c9c9c9;
+	background: #c9c9c9;
 	bottom: 40px;
 	right: 20px;
 	padding: 10px;

@@ -82,9 +82,11 @@ module.exports = function(app) {
 			});
 		})
 		.post(function (req, res) {
+			console.log(req.body);
 			if(req.body.id) {
 				dbUtils.updateMissionary(req.body.name, req.body.email, req.body.leadership, req.body.areaId, req.body.id,
 					function (error, results) {
+						console.log(results);
 						res.send(results);
 					})
 			} else {

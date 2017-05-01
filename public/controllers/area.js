@@ -30,12 +30,23 @@ angular.module('areaBook.area',[])
 		};
 		update();
 
+		$scope.editMiss = function (id, key) {
+			$scope.miss[key].newAreaId = $scope.miss[key].areaId
+			$scope.editing = id;
+		};
+
+		$scope.saveMiss = function (val) {
+			val.areaId = parseInt(val.newAreaId);
+			$http.post('/miss', val).then(function (resp) {
+					update();
+					$scope.editing = false;
+			});
+		};
 
 
 		$scope.showZone = function (id) {
 			$scope.activeZone = $scope.activeZone !== id ? id : false;
 		};
-
 
 		$scope.showDistrict = function (id) {
 			$scope.activeDistrict = $scope.activeDistrict !== id ? id : false;
@@ -48,26 +59,13 @@ angular.module('areaBook.area',[])
 
     $scope.exportStake = function (id) {
     	$http.post('/exportStake', {id: id}).then(function (resp) {
-    		console.log(resp)
     		window.open(resp.data.url);
-    		if (!resp.data.success) {
-    			$scope.codeEntry = true;
-    			$scope.client = resp.data.client;
-    		};
     	})
     };
-
-    $scope.authSubmit = function () {
-    	$http.post('/authGoogle', { id : $scope.authCode, client: $scope.client }).then(function (resp) {
-    		console.log(resp);
-    	})
-    }
-
 
 		$scope.save = function () {
 			for (var i = 0; i < changes.length; i++) {
 				var change = changes[i];
-				console.log(change)
 				$http.post(change[0], change[1]).then(function (resp) {
 				})
 			};
@@ -77,7 +75,6 @@ angular.module('areaBook.area',[])
 
 		$scope.addArea = function() {
 			var types = ['/zones', '/districts', '/areas'];
-			console.log($scope.newArea);
 			$http.post(types[$scope.newArea.type], $scope.newArea).then(function(resp) {
 				update();
 				resetAdd();
@@ -86,13 +83,13 @@ angular.module('areaBook.area',[])
 
 		$scope.subset = function(active, type) {
 			return function (val) {
-				return val[type] == active;
+				return val[type] === active;
 			}
 		}
 
 		$scope.unassigned = function() {
 			return function (val) {
-				return !val.areaId;
+				return val.areaId === undefined || val.areaId === null;
 			}
 		}
 

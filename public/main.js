@@ -7,7 +7,6 @@ angular.module('areaBook',[
   'areaBook.totals',
   'areaBook.area',
   'areaBook.areaBook',
-	'areaBook.miss',
 	'areaBook.main',
   'areaBook.menu'])
   .run(['$rootScope','$location','$http', function ($rootScope, $location, $http) {
@@ -84,17 +83,7 @@ angular.module('areaBook',[
                 }
             },
             auth: true
-          })
-      .state('app.menu.miss', {
-            url: '/miss',
-            views: {
-                'content': {
-                  templateUrl: 'templates/miss.html',
-                  controller: 'missController'
-                }
-            },
-            auth: true
-      });
+          });
 
 		$urlRouterProvider.otherwise('/app/menu');
 	}]);

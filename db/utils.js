@@ -15,6 +15,48 @@ module.exports = {
 		)
 	},
 
+	findRc: function (name, unitId, cb) {
+		db.query('SELECT * FROM rc WHERE name=? AND unitId=?', [name, unitId], cb);
+	},	
+
+	findUnits: function (areaId, cb) {
+		db.query('SELECT * FROM area_unit WHERE areaId = ?', areaId, cb);
+	},
+
+
+	weekNewInv: function (start, end, cb) {
+		bd.query('SELECT areaId FROM inv WHERE OrderDate BETWEEN ? AND ?', [start, end], cb);
+	},
+
+	weekLessons: function (start, end, cb) {
+		db.query(
+	    'SELECT l.summary, a.areaId FROM lessons l '+
+	    'INNER JOIN rc ON l.rcId = rc.id '+
+	    'INNER JOIN area_unit a ON rc.unitId = a.unitId '+
+	    'WHERE l.OrderDate BETWEEN ? and ? '+
+	    'UNION '+
+	    'SELECT l.summary, inv.areaId FROM lessons l '+
+	    'INNER JOIN inv ON l.invId = inv.id '+
+	    'WHERE l.OrderDate BETWEEN ? and ?',
+	    [start, end, start, end], cb);
+	},
+
+	weekBaptisms: function (start, end, cb) {
+		bd.query('SELECT areaId FROM bap WHERE OrderDate BETWEEN ? AND ?', [start, end], cb);
+	},
+
+	weekInvAtChurch: function (start, end, cb) {
+		db.query('SELECT areaId FROM church_attend WHERE OrderDate BETWEEN ? AND ?', [start, end], cb);
+	},
+
+	invAtChurch: function (invId) {
+		db.query('INSERT INTO church_attend (invId) VALUES (?)', [invId], cb);
+	},
+
+	rcAtChurch: function (rcId) {
+		db.query('INSERT INTO church_attend (rcId) VALUES (?)', [rcId], cb);
+	},
+
 	getMissionaries: function (cb) {
 		db.query('SELECT name, email, id, areaId, leadership FROM missionaries', cb);
 	},
@@ -105,6 +147,10 @@ module.exports = {
 			[missionaryId], cb)
 	},
 
+	findInv: function (name, areaId, cb) {
+		db.query('SELECT * FROM inv WHERE name=? AND areaId=?', [name, areaId], cb)
+	},
+
 	newInv: function (name, phoneNumber, areaId, cb) {
 		db.query('INSERT INTO inv (name, phoneNumber, areaId) VALUES (?,?,?)', [name, phoneNumber, areaId], db);
 	},
@@ -119,6 +165,14 @@ module.exports = {
 
 	getDominionNums: function () {
 
+	},
+
+	insertNums: function (nums) {
+		for(var area in nums) {
+	    db.query('INSERT INTO nums (areaId, bd, ni, bap) VALUES (?,?,?,?)',
+	     	[area, nums[area].bd, nums[area].ni, nums[area].bap],
+	     	function (error, results) {});
+			};
 	},
 
 	updateSheetId: function (stakeId, sheetId, cb) {

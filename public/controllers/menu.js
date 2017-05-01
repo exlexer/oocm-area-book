@@ -10,11 +10,10 @@ angular.module('areaBook.menu',[])
 
 		var area = ['Areas', 'areas'],
 				total = ['Totals', 'totals'],
-				miss = ['Missionaries', 'miss'],
 				areaBook = ['Area Book', 'areaBook'];
 
 		var leadership = {
-			pres : [area, total, miss],
+			pres : [area, total],
 			asst : [area, total, areaBook],
 			zone : [total, areaBook],
 			dist : [total, areaBook],
@@ -22,13 +21,10 @@ angular.module('areaBook.menu',[])
 			miss : [total, areaBook]
 		};
 
-
 		$http.get('/user').then(function (resp) {
-			console.log(resp);
 			$rootScope.leadership = !!resp.data[0].leadership ? resp.data[0].leadership : 'miss';
 			$rootScope.areaId = resp.data[0].areaId;
 			$rootScope.name = resp.data[0].name;
 			$scope.menu = leadership[$rootScope.leadership];
-
     });
 	}]);

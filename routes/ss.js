@@ -7,15 +7,14 @@ module.exports = function(app) {
 	app.route('/exportStake')
 		.post(function (req, res) {
 			ssUtils.exportRc(req.body.id, function (url) {
-				res.send({ url : url, success : true });
-			}, function (url, client) {
-				res.send({ url : url, success : false, client : client });
+				res.send({ url : url });
 			})
 		});
 
 	app.route('/redirectOAuth')
 		.get(function (req, res) {
-			console.log(req);
+			ssUtils.storeToken(req.query['code']);
+			res.send();
 		});
 
 	app.route('/authGoogle')
@@ -24,5 +23,4 @@ module.exports = function(app) {
 				res.send();
 			})
 		})
-
 }

@@ -7,7 +7,9 @@ var sheets = google.sheets('v4');
 
 
 // Creates new sheet, accepts a title for the sheet and a callback taking params of err and response
-var createSheet = function (title, cb) {
+var createSheet = function (title, cb, authCb) {
+
+
 	ss.auth(function (auth) {
 			sheets.spreadsheets.create({
 			resource: {
@@ -17,29 +19,30 @@ var createSheet = function (title, cb) {
 			},
 			auth: auth
 			}, cb);
-  	});
+  	}, authCb);
 };
 
-function getToken (code, client, cb) {
-	ss.recieveCode(code, client, cb);
+function storeToken (code, cb) {
+	ss.recieveToken(code, cb);
 }
 
-function exportRc(stakeId, cb, authCb) {
+
+function exportRc(stakeId, cb) {
 	dbUtils.getStakeRcs(stakeId, function (error, response) {
 		if (!response[0].sheetId) {
 			createSheet(response[0].stakeName, function(err,res) {
 				dbUtils.updateSheetId(stakeId, res.spreadsheetId)
-				updateSheet(res.spreadsheetId, 'A1', createValMatrix(response), function (err, res) {});
+				updateSheet(res.spreadsheetId, 'A1', createValMatrix(response), function (err, res) {}, cb);
 				cb(res.spreadsheetUrl);
-			})
+			}, cb)
 		} else {
-			updateSheet(response[0].sheetId, 'A1', createValMatrix(response), function (err, res) {});
+			updateSheet(response[0].sheetId, 'A1', createValMatrix(response), function (err, res) {}, cb);
   		cb('https://docs.google.com/spreadsheets/d/' + response[0].sheetId + '/edit');
 		}
 	})
 };
 
-function updateSheet (id, range, vals, cb) {
+function updateSheet (id, range, vals, cb, authCb) {
 	ss.auth(function(auth) {
 		sheets.spreadsheets.values.append({
 			spreadsheetId:id,
@@ -49,7 +52,7 @@ function updateSheet (id, range, vals, cb) {
 				values: vals
 			},
 			auth: auth
-		}, cb);
+		}, cb, authCb);
 	})
 };
 
@@ -66,6 +69,6 @@ function createValMatrix (rcs) {
 
 module.exports = {
 	exportRc: exportRc,
-	getToken: getToken
+	storeToken: storeToken
 };
 

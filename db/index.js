@@ -5,13 +5,13 @@ var mysql = require('mysql');
 // and to the database "chat".
 var options;
 
-var devOptions = {
-	host : 'aa4qb7hf7vsrnu.cvomhhylmjnk.us-west-2.rds.amazonaws.com',
-  port : '3306',
-  user : 'oocm',
-  password : 'masterpass',
-  database : 'ebdb'
-}
+// var devOptions = {
+// 	host : 'aa4qb7hf7vsrnu.cvomhhylmjnk.us-west-2.rds.amazonaws.com',
+//   port : '3306',
+//   user : 'oocm',
+//   password : 'masterpass',
+//   database : 'ebdb'
+// }
 
 
 
@@ -23,12 +23,12 @@ if (process.env.RDS_HOSTNAME) {
 	  password : process.env.RDS_PASSWORD,
 	  database : process.env.RDS_DB_NAME
 	};
-} else{
+} else {
 	options = {
 	  host:"localhost",
     user:"root",
 	  password: "root",
-	  database: "project"
+	  database: "ebdb"
 	};
 };
 

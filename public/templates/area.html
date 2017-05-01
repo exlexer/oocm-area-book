@@ -1,10 +1,5 @@
 <div ui-view>
 	<div class='content'>
-		
-		<div ng-show='codeEntry' class='code-entry flex'>
-			<input ng-model='authCode' class='flex-child code-input'>
-			<button ng-click='authSubmit()'>Authorize</button>
-		</div>
 
 		<h1>Mission Areas</h1>
 
@@ -31,11 +26,28 @@
 
 						<!-- Area Div -->
 						<div ng-repeat='val in areas | filter:subset(activeDistrict, "districtId")' class='third row flex'>
+							<span class='area-name'>
 							{{ val.name }}
+							</span>
 
 
 							<!-- Missionary Div -->
-							<div ng-repeat='val in miss | filter:subset(val.id, "areaId")' class='missionary'>{{val.name}}</div>
+							<div ng-repeat='(key, val) in miss | filter:subset(val.id, "areaId")' class='missionary' ng-class='{dl: val.leadership === "dist", zl: val.leadership === "zone", stl: val.leadership === "estl", asst: val.leadership === "asst"}'>
+								<span ng-show='editing !== val.id'>{{val.name}}</span>
+								<i class='edit material-icons' ng-click='editMiss(val.id, key)' ng-show='editing !== val.id'>edit</i>
+								<input ng-model='val.name' ng-show='editing === val.id'>
+								<input ng-model='val.email' ng-show='editing === val.id'>
+								<select ng-model='val.newAreaId' ng-show='editing === val.id'>
+ 									<option ng-repeat='(k, v) in areas' value='{{ v.id }}'>{{ v.name }}</option>
+								</select>
+								<select ng-model='val.leadership' ng-show='editing === val.id'>
+									<option value='dist'>District Leader</option>
+									<option value='zone'>Zone Leader</option>
+									<option value='asst'>Assistant</option>
+									<option value='estl'>STL</option>
+								</select>
+								<i class='edit material-icons' ng-click='saveMiss(val)' ng-show='editing === val.id'>save</i>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -43,7 +55,16 @@
 		</div>
 
 		<div class='unassigned flex'>
-			<div ng-repeat='val in miss | filter:unassigned()' class='missionary'>{{val.name}}</div>
+			<div ng-repeat='(key, val) in miss | filter:unassigned()' class='missionary'>
+				<span ng-show='editing !== val.id'>{{val.name}}</span>
+				<i class='edit material-icons' ng-click='editMiss(val.id, key)' ng-show='editing !== val.id'>edit</i>
+				<input ng-model='val.name' ng-show='editing === val.id'>
+				<input ng-model='val.email' ng-show='editing === val.id'>
+				<select ng-model='val.newAreaId' ng-show='editing === val.id'>
+ 					<option ng-repeat='(k, v) in areas' value='{{ v.id }}'>{{ v.name }}</option>
+				</select>
+				<i class='edit material-icons' ng-click='saveMiss(val)' ng-show='editing === val.id'>save</i>
+			</div>
 		</div>
 
 		<h1>Church Units</h1>
