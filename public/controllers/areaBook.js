@@ -26,6 +26,35 @@ angular.module('areaBook.areaBook',[])
 			$scope.current = null;
 		}
 
+		$scope.downloadFocus = function () {
+			$http.post('/record', {}).then(function (resp) {
+				console.log($scope.current);
+				var doc = new PDFDocument;
+				var stream = doc.pipe(blobStream());
+				
+				doc.fontSize(25)
+					.text($scope.current.name)
+					.moveDown()
+					.fontSize(18)
+					.text('Unit: '+$scope.current.unit+' Age: '+$scope.current.age+' Gender: '+$scope.current.gender+' Baptismal Date: '+$scope.current.bd);
+
+				doc.fontSize(12);
+
+				for (var i = 0; i < $scope.lessons.length; i++) {
+					doc.moveDown()
+							.text(resp.data.lessons[i].summary);
+				};
+
+				doc.end()
+				stream.on('finish', function() {
+	  			var blob = stream.toBlob('application/pdf')
+					
+	  			var url = stream.toBlobURL('application/pdf')
+	  			window.open(url);
+				})
+			});
+		}
+
 		$scope.openRc = function (id) {
 			$scope.focus = true;
 			$scope.current = $scope.rc[id];

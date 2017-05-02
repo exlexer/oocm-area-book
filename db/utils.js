@@ -93,7 +93,7 @@ module.exports = {
 			[name, phone, phoneTwo, districtId], function (error, results) {
 				for (var i = 0, j = 0; i < unitArr.length; i++) {
 					db.query('INSERT INTO area_unit (areaId, unitId) VALUES (?,?)',
-						[res.insertId, unitArr[i]],
+						[results.insertId, unitArr[i]],
 						function (err, res) {
 							j++;
 							if (j === unitArr.length) {
