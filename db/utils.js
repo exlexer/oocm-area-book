@@ -226,9 +226,9 @@ module.exports = {
 			[id], cb)},
 	updateUnit: function (name, stakeId, unitId, cb) {
 		db.query('UPDATE units SET name = ?, stakeId = ? WHERE id = ?',
-			[name, stakeId, unitId], cb);}
+			[name, stakeId, unitId], cb);},
 	findUnits: function (areaId, cb) {
 		db.query('SELECT * FROM area_unit WHERE areaId = ?',
-			[areaId], cb);},
+			[areaId], cb);}
 
 };
