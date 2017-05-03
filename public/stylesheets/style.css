@@ -3,6 +3,7 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: 'Roboto', sans-serif;
+	background: #f5f5f5;
 }
 a {
 	text-decoration: none;
@@ -85,21 +86,6 @@ i {
 	padding: 7px 19px;
 	color: #C62828;
 }
-#auth button:hover {
-	background: #fff
-}
-
-.code-entry {
-	background: lightgrey;
-	border-radius: 0 0 5px 5px;
-	padding: 10px;
-	box-shadow: 0 0 3px #2f2f2f;
-}
-.code-input {
-	margin: 5px;
-}
-
-
 
 /* Header Styling */
 #header a {
@@ -110,7 +96,6 @@ i {
 	width: 100%;
 	left: 0;
 	top: 0;
-	background: #B71C1C;
 	height: 40px;
 	position: relative;
 }
@@ -145,7 +130,6 @@ i {
 	clear: left;
 	float: left;
 	margin-top: -4px;
-	background: #d6d6d6;
 	border-right: 1px solid #c6c6c6;
 }
 #menu ul {
@@ -191,26 +175,26 @@ i {
 	border: none;
 }
 .main {
-	background: grey;	
+	margin-top: 5px;
 }
 .main h2 {
+	/*color: #F44336;*/
 	text-align: left;
-	padding: 5px;
-	margin: 0;
+	margin: 5px;
 }
 .secondary {
-	background: lightgray;
 	margin: 0 5px;
+	z-index: auto;
+	box-shadow: 0 0 1px #888;
+	border-radius: 2px
 }
 .third {
-	background: lightblue;
 	margin: 0 10px;
 }
 .area-name {
 	padding: 5px;
 }
 .missionary {
-	background: #e6e6e6;
 	border-radius: 20px;
 	margin: 0 5px;
 	padding: 5px 10px;
@@ -221,7 +205,6 @@ i {
 	padding: 3px;
 	vertical-align: middle;
 	margin-left: 5px;
-	background: grey;
 	border-radius: 10px;
 }
 .unassigned {
@@ -229,9 +212,6 @@ i {
 }
 .dl {
 
-}
-.zl {
-	background: red;
 }
 .stl {
 
@@ -243,7 +223,6 @@ i {
 /* Area Book Focus Styling */
 #focus button {
 	position: absolute;
-	background: #f39696;
 	width: 25px;
 	height: 25px;
 	right: 10px;
@@ -253,7 +232,8 @@ i {
   box-shadow: 0px 0px 5px #888888;
 }
 #focus i {
-	margin-left: -5px;
+	margin-left: -1px;
+	font-size: 15px;
 }
 #focus span{
 	padding: 5px;
@@ -268,8 +248,53 @@ i {
 	top: 80px;
 }
 
-.even {
-	background: lightgrey;
+.main i {
+	font-size: 15px;
+	border-radius: 15px;
+	padding: 3px;
+	margin: 2px;
+	box-shadow: 0 0 1px #888;
+	color: #fff;
+}
+
+/* Background Color Styling */
+#auth button:hover {
+	background: #fff
+}
+/* Primary */
+#header {
+	background: #F44336;
+}
+/* Darker */
+.main i {
+	background: #c62828
+}
+/* Accent */
+.missionary i, #focus button { 
+	background: #3f51b5;
+	color: #fff;
+}
+.zl {
+	background: red;
+}
+.missionary {
+	background: #e6e6e6;
+}
+.even, .secondary, .save{
+	background: #fff;
+}
+.third {	
+	background: #CFD8DC;
+	box-shadow: inset 0 0 1px #888;
+}
+#menu {
+	background: #fff;
+}
+.add {
+	background: #0D47A1;
+}
+.add-box {	
+	background: #c9c9c9;
 }
 
 /* Bottom Right Button Styling - Possibly soon to be depricated */
@@ -285,7 +310,6 @@ i {
 	font-size: 30px;
 	padding: 0;
 	text-align: center;
-	background: #0D47A1;
 	vertical-align: middle;
 	line-height: 26px !important;
 	transition: .25s;
@@ -296,7 +320,6 @@ i {
 	font-size: 20px;
 	position: fixed;
 	text-align: center;
-	background: lightgrey;
 	bottom: 10px;
 	right: 55px;
 	border-radius: 12.5px;
@@ -312,7 +335,6 @@ i {
   box-shadow: 0px 0px 5px #888888;
 	position: fixed;
 	border-radius: 15px 15px 2px 15px;
-	background: #c9c9c9;
 	bottom: 40px;
 	right: 20px;
 	padding: 10px;

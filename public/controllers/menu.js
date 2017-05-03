@@ -21,6 +21,14 @@ angular.module('areaBook.menu',[])
 			miss : [total, areaBook]
 		};
 
+
+		$http.get('auth/isAuthenticated').then(function (resp) {
+      if (!resp.data.auth) {
+        $state.go('auth');
+      }
+    });
+
+
 		$http.get('/user').then(function (resp) {
 			console.log(resp);
 			$rootScope.leadership = !!resp.data[0].leadership ? resp.data[0].leadership : 'miss';

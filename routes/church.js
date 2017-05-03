@@ -63,6 +63,12 @@ module.exports = function(app) {
 				function (error, results, fields) {
 					res.send(results);
 				})
+		})
+		.post(function (req, res) {
+			dbUtils.updateRc(req.body, function (error, results) {
+				console.log(error, results)
+				res.send()
+			})
 		});
 
 }

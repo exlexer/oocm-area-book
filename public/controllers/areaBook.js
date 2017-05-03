@@ -12,10 +12,10 @@ angular.module('areaBook.areaBook',[])
 				$scope.rc = resp.data;
 			}, function() {});
 			$http.get('/former').then(function (resp) {
+				console.log(resp.data);
 				$scope.former = resp.data;
 			}, function() {});
 			$http.get('/lesson').then(function (resp) {
-				console.log(resp.data);
 				$scope.lessons = resp.data;
 			}, function() {});
 		};
@@ -54,12 +54,24 @@ angular.module('areaBook.areaBook',[])
 		$scope.saveFocus = function () {
 			$scope.focusEdit = false;
 			console.log($scope.current)
-			$http.post('/inv')
+			if (!$scope.current.unit) {
+				$http.post('/inv', $scope.current).then(function (resp) {
+					console.log(resp);
+				})
+			} else {
+				$http.post('/rc', $scope.current).then(function (resp) {
+					console.log(resp);
+				})
+			}
 			// save focus edits!
 		}
 		$scope.filterLessons = function() {
 			return function (lesson) {
-				return lesson.id === $scope.current.id || lesson.name === current.name;
+				if ($scope.current) {
+					return lesson.id === $scope.current.id || lesson.name === $scope.current.name;
+				} else {
+					return false;
+				}
 			}
 		}
 
@@ -77,8 +89,8 @@ angular.module('areaBook.areaBook',[])
 			};
 
 			doc.fontSize(25)
-				.text($scope.current.name)
-				.moveDown()
+				// .image('img/logo.jpeg')
+				.text($scope.current.name, {align: 'center'})
 				.fontSize(18)
 				.text(str);
 
@@ -93,6 +105,8 @@ angular.module('areaBook.areaBook',[])
 						.text($scope.redate(lesson.OrderDate) + ' - ' + lesson.summary);
 				}
 			};
+
+			doc.info.Title = $scope.current.name + ' Teaching Record';
 
 			doc.end()
 			stream.on('finish', function() {

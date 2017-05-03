@@ -9,13 +9,14 @@ angular.module('areaBook',[
   'areaBook.areaBook',
 	'areaBook.main',
   'areaBook.menu'])
-  .run(['$rootScope','$location','$http', function ($rootScope, $location, $http) {
+  .run(['$rootScope','$location','$http','$state', function ($rootScope, $location, $http, $state) {
+    // Not currently Working
     $rootScope.$on('$stateChangeStart', function (e, toState) {
-      console.log("I'm HERE!!!")
+      var check = false;
       if (toState && toState.auth) {
         $http.get('auth/isAuthenticated').then(function (resp) {
           if (!resp.data.auth) {
-            $location.path('/auth');
+            $state.go('/auth');
           }
         });
       };

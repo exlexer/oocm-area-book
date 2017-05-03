@@ -57,7 +57,8 @@ module.exports = function(app) {
 			})
 		})
 		.post(function (req, res) {
-			dbUtils.updateInv(req.session.passport.user, req.body, function (error, results) {
+			dbUtils.updateInv(req.body, function (error, results) {
+				// console.log(error, results);
 				res.send();
 			})
 		});
@@ -65,6 +66,7 @@ module.exports = function(app) {
 	app.route('/former')
 		.get(function (req, res) {
 			dbUtils.getFormer(req.session.passport.user, function (error, results) {
+				console.log(results);
 				res.send(results);
 			})
 		})

@@ -55,7 +55,9 @@ module.exports = function (phone, message, cb) {
 
 			case 'bap':
 				dbUtils.findInv(params[1], from, function (error, results) {
-					dbUtils.bapInv(results[0], from);
+						console.log(error, results);
+					dbUtils.bapInv(results[0], from, function (error, results) {
+					});
 				});
 				break;
 
@@ -94,7 +96,19 @@ module.exports = function (phone, message, cb) {
 
 			case 'drop':
 				dbUtils.findInv(params[1], from, function (error, results) {
-					dbUtils.dropInv(results[0].id, params[2], cb);
+					dbUtils.dropInv(results[0], params[2], function (error, results) {
+						console.log(results);
+					});
+				});
+
+
+				break;
+
+			case 'pickup':
+				dbUtils.findFormer(params[1], from, function (error, results) {
+					dbUtils.pickupInv(results[0], params[2], function (error, results) {
+						console.log(results);
+					});
 				});
 
 
