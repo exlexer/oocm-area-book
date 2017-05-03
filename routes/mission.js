@@ -55,8 +55,19 @@ module.exports = function(app) {
 			dbUtils.getInv(req.session.passport.user, function (error, results) {
 				res.send(results);
 			})
+		})
+		.post(function (req, res) {
+			dbUtils.updateInv(req.session.passport.user, req.body, function (error, results) {
+				res.send();
+			})
 		});
 
+	app.route('/former')
+		.get(function (req, res) {
+			dbUtils.getFormer(req.session.passport.user, function (error, results) {
+				res.send(results);
+			})
+		})
 
 	app.route('/lesson')
 		.get(function (req, res) {

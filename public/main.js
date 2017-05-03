@@ -11,7 +11,7 @@ angular.module('areaBook',[
   'areaBook.menu'])
   .run(['$rootScope','$location','$http', function ($rootScope, $location, $http) {
     $rootScope.$on('$stateChangeStart', function (e, toState) {
-      var check = false;
+      console.log("I'm HERE!!!")
       if (toState && toState.auth) {
         $http.get('auth/isAuthenticated').then(function (resp) {
           if (!resp.data.auth) {
@@ -60,16 +60,6 @@ angular.module('areaBook',[
                 'content': {
                   templateUrl: 'templates/totals.html',
                   controller: 'totalsController'
-                }
-            },
-            auth: true
-          })
-      .state('app.menu.church', {
-            url: '/church',
-            views: {
-                'content': {
-                  templateUrl: 'templates/church.html',
-                  controller: 'churchController'
                 }
             },
             auth: true

@@ -22,6 +22,7 @@ angular.module('areaBook.menu',[])
 		};
 
 		$http.get('/user').then(function (resp) {
+			console.log(resp);
 			$rootScope.leadership = !!resp.data[0].leadership ? resp.data[0].leadership : 'miss';
 			$rootScope.areaId = resp.data[0].areaId;
 			$rootScope.name = resp.data[0].name;

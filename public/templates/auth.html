@@ -1,20 +1,39 @@
 <div ui-view id='auth'>
 	<div id='logo'>Area<span>Book</span></div>
-    <div>         
-        <form action='/login' method='post' id='authForm'>
-            <div ng-show='signup'>
-                <input type='text' name='name' placeholder='Name'/>
-            </div>
-            <div>
-                <input type='text' name='username' placeholder='Email'/>
-            </div>
-            <div>
-                <input type='password' name='password' placeholder='Password'/>
-            </div>
-            <div>
-                <button type='button' ng-click='redirect()' id='signup'>Sign Up</button>
-                <button type='submit' ng-click='redirect()' id='login'>Login</button>
-            </div>
-        </form>
+    <div id='authForm'>
+      <form action='/login' method='post' ng-show='!signup'>
+        <div>
+          <input type='text' name='username' placeholder='Email'/>
+        </div>
+        <div>
+          <input type='password' name='password' placeholder='Password'/>
+        </div>
+        <div>
+          <button type='button' ng-click='redirect()' id='signup'>Sign Up</button>
+          <button type='submit' id='login'>Login</button>
+        </div>
+      </form>
+
+      <form action='/signup' method='post' ng-show='signup'>
+        <div>
+          <input type='text' name='name' placeholder='Name'/>
+        </div>
+        <div>
+          <select name='gender'>
+            <option>Male</option>
+            <option>Female</option>
+          </select>
+        </div>
+        <div>
+          <input type='text' name='username' placeholder='Email'/>
+        </div>
+        <div>
+          <input type='password' name='password' placeholder='Password'/>
+        </div>
+        <div>
+          <button type='submit' id='signup'>Sign Up</button>
+          <button type='button' ng-click='redirect()' id='login'>Login</button>
+        </div>
+      </form>
     </div>
 </div>

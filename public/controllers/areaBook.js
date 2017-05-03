@@ -5,12 +5,17 @@ angular.module('areaBook.areaBook',[])
 		
 		function update() {
 			$http.get('/inv').then(function (resp) {
+				console.log(resp)
 				$scope.inv = resp.data;
 			}, function() {});
 			$http.get('/rc').then(function (resp) {
 				$scope.rc = resp.data;
 			}, function() {});
+			$http.get('/former').then(function (resp) {
+				$scope.former = resp.data;
+			}, function() {});
 			$http.get('/lesson').then(function (resp) {
+				console.log(resp.data);
 				$scope.lessons = resp.data;
 			}, function() {});
 		};
@@ -21,43 +26,78 @@ angular.module('areaBook.areaBook',[])
 			$scope.current = $scope.inv[id];
 		}
 
+		$scope.openRc = function (id) {
+			$scope.focus = true;
+			$scope.current = $scope.rc[id];
+		}
+
+		$scope.openFormer = function (id) {
+			$scope.focus = true;
+			$scope.current = $scope.former[id];
+		}
+
+		$scope.redate = function (date) {
+			date = new Date(date);
+			var format = date.getDay() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+			return format;
+		}
+
+		$scope.editFocus = function () {
+			$scope.focusEdit = true;
+		}
+
 		$scope.closeFocus = function () {
 			$scope.focus = false;
 			$scope.current = null;
 		}
 
-		$scope.downloadFocus = function () {
-			$http.post('/record', {}).then(function (resp) {
-				console.log($scope.current);
-				var doc = new PDFDocument;
-				var stream = doc.pipe(blobStream());
-				
-				doc.fontSize(25)
-					.text($scope.current.name)
-					.moveDown()
-					.fontSize(18)
-					.text('Unit: '+$scope.current.unit+' Age: '+$scope.current.age+' Gender: '+$scope.current.gender+' Baptismal Date: '+$scope.current.bd);
-
-				doc.fontSize(12);
-
-				for (var i = 0; i < $scope.lessons.length; i++) {
-					doc.moveDown()
-							.text(resp.data.lessons[i].summary);
-				};
-
-				doc.end()
-				stream.on('finish', function() {
-	  			var blob = stream.toBlob('application/pdf')
-					
-	  			var url = stream.toBlobURL('application/pdf')
-	  			window.open(url);
-				})
-			});
+		$scope.saveFocus = function () {
+			$scope.focusEdit = false;
+			console.log($scope.current)
+			$http.post('/inv')
+			// save focus edits!
+		}
+		$scope.filterLessons = function() {
+			return function (lesson) {
+				return lesson.id === $scope.current.id || lesson.name === current.name;
+			}
 		}
 
-		$scope.openRc = function (id) {
-			$scope.focus = true;
-			$scope.current = $scope.rc[id];
+		$scope.downloadFocus = function () {
+			var doc = new PDFDocument;
+			var stream = doc.pipe(blobStream());
+			
+			var data = ['Unit', 'Age', 'Gender', 'BD'];
+			var str = '';
+
+			for (var i = 0; i < data.length; i++) {
+				if($scope.current[data[i].toLowerCase()]) {
+					str = str + data[i] + ': ' + $scope.current[data[i].toLowerCase()] + '   ';	
+				}
+			};
+
+			doc.fontSize(25)
+				.text($scope.current.name)
+				.moveDown()
+				.fontSize(18)
+				.text(str);
+
+			doc.fontSize(12);
+
+			for (var i = 0; i < $scope.lessons.length; i++) {
+				if ($scope.lessons[i].id === $scope.current.id || $scope.lessons[i].name === $scope.current.name) {
+
+					var lesson = $scope.lessons[i];
+
+					doc.moveDown()
+						.text($scope.redate(lesson.OrderDate) + ' - ' + lesson.summary);
+				}
+			};
+
+			doc.end()
+			stream.on('finish', function() {
+  			window.open(stream.toBlobURL('application/pdf'));
+			})
 		}
 
 	}]);

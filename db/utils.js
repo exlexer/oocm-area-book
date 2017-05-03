@@ -15,19 +15,14 @@ module.exports = {
 		)
 	},
 
-	findRc: function (name, unitId, cb) {
-		db.query('SELECT * FROM rc WHERE name=? AND unitId=?', [name, unitId], cb);
-	},	
-
 	findUnits: function (areaId, cb) {
 		db.query('SELECT * FROM area_unit WHERE areaId = ?', areaId, cb);
 	},
 
-
+	// Functions for Collecting and Storing Numbers
 	weekNewInv: function (start, end, cb) {
 		bd.query('SELECT areaId FROM inv WHERE OrderDate BETWEEN ? AND ?', [start, end], cb);
 	},
-
 	weekLessons: function (start, end, cb) {
 		db.query(
 	    'SELECT l.summary, a.areaId FROM lessons l '+
@@ -40,22 +35,39 @@ module.exports = {
 	    'WHERE l.OrderDate BETWEEN ? and ?',
 	    [start, end, start, end], cb);
 	},
-
 	weekBaptisms: function (start, end, cb) {
 		bd.query('SELECT areaId FROM bap WHERE OrderDate BETWEEN ? AND ?', [start, end], cb);
 	},
-
 	weekInvAtChurch: function (start, end, cb) {
 		db.query('SELECT areaId FROM church_attend WHERE OrderDate BETWEEN ? AND ?', [start, end], cb);
 	},
+	getAreaNums: function (missionaryId, cb) {
+		db.query(
+			'SELECT n.bd, n.ni, n.bap, n.OrderDate FROM nums n '+
+			'INNER JOIN missionaries m ON n.areaId = m.areaId '+
+			'WHERE m.id = ?',
+			[missionaryId], cb);
+	},
+	getDominionNums: function () {
 
-	invAtChurch: function (invId) {
+	},
+	insertNums: function (nums) {
+		for(var area in nums) {
+	    db.query('INSERT INTO nums (areaId, bd, ni, bap) VALUES (?,?,?,?)',
+	     	[area, nums[area].bd, nums[area].ni, nums[area].bap],
+	     	function (error, results) {});
+			};
+	},
+
+	
+	// Church Attendance
+	invAtChurch: function (invId, cb) {
 		db.query('INSERT INTO church_attend (invId) VALUES (?)', [invId], cb);
 	},
-
-	rcAtChurch: function (rcId) {
+	rcAtChurch: function (rcId, cb) {
 		db.query('INSERT INTO church_attend (rcId) VALUES (?)', [rcId], cb);
 	},
+
 
 	getMissionaries: function (cb) {
 		db.query('SELECT name, email, id, areaId, leadership FROM missionaries', cb);
@@ -139,41 +151,74 @@ module.exports = {
     	[missionaryId, missionaryId], cb)
 	},
 
-	getInv: function (missionaryId, cb) {
+	newRc: function (name, bd, unitId, age, gender, cb) {
+		db.query('INSERT INTO rc (name, bd, unitId, age, gender) VALUES (?,?,?,?,?)', [name, bd, unitId, age, gender], cb)
+	},
+
+	updateLesson: function (invId, rcId, formerId, invId) {
+		db.query('UPDATE lessons SET invId = ?, rcId = ?, formerId = ?  WHERE invId = ?', [invId, rcId, formerId, invId], cb);
+	},
+
+	getFormer: function (missionaryId, cb) {
 		db.query(
-			'SELECT * FROM inv '+
-			'LEFT JOIN missionaries m ON inv.areaId = m.areaId '+
+			'SELECT f.name, f.bd, f.id, f.address, f.areaId, f.OrderDate, f.gender, f.phoneNumber FROM former f '+
+			'LEFT JOIN missionaries m ON f.areaId = m.areaId '+
 			'WHERE m.id = ?',
 			[missionaryId], cb)
 	},
 
-	findInv: function (name, areaId, cb) {
-		db.query('SELECT * FROM inv WHERE name=? AND areaId=?', [name, areaId], cb)
+	getDistrictAreas: function (missionaryId) {
+		db.query('SELECT districtId FROM areas WHERE id = ?', [missionaryId], function (error, results) {
+			db.query('SELECT areaId FROM districts WHERE id = ?', [results[0].districtId], cb);
+		})
 	},
 
-	newInv: function (name, phoneNumber, areaId, cb) {
-		db.query('INSERT INTO inv (name, phoneNumber, areaId) VALUES (?,?,?)', [name, phoneNumber, areaId], db);
+	getZoneAreas: function () {
+
 	},
 
-	getAreaNums: function (missionaryId, cb) {
+	// Investigator Functions
+	getInv: function (missionaryId, cb) {
 		db.query(
-			'SELECT n.bd, n.ni, n.bap, n.OrderDate FROM nums n '+
-			'INNER JOIN missionaries m ON n.areaId = m.areaId '+
+			'SELECT inv.name, inv.bd, inv.id, inv.address, inv.areaId, inv.nickName, inv.OrderDate, inv.gender, inv.phoneNumber FROM inv '+
+			'LEFT JOIN missionaries m ON inv.areaId = m.areaId '+
 			'WHERE m.id = ?',
-			[missionaryId], cb);
+			[missionaryId], cb)
+	},
+	deleteInv: function (invId, cb) {
+		db.query('DELETE FROM inv WHERE id = ?', [invId], cb);
+	},
+	findInv: function (name, areaId, cb) {
+		db.query('SELECT * FROM inv WHERE name = ? OR nickName = ? AND areaId = ?', [name, name, areaId], cb)
+	},
+	newInv: function (name, phoneNumber, areaId, cb) {
+		db.query('INSERT INTO inv (name, phoneNumber, areaId) VALUES (?,?,?)', [name, phoneNumber, areaId], cb);
+	},
+	updateInv: function (inv, cb) {
+		db.query('UPDATE inv SET nickName = ?, name = ?, bd = ?, gender = ?, areaId = ? WHERE id = ?',
+			[inv.nickName, inv.name, inv.bd, inv.gender, inv.areaId, inv.id], cb)
+	},
+	bapInv: function (inv, from) {
+		this.findUnits(from, function (error, results) {
+			// Inserts into correct unit
+			this.newRc(inv.name, inv.bd, results[0].unitId, inv.age, inv.gender,
+				function (error, results) {
+					this.updateLesson(null, results.insertId, null, inv.id, cb);
+					this.deleteInv(inv.id, cb);
+					db.query(
+						'INSERT INTO bap (areaId, rcId) VALUES (?,?)',
+							[from, results.insertId],
+						cb);
+				}
+			);
+		});
 	},
 
-	getDominionNums: function () {
+	// Recent Convert Functions
+	findRc: function (name, unitId, cb) {
+		db.query('SELECT * FROM rc WHERE name = ? OR nickName = ? AND unitId = ?', [name, name, unitId], cb);
+	},	
 
-	},
-
-	insertNums: function (nums) {
-		for(var area in nums) {
-	    db.query('INSERT INTO nums (areaId, bd, ni, bap) VALUES (?,?,?,?)',
-	     	[area, nums[area].bd, nums[area].ni, nums[area].bap],
-	     	function (error, results) {});
-			};
-	},
 
 	updateSheetId: function (stakeId, sheetId, cb) {
 		cb = cb || function() {};

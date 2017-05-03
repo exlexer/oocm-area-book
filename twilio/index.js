@@ -1,4 +1,4 @@
-var db = require('./index.js'),
+var db = require('../db/index'),
 		dbUtils = require('../db/utils');
 
 
@@ -7,98 +7,75 @@ module.exports = function (phone, message, cb) {
 	var params = message.split('! '),
 			route = params[0].toLowerCase();
 
-	dbUtils.findArea(from, function (error, results) {
+
+	dbUtils.findArea(phone, function (error, results) {
 		var from = results[0].id;
 
 		switch (route) {
 			case 'ni':
-				dbUtils.newInv(params[1], params[2], from, blankCb);
+				dbUtils.newInv(params[1], params[2], from, cb);
 				break;
 
 			case 'lesson':
 				findInvOrRc(params[1], from,
-				function (error, results, fields) {
+				function (error, results) {
 					db.query(
 						'INSERT INTO lessons (summary, lesson, invId) VALUES (?,?,?)',
-						[params[2], params[3], results[0].id], blankCb);
-				}, function (error, results, fields) {
+						[params[2], params[3], results[0].id], cb);
+				}, function (error, results) {
 					db.query(
 						'INSERT INTO lessons (summary, lesson, rcId) VALUES (?,?,?)',
-						[params[2], params[3], results[0].id], blankCb);
+						[params[2], params[3], results[0].id], cb);
 				})
 				break;
 
 			case 'ht':
 				// insert hters names into recent converts
-				dbUtils.findUnits(from, function (error, results, fields) {
+				dbUtils.findUnits(from, function (error, results) {
 						console.log(params[2], results[0].unitId, params[1]);	
 						db.query(
 							'UPDATE rc SET hters = ? WHERE name = ? AND unitId = ?',
 							[params[2], params[1], results[0].unitId],
-							blankCb
+							cb
 						);
 				});
 				break;
 
 			case 'vt':
 				// insert vters names into recent converts
-				dbUtils.findUnits(from, function (error, results, fields) {
+				dbUtils.findUnits(from, function (error, results) {
 						console.log(params[2], results[0].unitId, params[1]);
 						db.query(
 							'UPDATE rc SET vters = ? WHERE name = ? AND unitId = ?',
 							[params[2], params[1], results[0].unitId],
-							blankCb
+							cb
 						);
 				});
 				break;
 
 			case 'bap':
-				dbUtils.findInv(params[1], from, function (error, results, fields) {
-					var inv = results[0];
-					// insert inv into rc w/ bap date
-					dbUtils.findUnits(from, function (error, results, fields) {
-						// Inserts into incorrect unit
-						db.query(
-							'INSERT INTO rc (name, bd, unitId, age, gender) VALUES (?,?,?,?,?)',
-							[inv.name, inv.bd, results[0].unitId, inv.age, inv.gender],
-							function (error, results, fields) {
-								db.query(
-									'UPDATE lessons SET invId = NULL, rcId = ? WHERE invId = ?',
-									[results.insertId, inv.id],
-									blankCb
-								);
-								db.query(
-									'DELETE FROM inv WHERE id = ?',
-									[inv.id],
-									blankCb
-								);
-								db.query(
-									'INSERT INTO bap (areaId, rcId) VALUES (?,?)',
-									[from, results.insertId],
-									blankCb);
-							}
-						);
-					});
+				dbUtils.findInv(params[1], from, function (error, results) {
+					dbUtils.bapInv(results[0], from);
 				});
 				break;
 
 			case 'bd':
 				// insert bd into inv
-				dbUtils.findInv(params[1], from, function (error, results, fields) {
+				dbUtils.findInv(params[1], from, function (error, results) {
 					db.query(
 						'UPDATE inv SET bd = ? WHERE id = ?',
 						[params[2], results[0].id],
-						blankCb);
+						cb);
 				});
 				break;
 
 			case 'temple':
 				// insert bd into inv
-				dbUtils.findRc(params[1], from, function (error, results, fields) {
+				dbUtils.findRc(params[1], from, function (error, results) {
 					db.query(
 						'UPDATE inv SET bd = ? WHERE id = ?',
 						[params[2], results[0].id],
-						blankCb);
+						cb);
 				});
 				break;
 
@@ -108,11 +85,19 @@ module.exports = function (phone, message, cb) {
 					// add instance in church_attend as either RC or Inv
 					findInvOrRc(params[i], from,
 						function (error, results) {
-							dbUtils.invAtChurch(results[0].id, blankCb)
-						}, function (error, results, fields) {
-							dbUtils.rcAtChurch(results[0].id, blankCb);		
+							dbUtils.invAtChurch(results[0].id, cb)
+						}, function (error, results) {
+							dbUtils.rcAtChurch(results[0].id, cb);		
 						});
 					};
+				break;
+
+			case 'drop':
+				dbUtils.findInv(params[1], from, function (error, results) {
+					dbUtils.dropInv(results[0].id, params[2], cb);
+				});
+
+
 				break;
 
 			default:
@@ -122,17 +107,12 @@ module.exports = function (phone, message, cb) {
 	})
 };
 
-
-function blankCb(error, results, fields) {
-	if (error) { console.log(error) };
-};
-
 function findInvOrRc(name, areaId, invCb, rcCb) {
-	dbUtils.findInv(name, areaId, function (error, results, fields) {	
+	dbUtils.findInv(name, areaId, function (error, results) {	
 		if(results.length) {
-			dbUtils.invCb(error, results, fields);
+			invCb(error, results);
 		} else {
-			dbUtils.findUnits(areaId, function (error, results, fields) {
+			dbUtils.findUnits(areaId, function (error, results) {
 				dbUtils.findRc(name, results[0].unitId, rcCb);
 			});
 		};

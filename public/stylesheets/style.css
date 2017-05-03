@@ -241,37 +241,36 @@ i {
 }
 
 /* Area Book Focus Styling */
-.close {
+#focus button {
 	position: absolute;
-	background: red;
+	background: #f39696;
 	width: 25px;
 	height: 25px;
-	top: 10px;
 	right: 10px;
 	border-radius: 12.5px;
 	border: none;
 	text-align: center;
   box-shadow: 0px 0px 5px #888888;
 }
-.close i {
+#focus i {
 	margin-left: -5px;
+}
+#focus span{
+	padding: 5px;
+}
+.close {
+	top: 10px;
 }
 .download {
-	position: absolute;
-	background: red;
-	width: 25px;
-	height: 25px;
 	top: 45px;
-	right: 10px;
-	border-radius: 12.5px;
-	border: none;
-	text-align: center;
-  box-shadow: 0px 0px 5px #888888;
 }
-.download i {
-	margin-left: -5px;
+.edit-focus, .save-focus{
+	top: 80px;
 }
 
+.even {
+	background: lightgrey;
+}
 
 /* Bottom Right Button Styling - Possibly soon to be depricated */
 .add {

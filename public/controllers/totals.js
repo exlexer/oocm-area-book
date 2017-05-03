@@ -2,10 +2,8 @@
 
 angular.module('areaBook.totals',[])
 	.controller('totalsController', ['$scope','$rootScope','$http', function($scope,$rootScope,$http) {
-		var lead = $rootScope.leadership;
 
-		$http.post('/numbers', {leadership : lead}).then(function (resp) {
-			console.log(resp);
+		$http.post('/numbers', {leadership : $rootScope.leadership}).then(function (resp) {
 			$scope.data = resp.data;
 		});
 
