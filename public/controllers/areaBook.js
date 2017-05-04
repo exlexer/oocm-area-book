@@ -5,40 +5,42 @@ angular.module('areaBook.areaBook',[])
 		
 		function update() {
 			$http.get('/inv').then(function (resp) {
-				console.log(resp)
 				$scope.inv = resp.data;
 			}, function() {});
 			$http.get('/rc').then(function (resp) {
 				$scope.rc = resp.data;
 			}, function() {});
 			$http.get('/former').then(function (resp) {
-				console.log(resp.data);
 				$scope.former = resp.data;
 			}, function() {});
 			$http.get('/lesson').then(function (resp) {
+				console.log(resp.data)
 				$scope.lessons = resp.data;
 			}, function() {});
 		};
 		update();
 
 		$scope.openInv = function (id) {
+			$scope.focusEdit = false;
 			$scope.focus = true;
 			$scope.current = $scope.inv[id];
 		}
 
 		$scope.openRc = function (id) {
+			$scope.focusEdit = false;
 			$scope.focus = true;
 			$scope.current = $scope.rc[id];
 		}
 
 		$scope.openFormer = function (id) {
+			$scope.focusEdit = false;
 			$scope.focus = true;
 			$scope.current = $scope.former[id];
 		}
 
 		$scope.redate = function (date) {
 			date = new Date(date);
-			var format = date.getDay() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+			var format = (date.getMonth() + 1) + '-' + date.getDay() + '-' + date.getFullYear();
 			return format;
 		}
 
@@ -68,7 +70,7 @@ angular.module('areaBook.areaBook',[])
 		$scope.filterLessons = function() {
 			return function (lesson) {
 				if ($scope.current) {
-					return lesson.id === $scope.current.id || lesson.name === $scope.current.name;
+					return lesson.id === $scope.current.id && lesson.name === $scope.current.name;
 				} else {
 					return false;
 				}

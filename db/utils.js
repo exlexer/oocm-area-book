@@ -140,8 +140,13 @@ module.exports = {
 	    'SELECT l.summary, l.lesson, l.OrderDate, inv.id, inv.areaId, inv.name FROM lessons l '+
 	    'INNER JOIN inv ON l.invId = inv.id '+
 	    'LEFT JOIN missionaries m ON inv.areaId = m.areaId '+
+	    'WHERE m.id = ? '+
+	    'UNION '+
+	    'SELECT l.summary, l.lesson, l.OrderDate, f.id, f.areaId, f.name FROM lessons l '+
+	    'INNER JOIN former f ON l.invId = f.id '+
+	    'LEFT JOIN missionaries m ON f.areaId = m.areaId '+
 	    'WHERE m.id = ?',
-    	[missionaryId, missionaryId], cb)},
+    	[missionaryId, missionaryId, missionaryId], cb)},
 	updateLesson: function (invId, rcId, formerId, type, typeId, cb) {
 		db.query('UPDATE lessons SET invId = ?, rcId = ?, formerId = ?  WHERE ? = ?',
 			[invId, rcId, formerId, type, typeId], cb);},
@@ -177,23 +182,29 @@ module.exports = {
 		db.query('INSERT INTO inv (name, phoneNumber, areaId) VALUES (?,?,?)',
 			[name, phoneNumber, areaId], cb);},
 	dropInv: function (inv, reason, cb) {
+		console.log(inv);
 		var utils = this;
 		db.query('INSERT INTO former (name, nickName, dropReason, address, phoneNumber, areaId, gender) VALUES (?, ?, ?, ?, ?, ?, ?)',
 			[inv.name, inv.nickName, reason, inv.address, inv.phoneNumber, inv.areaId, inv.gender],
 			function (error, results) {
-				utils.updateLesson(null, null, results.insertId, 'invId', inv.id, function (error, results) {
-					utils.deleteInv(inv.id, cb);
-				});
-			})},
+				var formerId = results.insertId;
+				db.query('UPDATE lessons SET formerId = ?  WHERE invId = ?', [formerId, inv.id], function (error, results) {
+					db.query('UPDATE lessons SET invId = null WHERE formerId = ?', [formerId], function (error, results) {
+						utils.deleteInv(inv.id, cb);
+					})
+				})
+			}); },
 	pickupInv: function (former, cb) {
 		var utils = this;
 		db.query('INSERT INTO inv (name, nickName, address, phoneNumber, areaId, gender) VALUES (?, ?, ?, ?, ?, ?)',
 			[former.name, former.nickName, former.address, former.phoneNumber, former.areaId, former.gender],
 			function (error, results) {
-				console.log(error, results)
-				utils.updateLesson(results.insertId, null, null, 'formerId', former.id, function (error, results) {
-					utils.deleteFormer(former.id, cb);
-				});
+				var invId = results.insertId;
+				db.query('UPDATE lessons SET invId = ?  WHERE formerId = ?', [invId, former.id], function (error, results) {
+					db.query('UPDATE lessons SET formerId = null WHERE invId = ?', [invId], function (error, results) {
+						utils.deleteFormer(former.id, cb);
+					})
+				})
 			})},
 	updateInv: function (inv, cb) {
 		db.query('UPDATE inv SET nickName = ?, name = ?, bd = ?, gender = ?, areaId = ? WHERE id = ?',

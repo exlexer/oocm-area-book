@@ -9,7 +9,9 @@
 			<div class='main row'>
 				<div>
 					{{ val.name }} Zone
-					<i class='material-icons' ng-class='{flip: activeZone === val.id }' ng-click='showZone(val.id)'>keyboard_arrow_down</i>
+					<button class='ui-buttons small darker' ng-class='{flip: activeZone === val.id}' ng-click='showZone(val.id)'>
+						<i class='material-icons'>keyboard_arrow_down</i>
+					</button>
 				</div>
 			</div>
 			<div ng-show='activeZone === val.id'>
@@ -19,7 +21,9 @@
 				<div ng-repeat='val in districts | filter:subset(activeZone, "zoneId")'>
 					<div class='secondary row'>
 						{{ val.name }} District
-						<i class='material-icons' ng-class='{ flip: activeDistrict === val.id }' ng-click='showDistrict(val.id)'>keyboard_arrow_down</i>
+						<button class='ui-buttons small lighter' ng-class='{flip: activeDistrict === val.id}' ng-click='showDistrict(val.id)'>
+							<i class='material-icons'>keyboard_arrow_down</i>
+						</button>
 					</div>
 					<div ng-show='activeDistrict === val.id'>
 
@@ -34,7 +38,7 @@
 							<!-- Missionary Div -->
 							<div ng-repeat='(key, val) in miss | filter:subset(val.id, "areaId")' class='missionary' ng-class='{dl: val.leadership === "dist", zl: val.leadership === "zone", stl: val.leadership === "estl", asst: val.leadership === "asst"}'>
 								<span ng-show='editing !== val.id'>{{val.name}}</span>
-								<i class='edit material-icons' ng-click='editMiss(val.id, key)' ng-show='editing !== val.id'>edit</i>
+								<i class='edit material-icons accent' ng-click='editMiss(val.id, key)' ng-show='editing !== val.id'>edit</i>
 								<input ng-model='val.name' ng-show='editing === val.id'>
 								<input ng-model='val.email' ng-show='editing === val.id'>
 								<select ng-model='val.newAreaId' ng-show='editing === val.id'>
@@ -46,7 +50,7 @@
 									<option value='asst'>Assistant</option>
 									<option value='estl'>STL</option>
 								</select>
-								<i class='edit material-icons' ng-click='saveMiss(val)' ng-show='editing === val.id'>save</i>
+								<i class='edit material-icons accent' ng-click='saveMiss(val)' ng-show='editing === val.id'>save</i>
 							</div>
 						</div>
 					</div>
@@ -57,27 +61,31 @@
 		<div class='unassigned flex'>
 			<div ng-repeat='(key, val) in miss | filter:unassigned()' class='missionary'>
 				<span ng-show='editing !== val.id'>{{val.name}}</span>
-				<i class='edit material-icons' ng-click='editMiss(val.id, key)' ng-show='editing !== val.id'>edit</i>
+				<i class='edit material-icons accent' ng-click='editMiss(val.id, key)' ng-show='editing !== val.id'>edit</i>
 				<input ng-model='val.name' ng-show='editing === val.id'>
 				<input ng-model='val.email' ng-show='editing === val.id'>
 				<select ng-model='val.newAreaId' ng-show='editing === val.id'>
  					<option ng-repeat='(k, v) in areas' value='{{ v.id }}'>{{ v.name }}</option>
 				</select>
-				<i class='edit material-icons' ng-click='saveMiss(val)' ng-show='editing === val.id'>save</i>
+				<i class='edit material-icons accent' ng-click='saveMiss(val)' ng-show='editing === val.id'>save</i>
 			</div>
 		</div>
 
 		<h1>Church Units</h1>
 	
-		<div ng-repeat='(key, value) in stakes' class='row-box'>
+		<div ng-repeat='(key, val) in stakes' class='row-box'>
 			<div class='main row'>
 				<div>
-					{{ value.name }} Stake
-					<i class='material-icons' ng-click='exportStake(value.id)'>file_download</i>
-					<i class='material-icons' ng-class='{flip: activeStake === value.id }' ng-click='showStake(value.id)'>keyboard_arrow_down</i>
+					{{ val.name }} Stake
+					<button class='ui-buttons small darker first' ng-click='exportStake(val.id)'>
+						<i class='material-icons'>file_download</i>
+					</button>
+					<button class='ui-buttons small darker second' ng-class='{flip: activeStake === val.id}' ng-click='showStake(val.id)'>
+						<i class='material-icons'>keyboard_arrow_down</i>
+					</button>
 				</div>
 			</div>
-			<div ng-show='activeStake === value.id'>
+			<div ng-show='activeStake === val.id'>
 				<div ng-repeat='value in units | filter:subset(activeStake, "stakeId")' class='secondary row'>
 					{{ value.name }} Unit
 				</div>
@@ -88,8 +96,7 @@
 
 
 <!-- SECTION FOR ADDING NEW AREA -->
-	<i class='save material-icons' ng-click='save()' ng-show='changed'>save</i>
-	<i ng-class='{adding: adding}' class='add material-icons' ng-click='add()'>add</i>
+	<button class='ui-buttons top-button accent regular' ng-click='add()'><i class='material-icons'>add</i></button>
 	<div class='add-box' ng-show='adding'>
 		<p>
 			<select ng-model='newArea.type'>

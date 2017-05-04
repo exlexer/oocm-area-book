@@ -32,9 +32,6 @@ select {
 i:hover {
 	cursor: pointer;
 }
-i {
-	transition: .5s;
-}
 .flip {
 	transform: rotate(180deg);
 	transition: .5s;
@@ -88,8 +85,8 @@ i {
 }
 
 /* Header Styling */
-#header a {
-	color: white;
+#header a, #header, #user {
+	color: #fff;
 }
 #header {
   box-shadow: 0px 0px 5px #888888;
@@ -101,16 +98,11 @@ i {
 }
 #logo {
 	font-size: 20px;
-	color: white;
 	font-family: 'Slabo 13px', serif;
 	float: left;
 	margin: 10px;
 }
-#logo span {
-	color: #497da7;
-}
 #user {
-	color: white;
 	float: right;
 	margin: 10px;
 }
@@ -141,12 +133,15 @@ i {
 	list-style: none;
 }
 #menu ul li:hover {
-	color: #B71C1C;
+	color: #3f51b5;
 	padding-left: 6px;
-	border-left: 4px solid #B71C1C;
+	border-left: 4px solid #3f51b5;
 }
 
-
+/* Text Styling */
+.accent-text {
+	color: #3f51b5;
+}
 
 /* Content Styling */
 #content-view {
@@ -170,15 +165,10 @@ i {
 .row {
 	padding: 5px;
 }
-.row i{
-	float: right;
-	border: none;
-}
 .main {
 	margin-top: 5px;
 }
 .main h2 {
-	/*color: #F44336;*/
 	text-align: left;
 	margin: 5px;
 }
@@ -221,56 +211,90 @@ i {
 }
 
 /* Area Book Focus Styling */
-#focus button {
+#focus span {
+	padding: 5px;
+}
+.focus-data {
+	box-shadow: inset 0 0 1px #888;
+	padding: 1px 10px;
+	border-radius: 2px;
+}
+.focus-data input {
+	float: right;
+	margin: 0 5px;
+	padding: 2px;
+	border: none;
+	width: 60%;
+}
+
+
+
+/* Button Styling */
+.ui-buttons {
 	position: absolute;
-	width: 25px;
-	height: 25px;
 	right: 10px;
-	border-radius: 12.5px;
 	border: none;
 	text-align: center;
+	transition: .5s;
   box-shadow: 0px 0px 5px #888888;
 }
-#focus i {
+.ui-buttons:hover {
+	cursor: pointer;	
+  -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1);
+}
+.top-button {
+	top: 10px;
+}
+.second-button {
+	top: 45px;
+}
+.third-button{
+	top: 80px;
+}
+.regular {
+	width: 25px;
+	height: 25px;
+	border-radius: 12.5px;
+}
+.regular i {
 	margin-left: -1px;
 	font-size: 15px;
 }
-#focus span{
-	padding: 5px;
+.small {
+	width: 20px;
+	height: 20px;
+	border-radius: 10px;
 }
-.close {
-	top: 10px;
+.small i {
+	margin-left: -3.5px;
+	margin-top: 3px;
+	font-size: 15px;
 }
-.download {
-	top: 45px;
+.first {
+	right: 40px;
 }
-.edit-focus, .save-focus{
-	top: 80px;
+.second {
+	right: 10px;
 }
 
-.main i {
-	font-size: 15px;
-	border-radius: 15px;
-	padding: 3px;
-	margin: 2px;
-	box-shadow: 0 0 1px #888;
-	color: #fff;
-}
+
+
+
+
 
 /* Background Color Styling */
-#auth button:hover {
-	background: #fff
-}
-/* Primary */
-#header {
+.primary {
 	background: #F44336;
 }
-/* Darker */
-.main i {
-	background: #c62828
+.darker {
+	background: #c62828;
 }
-/* Accent */
-.missionary i, #focus button { 
+.lighter {
+	background: #e57373;
+}
+.accent, .focus-data input { 
 	background: #3f51b5;
 	color: #fff;
 }
@@ -280,15 +304,12 @@ i {
 .missionary {
 	background: #e6e6e6;
 }
-.even, .secondary, .save{
+.even, .secondary, .save, #auth button:hover, .white, #menu{
 	background: #fff;
 }
 .third {	
 	background: #CFD8DC;
 	box-shadow: inset 0 0 1px #888;
-}
-#menu {
-	background: #fff;
 }
 .add {
 	background: #0D47A1;
@@ -297,46 +318,13 @@ i {
 	background: #c9c9c9;
 }
 
-/* Bottom Right Button Styling - Possibly soon to be depricated */
-.add {
-	position: fixed;
-	width: 25px;
-	height: 25px;
-	bottom: 10px;
-	right: 20px;
-	border-radius: 12.5px;
-	border: none;
-	color: white;
-	font-size: 30px;
-	padding: 0;
-	text-align: center;
-	vertical-align: middle;
-	line-height: 26px !important;
-	transition: .25s;
-  box-shadow: 0px 0px 5px #888888;
-}
-.save {
-	color: white;
-	font-size: 20px;
-	position: fixed;
-	text-align: center;
-	bottom: 10px;
-	right: 55px;
-	border-radius: 12.5px;
-	width: 25px;
-	height: 25px;
-	transition: .25s;
-  box-shadow: 0px 0px 5px #888888;
-}
-.adding {
-	border-radius: 12.5px 2px 12.5px 12.5px;
-}
 .add-box {
-  box-shadow: 0px 0px 5px #888888;
-	position: fixed;
-	border-radius: 15px 15px 2px 15px;
-	bottom: 40px;
-	right: 20px;
+  box-shadow: 0px 0px 5px #888;
+	position: absolute;
+	border-radius: 2px;
+	top: 10px;
+	right: 45px;
+	width: 25%;
 	padding: 10px;
 	color: white;
 }

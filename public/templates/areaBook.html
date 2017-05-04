@@ -32,35 +32,35 @@
 	<!-- Focus -->
 	<div class='flex-child' ng-show='focus' id='focus'>
 		<h1>{{ current.name }}</h1>
-		<p class='focus-info' ng-show='!focusEdit'>
-			<span ng-show='current.age'><b>Age:</b> {{ current.age }}</span>
-			<span ng-show='current.gender'><b>Gender:</b> {{ current.gender }}</span>
-			<span ng-show='current.bd'><b>Baptismal Date:</b> {{ current.bd }}</span>
-			<span ng-show='current.nickName'><b>Nick Name:</b> {{ current.nickName }}</span>
-			<span ng-show='current.reason'><b>Drop Reason:</b> {{ current.reason }}</span>
-		</p>
-		<p class='focus-info' ng-show='focusEdit'>
-			<span>Age:<input ng-model='current.age'></span>
-			<span>Gender:<input ng-model='current.gender'></span>
-			<span>Baptismal Date:<input ng-model='current.bd'></span>
-			<span>Nick Name:<input ng-model='current.nickName'></span>
-		</p>
+		<div class='focus-data white'>
+			<p ng-show='!focusEdit'>
+				<span ng-show='current.age'><b>Age:</b> {{ current.age }}</span>
+				<span ng-show='current.gender'><b>Gender:</b> {{ current.gender }}</span>
+				<span ng-show='current.bd'><b>Baptismal Date:</b> {{ current.bd }}</span>
+				<span ng-show='current.nickName'><b>Nick Name:</b> {{ current.nickName }}</span>
+				<span ng-show='current.reason'><b>Drop Reason:</b> {{ current.reason }}</span>
+			</p>
+				<p ng-show='focusEdit'><b>Age:</b><input ng-model='current.age'></p>
+				<p ng-show='focusEdit'><b>Gender:</b><input ng-model='current.gender'></p>
+				<p ng-show='focusEdit'><b>Baptismal Date:</b><input ng-model='current.bd'></p>
+				<p ng-show='focusEdit'><b>Nick Name:</b><input ng-model='current.nickName'></p>
+		</div>
 		<div ng-repeat='l in lessons | filter:filterLessons()' ng-class-even='"even"'>
 				<span><b>{{ redate(l.OrderDate) }}</b></span>
 				<span>{{ l.summary }}</span>
 				<!-- <span>{{ l.lesson }}</span> -->
 		</div>
-		<button class='download'  ng-click='downloadFocus()'>
+		<button class='ui-buttons top-button accent regular' ng-click='closeFocus()'>
+			<i class='material-icons'>close</i>
+		</button>
+		<button class='ui-buttons second-button accent regular' ng-click='downloadFocus()'>
 			<i class='material-icons'>file_download</i>
 		</button>
-		<button class='edit-focus'  ng-show='!focusEdit' ng-click='editFocus()'>
+		<button class='ui-buttons third-button accent regular' ng-show='!focusEdit' ng-click='editFocus()'>
 			<i class='material-icons'>edit</i>
 		</button>
-		<button class='save-focus'  ng-show='focusEdit' ng-click='saveFocus()'>
+		<button class='ui-buttons third-button accent regular' ng-show='focusEdit' ng-click='saveFocus()'>
 			<i class='material-icons'>save</i>
-		</button>
-		<button class='close'  ng-click='closeFocus()'>
-			<i class='material-icons'>close</i>
 		</button>
 	</div>
 </div>

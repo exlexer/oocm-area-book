@@ -66,7 +66,6 @@ module.exports = function(app) {
 	app.route('/former')
 		.get(function (req, res) {
 			dbUtils.getFormer(req.session.passport.user, function (error, results) {
-				console.log(results);
 				res.send(results);
 			})
 		})
@@ -88,14 +87,6 @@ module.exports = function(app) {
 				// dbUtils.getDominionNums
 			}
 		});
-
-		// possibly depracating and building on front end
-	app.route('/record')
-		.post(function (req, res) {
-			// dbUtils.getreportData(req.body.id, function (error, results) {
-			res.send({name:'Hello', unitName: 'World', lessons: [{summary: 'well'}, {summary: 'well'}, {summary: 'good'}, {summary: 'well'}]});
-			// });
-		})
 
 	app.route('/miss')
 		.get(function (req, res) {
