@@ -2,7 +2,19 @@
 	<div id='header' class='primary'>
 		<div id='logo'>Area<span class='accent-text'>Book</span></div>
     <a href='/logout' class='logout'><i class='material-icons' ng-click='logout()'>exit_to_app</i></a>
-		<div id='user'>{{ $root.name }}</div>
+		<div id='user-wrapper'>
+			<div id='user' ng-click='openUserEdit()'>{{ $root.name }}</div>
+			<div class='drop'>
+				<i class='material-icons'>keyboard_arrow_down</i>
+			</div>
+		</div>
+	</div>
+	<div id='user-edit' class='darker' ng-show='userEdit'>
+		<p><label>Name</label> <input ng-model='user.name'></p>
+		<p><label>Email</label> <input ng-model='user.email'></p>
+		<p><label>Password</label> <input type='password' ng-model='user.password'></p>
+		<p><label>New Password</label> <input type='password' ng-model='user.newPassword'></p>
+		<button ng-click='saveUserEdit()'>SAVE</button>
 	</div>
 	<div ui-view='menu' id='menu-view' ng-style='resizeWithOffset(40)' resize notifier='notifyServiceOnChage(params)'>
 	</div>

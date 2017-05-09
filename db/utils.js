@@ -1,4 +1,5 @@
-var db = require('./index.js');
+var db = require('./index.js'),
+		SHA256 = require("crypto-js/sha256");
 
 module.exports = {
 
@@ -46,6 +47,22 @@ module.exports = {
 			[rcId], cb);},
 
 	// Functions for Creating and Managing Missionaries
+	checkPass: function (pw, id, passCb, failCb) {
+		db.query('SELECT password FROM missionaries WHERE id = ?',
+			[id], function (error, results) {
+				var userPW = SHA256(pw).toString();
+				if ( results[0].password === userPW ) {
+					passCb();
+				} else {
+					failCb();
+				};
+			});},
+		updateUser: function (name, email, newPass, id, cb) {
+			var pass = !!newPass ? 'password = ? ': '',
+					query = 'UPDATE missionaries SET name = ?, email = ?, ' + pass + 'WHERE id = ?'
+					params = !!newPass ? [name, email, SHA256(newPass).toString(), id] : [name, email, id];
+			db.query(query, params, cb);
+		},
 	newMissionary: function (name, email, cb) {
 		db.query('INSERT INTO missionaries (name, email) VALUES (?,?)',
 			[name, email], cb);},
@@ -56,7 +73,7 @@ module.exports = {
 		db.query('SELECT name, email, leadership FROM missionaries WHERE id = ?',
 			[id], cb);},
 	getMissionaries: function (cb) {
-		db.query('SELECT name, email, id, areaId, leadership FROM missionaries', cb);},
+		db.query('SELECT name, email, id, areaId, leadership, gender FROM missionaries', cb);},
 
 	// Functions for Creating and Managing Areas
 	newArea: function (name, phone, phoneTwo, districtId, unitArr, cb) {
@@ -72,6 +89,22 @@ module.exports = {
 							}
 						})
 				};
+			})},
+
+	updateArea: function (name, phone, phoneTwo, districtId, unitArr, id, cb) {
+		db.query('UPDATE areas SET name = ?, phone = ?, phoneTwo = ?, districtId = ? WHERE id = ?',
+			[name, phone, phoneTwo, districtId, id], function (error, results) {
+				// for (var i = 0, j = 0; i < unitArr.length; i++) {
+				// 	db.query('INSERT INTO area_unit (areaId, unitId) VALUES (?,?)',
+				// 		[results.insertId, unitArr[i]],
+				// 		function (err, res) {
+				// 			j++;
+				// 			if (j === unitArr.length) {
+				// 				cb(error, results)
+				// 			}
+				// 		})
+				// };
+				cb(error, results);
 			})},
 	findArea: function (from, cb) {
 		db.query('SELECT id, name FROM areas WHERE phone = ? OR phoneTwo = ?',
@@ -93,12 +126,15 @@ module.exports = {
 			'WHERE m.id = ?', [missId], cb
 		)},
 	getStakeRcs: function (stakeId, cb) { 
-			db.query(
-				'SELECT rc.name name, u.name unit, rc.age age, rc.gender gender, rc.bd bd, rc.hters hters, s.id stakeId, s.name stakeName, s.sheetId sheetId, rc.vters vters FROM rc '+
-				'LEFT JOIN units u ON rc.unitId = u.id '+
-				'LEFT JOIN stakes s ON u.stakeId = s.id '+
-				'WHERE u.stakeId = ?', [stakeId], cb
-			)},
+		db.query(
+			'SELECT rc.name name, u.name unit, rc.age age, rc.gender gender, rc.bd bd, rc.hters hters, s.id stakeId, s.name stakeName, s.sheetId sheetId, rc.vters vters FROM rc '+
+			'LEFT JOIN units u ON rc.unitId = u.id '+
+			'LEFT JOIN stakes s ON u.stakeId = s.id '+
+			'WHERE u.stakeId = ?', [stakeId], cb
+		)},
+	getStakeSheet: function (stakeId, cb) {
+		db.query('SELECT sheetId FROM stakes WHERE id = ?', [stakeId], cb)
+	},
 	updateRc: function (rc, cb) {
 		db.query('UPDATE rc SET nickName = ?, name = ?, bd = ?, gender = ? WHERE id = ?',
 			[rc.nickName, rc.name, rc.bd, rc.gender, rc.id], cb)},
@@ -143,7 +179,7 @@ module.exports = {
 	    'WHERE m.id = ? '+
 	    'UNION '+
 	    'SELECT l.summary, l.lesson, l.OrderDate, f.id, f.areaId, f.name FROM lessons l '+
-	    'INNER JOIN former f ON l.invId = f.id '+
+	    'INNER JOIN former f ON l.formerId = f.id '+
 	    'LEFT JOIN missionaries m ON f.areaId = m.areaId '+
 	    'WHERE m.id = ?',
     	[missionaryId, missionaryId, missionaryId], cb)},
@@ -182,14 +218,17 @@ module.exports = {
 		db.query('INSERT INTO inv (name, phoneNumber, areaId) VALUES (?,?,?)',
 			[name, phoneNumber, areaId], cb);},
 	dropInv: function (inv, reason, cb) {
-		console.log(inv);
+		console.log('dropInv, Investigator being dropped',inv);
 		var utils = this;
 		db.query('INSERT INTO former (name, nickName, dropReason, address, phoneNumber, areaId, gender) VALUES (?, ?, ?, ?, ?, ?, ?)',
 			[inv.name, inv.nickName, reason, inv.address, inv.phoneNumber, inv.areaId, inv.gender],
 			function (error, results) {
+			console.log('dropInv, New Former', results);
 				var formerId = results.insertId;
 				db.query('UPDATE lessons SET formerId = ?  WHERE invId = ?', [formerId, inv.id], function (error, results) {
+					console.log('dropInv, Lessons changed to Former', results);
 					db.query('UPDATE lessons SET invId = null WHERE formerId = ?', [formerId], function (error, results) {
+					console.log('dropInv, Lessons changed from Investigator', results);
 						utils.deleteInv(inv.id, cb);
 					})
 				})

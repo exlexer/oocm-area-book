@@ -30,28 +30,36 @@
 
 						<!-- Area Div -->
 						<div ng-repeat='val in areas | filter:subset(activeDistrict, "districtId")' class='third row flex'>
-							<span class='area-name'>
-							{{ val.name }}
-							</span>
+							<span class='area-name' ng-show='editingArea.id !== val.id'>{{ val.name }}</span>
+							<span class='area-name' ng-show='editingArea.id === val.id'><input ng-model='val.name'></span>
+							<span class='area-phone' ng-show='editingArea.id !== val.id'>{{ val.phone }}</span>
+							<span class='area-phone' ng-show='editingArea.id === val.id'><input ng-model='val.phone'></span>
+							<span class='area-phone' ng-show='editingArea.id !== val.id && val.phoneTwo'>{{ val.phoneTwo }}</span>
+							<span class='area-phone' ng-show='editingArea.id === val.id'><input ng-model='val.phoneTwo'></span>
 
 
 							<!-- Missionary Div -->
 							<div ng-repeat='(key, val) in miss | filter:subset(val.id, "areaId")' class='missionary' ng-class='{dl: val.leadership === "dist", zl: val.leadership === "zone", stl: val.leadership === "estl", asst: val.leadership === "asst"}'>
-								<span ng-show='editing !== val.id'>{{val.name}}</span>
-								<i class='edit material-icons accent' ng-click='editMiss(val.id, key)' ng-show='editing !== val.id'>edit</i>
-								<input ng-model='val.name' ng-show='editing === val.id'>
-								<input ng-model='val.email' ng-show='editing === val.id'>
-								<select ng-model='val.newAreaId' ng-show='editing === val.id'>
- 									<option ng-repeat='(k, v) in areas' value='{{ v.id }}'>{{ v.name }}</option>
+								<span ng-show='editing.id !== val.id'>{{val.name}}</span>
+								<i class='edit material-icons accent' ng-click='editMiss(val)' ng-show='editing.id !== val.id'>edit</i>
+								<input ng-model='val.name' class='first-input' ng-show='editing.id === val.id'>
+								<input ng-model='val.email' ng-show='editing.id === val.id'>
+								<select ng-model='val.newAreaId' ng-show='editing.id === val.id'>
+ 									<option ng-repeat='(k, v) in areas' value='{{ v.id }}' ng-selected='v.id === editing.newAreaId'>{{ v.name }}</option>
 								</select>
-								<select ng-model='val.leadership' ng-show='editing === val.id'>
-									<option value='dist'>District Leader</option>
-									<option value='zone'>Zone Leader</option>
-									<option value='asst'>Assistant</option>
-									<option value='estl'>STL</option>
+								<select ng-model='val.leadership' ng-show='editing.id === val.id'>
+									<option value='dist' ng-show='val.gender === "Male"' ng-selected='editing.leadership === "dist"'>District Leader</option>
+									<option value='zone' ng-show='val.gender === "Male"' ng-selected='editing.leadership === "zone"'>Zone Leader</option>
+									<option value='asst' ng-show='val.gender === "Male"' ng-selected='editing.leadership === "asst"'>Assistant</option>
+									<option value='estl' ng-show='val.gender === "Female"' ng-selected='editing.leadership === "estl"'>STL</option>
 								</select>
-								<i class='edit material-icons accent' ng-click='saveMiss(val)' ng-show='editing === val.id'>save</i>
+								<i class='edit material-icons accent' ng-click='saveMiss(val)' ng-show='editing.id === val.id'>save</i>
 							</div>
+							<div>
+							<i class='district-button material-icons accent' ng-click='saveArea(val)' ng-show='editingArea.id === val.id'>save</i>
+							<i class='district-button material-icons accent' ng-click='editArea(val)' ng-show='editingArea.id !== val.id'>edit</i>
+							</div>
+
 						</div>
 					</div>
 				</div>
@@ -103,9 +111,11 @@
 				<option value='0'>Zone</option>
 				<option value='1'>District</option>
 				<option value='2'>Area</option>
+				<option value='3'>Stake</option>
+				<option value='4'>Unit</option>
 			</select>
 		</p>
-			<p ng-show='newArea.type == 0 || newArea.type == 1 || newArea.type == 2'>
+			<p ng-show='newArea.type == 0 || newArea.type == 1 || newArea.type == 2 || newArea.type == 3 || newArea.type == 4'>
 				<input type='text' ng-model='newArea.name' placeholder='Name'>
 			</p>
 			<p ng-show='newArea.type == 0'>
@@ -116,6 +126,11 @@
 			<p ng-show='newArea.type == 1'>
 				<select ng-model='newArea.zoneId'>
   				<option ng-repeat='(key, value) in zones' value='{{ value.id }}'>{{ value.name }}</option>
+				</select>
+			</p>
+			<p ng-show='newArea.type == 4'>
+				<select ng-model='newArea.stakeId'>
+  				<option ng-repeat='(key, value) in stakes' value='{{ value.id }}'>{{ value.name }}</option>
 				</select>
 			</p>
 			<p ng-show='newArea.type == 2'>

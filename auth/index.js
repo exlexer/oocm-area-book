@@ -78,8 +78,8 @@ module.exports = function(passport) {
         if (results.length) {
           if(!results[0].password) {
             db.query(
-              'UPDATE missionaries SET password = ?, name = ? WHERE email = ?',
-              [password, req.body.name, username],
+              'UPDATE missionaries SET password = ?, name = ?, gender = ? WHERE email = ?',
+              [password, req.body.name, req.body.gender, username],
               function (error, results, fields) {
                 console.log(results);
                 newUserMysql.id = results[0].id;
@@ -94,8 +94,8 @@ module.exports = function(passport) {
           // create the user
       
           db.query(
-            "INSERT INTO missionaries ( email, password, name ) VALUES (?,?,?)",
-            [username, password, req.body.name],
+            "INSERT INTO missionaries ( email, password, name, gender ) VALUES (?,?,?,?)",
+            [username, password, req.body.name, req.body.gender],
             function (error, results, fields){
               newUserMysql.id = results.insertId;
               return done(null, newUserMysql);

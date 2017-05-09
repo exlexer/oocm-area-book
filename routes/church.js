@@ -66,7 +66,6 @@ module.exports = function(app) {
 		})
 		.post(function (req, res) {
 			dbUtils.updateRc(req.body, function (error, results) {
-				console.log(error, results)
 				res.send()
 			})
 		});

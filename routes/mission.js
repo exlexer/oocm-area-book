@@ -44,10 +44,15 @@ module.exports = function(app) {
 		.post(function (req, res) {
 			var data = req.body;
 			var units = Array.isArray(data.unitId) ? data.unitId : [data.unitId];
-			dbUtils.newArea(data.name, data.phone, data.phoneTwo, data.districtId, units, function (error, results) {
+			if (!data.id) {
+				dbUtils.newArea(data.name, data.phone, data.phoneTwo, data.districtId, units, function (error, results) {
 					res.send();
-				}
-			);
+				});
+			} else {
+				dbUtils.updateArea(data.name, data.phone, data.phoneTwo, data.districtId, units, data.id, function (error, results) {
+					res.send();
+				});
+			};
 		});
 
 	app.route('/inv')
@@ -58,7 +63,6 @@ module.exports = function(app) {
 		})
 		.post(function (req, res) {
 			dbUtils.updateInv(req.body, function (error, results) {
-				// console.log(error, results);
 				res.send();
 			})
 		});
@@ -95,7 +99,6 @@ module.exports = function(app) {
 			});
 		})
 		.post(function (req, res) {
-			console.log(req.body);
 			if(req.body.id) {
 				dbUtils.updateMissionary(req.body.name, req.body.email, req.body.leadership, req.body.areaId, req.body.id,
 					function (error, results) {

@@ -48,7 +48,6 @@ function authorize(cb, authCb) {
  *     client.
  */
 function getNewToken (oauth2Client, cb) {
-  console.log('I"m in auth!', authCb)
   var authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: SCOPES
@@ -65,8 +64,6 @@ function recieveToken (code) {
   var redirectUrl = 'http://development.etttcqu2nb.us-west-2.elasticbeanstalk.com/redirectOAuth';
   var auth = new googleAuth();
   var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
-
-  console.log("HERE I AM!", code)
 
   oauth2Client.getToken(code, function (err, token) {
     if (err) {

@@ -30,26 +30,41 @@ angular.module('areaBook.area',[])
 		};
 		update();
 
-		$scope.editMiss = function (id, key) {
-			$scope.miss[key].newAreaId = $scope.miss[key].areaId
-			$scope.editing = id;
+		$scope.editMiss = function (val) {
+			$scope.editing = val;
+			$scope.editing.newAreaId = val.areaId;
+		};
+
+		$scope.editArea = function (val) {
+			$scope.editingArea = val;
+			console.log($scope.editingArea)
 		};
 
 		$scope.saveMiss = function (val) {
+					$scope.editing = false;
 			val.areaId = parseInt(val.newAreaId);
 			$http.post('/miss', val).then(function (resp) {
 					update();
-					$scope.editing = false;
 			});
 		};
 
+		$scope.saveArea = function (val) {
+					$scope.editingArea = false;
+			$http.post('/areas', val).then(function (resp) {
+					update();
+			});
+		};
 
 		$scope.showZone = function (id) {
 			$scope.activeZone = $scope.activeZone !== id ? id : false;
 		};
 
 		$scope.showDistrict = function (id) {
-			$scope.activeDistrict = $scope.activeDistrict !== id ? id : false;
+			if ($scope.activeDistrict !== id) {
+				$scope.activeDistrict = id;
+			} else {
+				$scope.activeDistrict = $scope.editingArea = false;
+			}
 		};
 
 		$scope.showStake = function (id) {
@@ -74,7 +89,7 @@ angular.module('areaBook.area',[])
 		$scope.add = function() { $scope.adding = !$scope.adding; };
 
 		$scope.addArea = function() {
-			var types = ['/zones', '/districts', '/areas'];
+			var types = ['/zones', '/districts', '/areas', '/stakes', '/units'];
 			$http.post(types[$scope.newArea.type], $scope.newArea).then(function(resp) {
 				update();
 				resetAdd();

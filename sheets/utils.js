@@ -26,7 +26,7 @@ function storeToken (code, cb) {
 	ss.recieveToken(code, cb);
 }
 
-
+// only workswhen there are less actives
 function exportRc(stakeId, cb) {
 	dbUtils.getStakeRcs(stakeId, function (error, response) {
 		if (!response[0].sheetId) {
@@ -52,10 +52,31 @@ function updateSheet (id, range, vals, cb, authCb) {
 				values: vals
 			},
 			auth: auth
-		}, cb, authCb);
-	})
+		}, cb);
+	}, authCb)
 };
 
+
+function readSheet (id, range, cb, authCb) {
+	ss.auth(function (auth) {
+		sheets.spreadsheets.values.get({
+			spreadsheetId: id,
+			range: range,
+			auth: auth
+		}, cb);
+	}, authCb)
+}
+
+function getSheets (id, cb, authCb) {
+	ss.auth(function (auth) {
+	  sheets.spreadsheets.get({
+  		spreadsheetId: id,
+  		ranges: [],
+	    includeGridData: false,
+	    auth: auth
+		}, cb)
+	}, authCb);
+}
 
 function createValMatrix (rcs) {
 	var matrix = [['Current Unit', 'Name','Bishop/Branch President','Age','Gender','Date Confirmed','Status','Attended Church this month','Responsibility/Calling','Home Teacher','Visiting Teachers','Temple']];
@@ -69,6 +90,8 @@ function createValMatrix (rcs) {
 
 module.exports = {
 	exportRc: exportRc,
-	storeToken: storeToken
+	storeToken: storeToken,
+	readSheet: readSheet,
+	getSheets: getSheets
 };
 

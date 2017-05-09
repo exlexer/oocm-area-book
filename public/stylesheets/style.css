@@ -78,6 +78,12 @@ i:hover {
 #auth input:-moz-placeholder { /* Firefox 18- */
   color: #C62828;
 }
+#auth select {
+	margin: 10px;
+	padding: 5px;
+	width: 160px;
+  color: #C62828;
+}
 #auth button {
 	margin-top: 20px;
 	padding: 7px 19px;
@@ -102,9 +108,35 @@ i:hover {
 	float: left;
 	margin: 10px;
 }
-#user {
+#user-wrapper {
 	float: right;
-	margin: 10px;
+}
+#user {
+	/*float: right;*/
+	padding: 5px;
+	cursor: pointer;
+	margin: 5px;
+	border-radius: 2px;
+}
+#user-edit {
+	position: absolute;
+	right: 25px;
+	top: 50px;
+	border-radius: 2px;
+	padding: 5px;
+	z-index: 1;
+	box-shadow: 0 0 1px #888;
+}
+.drop {
+	display: none;
+	font-size: 100px;
+	text-align: center;
+	top: -17px;
+	position: relative;
+	pointer-events: none;
+}
+#user:hover + .drop {
+	display: block;
 }
 .logout {
 	float: right;
@@ -181,8 +213,11 @@ i:hover {
 .third {
 	margin: 0 10px;
 }
-.area-name {
+.area-name, .area-phone {
 	padding: 5px;
+}
+.area-phone {
+	color: #e57373;
 }
 .missionary {
 	border-radius: 20px;
@@ -210,6 +245,17 @@ i:hover {
 
 }
 
+.missionary input, .missionary select {
+	margin-left: 5px;
+	padding: 0 5px;
+	border-radius: 2px;
+}
+.first-input {
+	border-radius: 10px 2px 2px 10px !important;
+	margin-left: -3px !important;
+}
+
+
 /* Area Book Focus Styling */
 #focus span {
 	padding: 5px;
@@ -230,6 +276,16 @@ i:hover {
 
 
 /* Button Styling */
+.district-button {
+	width: 30px;
+	height: 30px;
+	border-radius: 15px;
+	text-align: center;
+	font-size: 20px !important;
+	line-height: 30px !important;
+	position: absolute;
+	right: 25px;
+}
 .ui-buttons {
 	position: absolute;
 	right: 10px;
@@ -288,7 +344,7 @@ i:hover {
 .primary {
 	background: #F44336;
 }
-.darker {
+.darker, #user:hover {
 	background: #c62828;
 }
 .lighter {
@@ -304,7 +360,7 @@ i:hover {
 .missionary {
 	background: #e6e6e6;
 }
-.even, .secondary, .save, #auth button:hover, .white, #menu{
+.even, .secondary, .save, #auth button:hover, .white, #menu, .missionary input{
 	background: #fff;
 }
 .third {	
@@ -325,6 +381,6 @@ i:hover {
 	top: 10px;
 	right: 45px;
 	width: 25%;
-	padding: 10px;
+	padding: 0 10px 10px;
 	color: white;
 }

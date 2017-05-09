@@ -20,5 +20,18 @@ module.exports = function(app) {
 			dbUtils.getUser(req.session.passport.user, function (error, results) {
 				res.send(results);
 			});
+		})
+		.post(function (req, res) {
+			if (req.body.newPassword) {
+				dbUtils.checkPass(req.body.password, req.session.passport.user, function () {
+					dbUtils.updateUser(req.body.name, req.body.email, req.body.newPassword, req.session.passport.user, function (error, results) {
+						res.send('Password Correct!');
+					})
+				}, function () {
+					res.send('Password Incorrect!');
+				});
+			} else {
+				res.send('no password!');
+			}
 		});
 }
