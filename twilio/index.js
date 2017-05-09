@@ -71,14 +71,15 @@ module.exports = function (phone, message, cb) {
 				});
 				break;
 
+				// not setup yet
 			case 'temple':
 				// insert bd into inv
-				dbUtils.findRc(params[1], from, function (error, results) {
-					db.query(
-						'UPDATE inv SET bd = ? WHERE id = ?',
-						[params[2], results[0].id],
-						cb);
-				});
+				// dbUtils.findRc(params[1], from, function (error, results) {
+				// 	db.query(
+				// 		'UPDATE inv SET bd = ? WHERE id = ?',
+				// 		[params[2], results[0].id],
+				// 		cb);
+				// });
 				break;
 
 			case 'church':

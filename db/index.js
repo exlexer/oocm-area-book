@@ -6,11 +6,10 @@ var mysql = require('mysql');
 var options;
 
 var devOptions = {
-	host : 'aa4qb7hf7vsrnu.cvomhhylmjnk.us-west-2.rds.amazonaws.com',
-  port : '3306',
-  user : 'oocm',
-  password : 'masterpass',
-  database : 'ebdb'
+	  host:"localhost",
+    user:"root",
+	  password: "root",
+	  database: "ebdb"
 }
 
 
@@ -25,10 +24,11 @@ if (process.env.RDS_HOSTNAME) {
 	};
 } else {
 	options = {
-	  host:"localhost",
-    user:"root",
-	  password: "root",
-	  database: "ebdb"
+		host : 'aa4qb7hf7vsrnu.cvomhhylmjnk.us-west-2.rds.amazonaws.com',
+	  port : '3306',
+	  user : 'oocm',
+	  password : 'masterpass',
+	  database : 'ebdb'
 	};
 };
 

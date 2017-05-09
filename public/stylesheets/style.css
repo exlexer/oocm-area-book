@@ -28,12 +28,13 @@ select {
 	border-radius: 2px;
 	border: none;
 	width: 100%;
+	font-family: 'Roboto', sans-serif;
 }
 i:hover {
 	cursor: pointer;
 }
 .flip {
-	transform: rotate(180deg);
+	transform: rotate(180deg) !important;
 	transition: .5s;
 }
 .flex {
@@ -45,12 +46,13 @@ i:hover {
 *:focus {
   outline: none;
 }
-
-
+label {
+	color: #757575;
+	font-size: 13px;
+}
 
 /* Auth Styling */
 #auth{
-	background: #C62828 url("../img/img.jpg") no-repeat center;
 	width: 100%;
 	height: 100%;
 	text-align: center;
@@ -334,9 +336,6 @@ i:hover {
 .second {
 	right: 10px;
 }
-
-
-
 
 
 

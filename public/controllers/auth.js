@@ -3,6 +3,8 @@
 angular.module('areaBook.auth',[])
 	.controller('authController', ['$rootScope','$scope','$location','$http', '$state', function($rootScope, $scope, $location, $http, $state) {
 		
+		document.body.style.background = '#C62828 url("../img/img.jpg") no-repeat center';
+
 		$scope.signup = false;
 
 		$scope.redirect = function() {
