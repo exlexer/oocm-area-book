@@ -29,13 +29,16 @@ module.exports = {
 	getAreaNums: function (missionaryId, cb) {
 		var start = getDateForLastOccurence(4),
 				end = new Date(),
-				nums = {};
+				nums = {bd: 0};
 				end.setUTCMinutes(59);
 				end.setUTCHours(23);
 
 		db.query('SELECT * FROM inv WHERE OrderDate BETWEEN ? AND ?',
 			[start, end], function (error, results) {
 				nums.ni = results.length;
+				for (var i = 0; i < results.length; i++) {
+					if (results[i].bd) { nums.bd++ };
+				};
 				db.query('SELECT * FROM lessons WHERE OrderDate BETWEEN ? AND ?',
 					[start, end], function (error, results) {
 						nums.lessons = results.length;
@@ -242,9 +245,9 @@ module.exports = {
 	findInv: function (name, areaId, cb) {
 		db.query('SELECT * FROM inv WHERE name = ? OR nickName = ? AND areaId = ?',
 			[name, name, areaId], cb)},
-	newInv: function (name, phoneNumber, areaId, cb) {
-		db.query('INSERT INTO inv (name, phoneNumber, areaId) VALUES (?,?,?)',
-			[name, phoneNumber, areaId], cb);},
+	newInv: function (name, phoneNumber, address, areaId, cb) {
+		db.query('INSERT INTO inv (name, phoneNumber, address, areaId) VALUES (?,?,?,?)',
+			[name, phoneNumber, address, areaId], cb);},
 	dropInv: function (inv, reason, cb) {
 		console.log('dropInv, Investigator being dropped',inv);
 		var utils = this;

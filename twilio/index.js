@@ -13,7 +13,7 @@ module.exports = function (phone, message, cb) {
 
 		switch (route) {
 			case 'ni':
-				dbUtils.newInv(params[1], params[2], from, cb);
+				dbUtils.newInv(params[1], params[2], params[3], from, cb);
 				break;
 
 			case 'lesson':
