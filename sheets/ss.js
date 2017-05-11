@@ -52,9 +52,7 @@ function getNewToken (oauth2Client, cb) {
     scope: SCOPES
   });
 
-  console.log('callback',cb);
-
-  cb(authUrl, oauth2Client);
+  cb(authUrl);
 };
 
 function recieveToken (code) {

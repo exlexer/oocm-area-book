@@ -31,6 +31,7 @@ angular.module('areaBook.menu',[])
 
 		$http.get('/user').then(function (resp) {
 			$rootScope.leadership = !!resp.data[0].leadership ? resp.data[0].leadership : 'miss';
+			$state.go($rootScope.leadership === 'pres' ? 'app.menu.areas' : 'app.menu.areaBook');
 			$rootScope.areaId = resp.data[0].areaId;
 			$rootScope.email = resp.data[0].email;
 			$rootScope.name = resp.data[0].name;

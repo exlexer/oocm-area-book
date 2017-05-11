@@ -8,8 +8,6 @@ var sheets = google.sheets('v4');
 
 // Creates new sheet, accepts a title for the sheet and a callback taking params of err and response
 var createSheet = function (title, cb, authCb) {
-
-
 	ss.auth(function (auth) {
 			sheets.spreadsheets.create({
 			resource: {
@@ -29,21 +27,23 @@ function storeToken (code, cb) {
 // only workswhen there are less actives
 function exportRc(stakeId, cb) {
 	dbUtils.getStakeRcs(stakeId, function (error, response) {
+		// If there is a spreadsheet made for stake, it updates sheet and
+		// sends url. if there is no sheet, it creates sheet, updates it and sends it.
 		if (!response[0].sheetId) {
-			createSheet(response[0].stakeName, function(err,res) {
+			createSheet(response[0].stakeName, function (err,res) {
 				dbUtils.updateSheetId(stakeId, res.spreadsheetId)
-				updateSheet(res.spreadsheetId, 'A1', createValMatrix(response), function (err, res) {}, cb);
+				updateSheet(res.spreadsheetId, 'A1', createValMatrix(response), cb);
 				cb(res.spreadsheetUrl);
 			}, cb)
 		} else {
-			updateSheet(response[0].sheetId, 'A1', createValMatrix(response), function (err, res) {}, cb);
+			updateSheet(response[0].sheetId, 'A1', createValMatrix(response), cb);
   		cb('https://docs.google.com/spreadsheets/d/' + response[0].sheetId + '/edit');
 		}
 	})
 };
 
-function updateSheet (id, range, vals, cb, authCb) {
-	ss.auth(function(auth) {
+function updateSheet (id, range, vals, cb) {
+	ss.auth(function (auth) {
 		sheets.spreadsheets.values.append({
 			spreadsheetId:id,
 			range: range,
@@ -53,18 +53,18 @@ function updateSheet (id, range, vals, cb, authCb) {
 			},
 			auth: auth
 		}, cb);
-	}, authCb)
+	})
 };
 
 
-function readSheet (id, range, cb, authCb) {
+function readSheet (id, range, cb) {
 	ss.auth(function (auth) {
 		sheets.spreadsheets.values.get({
 			spreadsheetId: id,
 			range: range,
 			auth: auth
 		}, cb);
-	}, authCb)
+	})
 }
 
 function getSheets (id, cb, authCb) {

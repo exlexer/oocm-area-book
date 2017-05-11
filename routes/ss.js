@@ -7,7 +7,9 @@ module.exports = function(app) {
 	app.route('/exportStake')
 		.post(function (req, res) {
 			ssUtils.exportRc(req.body.id, function (url) {
-				res.send({ url : url });
+				if(!res._header) {
+					res.send({ url : url });
+				};
 			})
 		});
 
