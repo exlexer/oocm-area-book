@@ -8,7 +8,7 @@ var googleAuth = require('google-auth-library');
 var SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/';
-var TOKEN_PATH = TOKEN_DIR + 'sheets.googleapis.com-nodejs-quickstart.json';
+var TOKEN_PATH = TOKEN_DIR + 'sheets-credentials.json';
 
 /**
  * Create an OAuth2 client with the given credentials, and then execute the
@@ -22,8 +22,7 @@ function authorize(cb, authCb) {
 
   var clientId = process.env.OAUTH_CLIENT_SECRET || "980683034451-l7k9t1h6sr82v4il32rruks7sh5gmkvj.apps.googleusercontent.com";
   var clientSecret = process.env.OAUTH_CLIENT_SECRET || "GQeQd6eoAEjD1RAMi-rMJXuh";
-  // var redirectUrl = 'http://localhost:3000/redirectOAuth';
-  var redirectUrl = 'http://development.etttcqu2nb.us-west-2.elasticbeanstalk.com/redirectOAuth';
+  var redirectUrl = process.env.SHEET_REDIRECT_URL || 'http://localhost:3000/redirectOAuth';
   var auth = new googleAuth();
   var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 
@@ -53,6 +52,8 @@ function getNewToken (oauth2Client, cb) {
     scope: SCOPES
   });
 
+  console.log('callback',cb);
+
   cb(authUrl, oauth2Client);
 };
 
@@ -60,8 +61,7 @@ function recieveToken (code) {
 
   var clientId = process.env.OAUTH_CLIENT_SECRET || "980683034451-l7k9t1h6sr82v4il32rruks7sh5gmkvj.apps.googleusercontent.com";
   var clientSecret = process.env.OAUTH_CLIENT_SECRET || "GQeQd6eoAEjD1RAMi-rMJXuh";
-  // var redirectUrl = 'http://localhost:3000/redirectOAuth';
-  var redirectUrl = 'http://development.etttcqu2nb.us-west-2.elasticbeanstalk.com/redirectOAuth';
+  var redirectUrl = process.env.SHEET_REDIRECT_URL || 'http://localhost:3000/redirectOAuth';
   var auth = new googleAuth();
   var oauth2Client = new auth.OAuth2(clientId, clientSecret, redirectUrl);
 

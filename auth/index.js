@@ -58,7 +58,6 @@ module.exports = function(passport) {
   },
   function (req, username, password, done) {
 
-    console.log(req, username, password, done);
 
     password = SHA256(password).toString();
 
@@ -72,7 +71,6 @@ module.exports = function(passport) {
     db.query("SELECT * FROM missionaries WHERE email = ?",
       [username],
       function (error, results, fields){
-        console.log(results);
         if (error)
           return done(error);
         if (results.length) {
@@ -81,7 +79,6 @@ module.exports = function(passport) {
               'UPDATE missionaries SET password = ?, name = ?, gender = ? WHERE email = ?',
               [password, req.body.name, req.body.gender, username],
               function (error, results, fields) {
-                console.log(results);
                 newUserMysql.id = results[0].id;
                 return done(null, newUserMysql);
               });
