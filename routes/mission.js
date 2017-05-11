@@ -83,13 +83,13 @@ module.exports = function(app) {
 
 	app.route('/numbers')
 		.post(function (req, res) {
-			dbUtils.getAreaNums(req.session.passport.user,	function (error, results) {
-				res.send(results)
+			dbUtils.getAreaNums(req.session.passport.user,	function (nums) {
+				res.send(nums)
 			});
-			if (req.body.leadership !== 'miss' || undefined) {
-				// get numbers for dominion
-				// dbUtils.getDominionNums
-			}
+			// if (req.body.leadership !== 'miss' || undefined) {
+			// 	// get numbers for dominion
+			// 	// dbUtils.getDominionNums
+			// }
 		});
 
 	app.route('/miss')

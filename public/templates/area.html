@@ -68,14 +68,20 @@
 
 		<div class='unassigned flex'>
 			<div ng-repeat='(key, val) in miss | filter:unassigned()' class='missionary'>
-				<span ng-show='editing !== val.id'>{{val.name}}</span>
-				<i class='edit material-icons accent' ng-click='editMiss(val.id, key)' ng-show='editing !== val.id'>edit</i>
-				<input ng-model='val.name' ng-show='editing === val.id'>
-				<input ng-model='val.email' ng-show='editing === val.id'>
-				<select ng-model='val.newAreaId' ng-show='editing === val.id'>
- 					<option ng-repeat='(k, v) in areas' value='{{ v.id }}'>{{ v.name }}</option>
-				</select>
-				<i class='edit material-icons accent' ng-click='saveMiss(val)' ng-show='editing === val.id'>save</i>
+				<span ng-show='editing.id !== val.id'>{{val.name}}</span>
+					<i class='edit material-icons accent' ng-click='editMiss(val)' ng-show='editing.id !== val.id'>edit</i>
+					<input ng-model='val.name' class='first-input' ng-show='editing.id === val.id'>
+					<input ng-model='val.email' ng-show='editing.id === val.id'>
+					<select ng-model='val.newAreaId' ng-show='editing.id === val.id'>
+							<option ng-repeat='(k, v) in areas' value='{{ v.id }}' ng-selected='v.id === editing.newAreaId'>{{ v.name }}</option>
+					</select>
+					<select ng-model='val.leadership' ng-show='editing.id === val.id'>
+						<option value='dist' ng-show='val.gender === "Male"' ng-selected='editing.leadership === "dist"'>District Leader</option>
+						<option value='zone' ng-show='val.gender === "Male"' ng-selected='editing.leadership === "zone"'>Zone Leader</option>
+						<option value='asst' ng-show='val.gender === "Male"' ng-selected='editing.leadership === "asst"'>Assistant</option>
+						<option value='estl' ng-show='val.gender === "Female"' ng-selected='editing.leadership === "estl"'>STL</option>
+					</select>
+					<i class='edit material-icons accent' ng-click='saveMiss(val)' ng-show='editing.id === val.id'>save</i>
 			</div>
 		</div>
 

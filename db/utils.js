@@ -24,12 +24,40 @@ module.exports = {
 	weekInvAtChurch: function (start, end, cb) {
 		db.query('SELECT areaId FROM church_attend WHERE OrderDate BETWEEN ? AND ?', 
 			[start, end], cb);},
+
+
 	getAreaNums: function (missionaryId, cb) {
-		db.query(
-			'SELECT n.bd, n.ni, n.bap, n.OrderDate FROM nums n '+
-			'INNER JOIN missionaries m ON n.areaId = m.areaId '+
-			'WHERE m.id = ?',
-			[missionaryId], cb);},
+		var start = getDateForLastOccurence(4),
+				end = new Date(),
+				nums = {};
+				end.setUTCMinutes(59);
+				end.setUTCHours(23);
+
+		db.query('SELECT * FROM inv WHERE OrderDate BETWEEN ? AND ?',
+			[start, end], function (error, results) {
+				nums.ni = results.length;
+				db.query('SELECT * FROM lessons WHERE OrderDate BETWEEN ? AND ?',
+					[start, end], function (error, results) {
+						nums.lessons = results.length;
+						db.query('SELECT * FROM bap WHERE OrderDate BETWEEN ? AND ?',
+							[start, end], function (error, results) {
+								nums.bap = results.length;
+								db.query('SELECT * FROM church_attend WHERE OrderDate BETWEEN ? AND ?',
+									[start, end], function (error, results) {
+										nums.church = results.length;
+										cb(nums);
+									})
+							})
+					})
+			})
+		// db.query(
+		// 	'SELECT n.bd, n.ni, n.bap, n.OrderDate FROM nums n '+
+		// 	'INNER JOIN missionaries m ON n.areaId = m.areaId '+
+		// 	'WHERE m.id = ?',
+		// 	[missionaryId], cb);
+	},
+
+
 	getDominionNums: function () { },
 	insertNums: function (nums) {
 		for(var area in nums) {
@@ -282,3 +310,15 @@ module.exports = {
 			[areaId], cb);}
 
 };
+
+
+function getDateForLastOccurence( dayInd ) {
+
+  var date = new Date(),
+			day = date.getDay() + (7 - dayInd),
+  		difference = day % 7 === 0 ? 7 : day;
+  date.setDate( date.getDate() - difference );
+  date.setUTCHours(23);
+  date.setUTCMinutes(59);
+  return date;
+}
