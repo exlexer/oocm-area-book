@@ -31,7 +31,7 @@ module.exports =  {
 					cb(null, twiml.toString())
 			})
 		}
-	}
+	},
 	lessons: function (params, from, cb) {
 		dbUtils.findInvOrRc(params[0], from,
 		function (error, results) {
