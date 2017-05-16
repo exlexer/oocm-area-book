@@ -337,6 +337,10 @@ module.exports = {
 
 	getCommitments: function (areaId, cb) {
 		db.query('SELECT * FROM commitments WHERE areaId = ?', areaId, cb)
+	},
+	followUp: function (name, commitment, from, cb) {
+		db.query('DELETE FROM commitments WHERE areaId = ? AND name = ? AND commitment = ?',
+			[from, name, commitment], cb)
 	}
 
 };

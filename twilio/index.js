@@ -139,5 +139,10 @@ module.exports =  {
 				cb(null, twiml.toString())
 			})
 		}
+	},
+	followup: function (params, from, cb) {
+		dbUtils.followUp(params[0], params[1], from, function (error, results) {
+			if (error) { console.error('Error Following Up: ', error) }
+		})
 	}
 }
