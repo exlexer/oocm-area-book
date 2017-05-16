@@ -253,6 +253,10 @@ module.exports = {
 			'LEFT JOIN missionaries m ON inv.areaId = m.areaId '+
 			'WHERE m.id = ?',
 			[missionaryId], cb)},
+	getAreaInv: function (areaId, cb) {
+		db.query(
+			'SELECT name FROM inv WHERE areaId = ?', areaId, cb)
+	},
 	deleteInv: function (invId, cb) {
 		db.query('DELETE FROM inv WHERE id = ?',
 			[invId], cb);},

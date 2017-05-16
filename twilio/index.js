@@ -7,6 +7,31 @@ module.exports =  {
 	ni: function (params, from, cb) {
 		dbUtils.newInv(params[0], params[1], params[2], from, cb)
 	},
+	inv: function (params, from, cb) {
+		if(params[0]) {
+			dbUtils.findInv(params[0], from, function (error, results) {
+				var message = results[0].name + ', ' + results[0].address + ', ' + results[0].phoneNumber + ';'
+
+				var twiml = new twilio.TwimlResponse();
+		  	twiml.message(message);
+
+				cb(null, twiml.toString())				
+			})
+		} else {
+			dbUtils.getAreaInv(from, function (error, results) {
+					if (error) { console.error('Error Getting Commitments: ', error) }
+					var message = '';
+					for (var i = 0; i < results.length; i++) {
+						message = message + results[i].name + '; '
+					};
+
+					var twiml = new twilio.TwimlResponse();
+			  	twiml.message(message);
+
+					cb(null, twiml.toString())
+			})
+		}
+	}
 	lessons: function (params, from, cb) {
 		dbUtils.findInvOrRc(params[0], from,
 		function (error, results) {
@@ -112,7 +137,6 @@ module.exports =  {
 		  	twiml.message(message);
 
 				cb(null, twiml.toString())
-				// send commitments
 			})
 		}
 	}
