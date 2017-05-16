@@ -331,8 +331,8 @@ module.exports = {
 			[name, areaId, commitment, followUp], cb)
 	},
 
-	getCommitments: function () {
-		db.query('SELECT * FROM commitments WHERE areaId = ?')
+	getCommitments: function (areaId, cb) {
+		db.query('SELECT * FROM commitments WHERE areaId = ?', areaId, cb)
 	}
 
 };

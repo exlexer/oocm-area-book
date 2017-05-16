@@ -1,6 +1,6 @@
 var db = require('../db/index')
 var dbUtils = require('../db/utils')
-var twilioUtils = require('./utils')
+var twilio = require('twilio')
 
 
 module.exports =  {
@@ -107,7 +107,11 @@ module.exports =  {
 				for (var i = 0; i < results.length; i++) {
 					message = message + results[i].name + ', ' + results[i].commitment + ', ' + results[i].followUp + '; ' 
 				};
-				cb(null, message)
+
+				var twiml = new twilio.TwimlResponse();
+		  	twiml.message(message);
+
+				cb(null, twiml.toString())
 				// send commitments
 			})
 		}
