@@ -53,11 +53,25 @@ module.exports = {
 							})
 					})
 			})
+		// INSERT NUMS
 		// db.query(
 		// 	'SELECT n.bd, n.ni, n.bap, n.OrderDate FROM nums n '+
 		// 	'INNER JOIN missionaries m ON n.areaId = m.areaId '+
 		// 	'WHERE m.id = ?',
 		// 	[missionaryId], cb);
+	},
+
+	findInvOrRc: function (name, areaId, invCb, rcCb) {
+		var utils = this
+		utils.findInv(name, areaId, function (error, results) {	
+			if(results.length) {
+				invCb(error, results);
+			} else {
+				utils.findUnits(areaId, function (error, results) {
+					utils.findRc(name, results[0].unitId, rcCb);
+				})
+			}
+		})
 	},
 
 
@@ -310,7 +324,16 @@ module.exports = {
 			[name, stakeId, unitId], cb);},
 	findUnits: function (areaId, cb) {
 		db.query('SELECT * FROM area_unit WHERE areaId = ?',
-			[areaId], cb);}
+			[areaId], cb);},
+
+	addCommitment: function (name, areaId, commitment, followUp, cb) {
+		db.query('INSERT INTO commitments (name, areaId, commitment, followUp) VALUES (?,?,?,?)',
+			[name, areaId, commitment, followUp], cb)
+	},
+
+	getCommitments: function () {
+		db.query('SELECT * FROM commitments WHERE areaId = ?')
+	}
 
 };
 
