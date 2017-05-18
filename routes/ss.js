@@ -1,28 +1,29 @@
-'use strict';
+'use strict'
 
-var ssUtils = require('../sheets/utils.js');
+var ssUtils = require('../sheets/utils.js')
 
 module.exports = function(app) {
 
 	app.route('/exportStake')
-		.post(function (req, res) {
-			ssUtils.exportRc(req.body.id, function (url) {
+		.post((req, res) => {
+			ssUtils.exportRc(req.body.id, (url) => {
 				if(!res._header) {
-					res.send({ url : url });
+					res.send({ url : url })
 				};
 			})
-		});
+		})
 
 	app.route('/redirectOAuth')
-		.get(function (req, res) {
-			ssUtils.storeToken(req.query['code']);
-			res.send();
-		});
+		.get((req, res) => {
+			ssUtils.storeToken(req.query['code'])
+			res.send()
+		})
 
+	// This seems to be depricated
 	app.route('/authGoogle')
-		.post(function (req, res) {
-			ssUtils.getToken(req.body.authCode, req.body.client, function(client) {
-				res.send();
+		.post((req, res) => {
+			ssUtils.getToken(req.body.authCode, req.body.client, (client) => {
+				res.send()
 			})
 		})
 }

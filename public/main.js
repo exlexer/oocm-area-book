@@ -10,7 +10,7 @@ angular.module('areaBook',[
 	'areaBook.main',
   'areaBook.menu'])
   .run(['$rootScope','$location','$http','$state', function ($rootScope, $location, $http, $state) {
-    // Not currently Working
+    // Not currently Working, Statechangestart is depricated
     $rootScope.$on('$stateChangeStart', function (e, toState) {
       var check = false;
       if (toState && toState.auth) {
@@ -23,6 +23,7 @@ angular.module('areaBook',[
     });
   }])
   .config(['$stateProvider','$urlRouterProvider', function($stateProvider,$urlRouterProvider) {
+
 
     $stateProvider
       .state('auth', {

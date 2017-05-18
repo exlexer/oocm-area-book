@@ -1,29 +1,25 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+var express = require('express')
+var path = require('path')
+var favicon = require('serve-favicon')
+var logger = require('morgan')
+var cookieParser = require('cookie-parser')
+var bodyParser = require('body-parser')
+var dbUtils = require('./db/utils')
 
+var app = express()
 
+var passport = require('passport')
 
-var app = express();
+var db = require('./db/index.js')
+db.connect()
 
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
-
-
-var passport = require('passport');
-
-
-var db = require('./db/index.js');
-db.connect();
+// setup scheduler
+var schedule = require('node-schedule')
+var j = schedule.scheduleJob('15 9 * * 4 *', dbUtils.sendNumbers)
 
 // session setup
-var session = require('express-session');
-var MySQLStore = require('express-mysql-session')(session);
+var session = require('express-session')
+var MySQLStore = require('express-mysql-session')(session)
 var store = new MySQLStore({
   schema: {
     tableName: 'sessions',
@@ -31,15 +27,14 @@ var store = new MySQLStore({
       session_id: 'session_id',
       expires: 'expires',
       data: 'data'
-    }}}, db);
+    }}}, db)
 
-
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use('/', express.static(path.join(__dirname, 'public')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
+app.use(logger('dev'))
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(cookieParser())
+app.use('/', express.static(path.join(__dirname, 'public')))
 app.use(session({
   secret: 'keyboard cat',
   cookie: {
@@ -48,42 +43,35 @@ app.use(session({
   store: store,
   resave: true,
   saveUninitialized: true
-}));
+}))
 
 // Initializes Passport
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.initialize())
+app.use(passport.session())
 
 // setup routes
-var routes = require('./routes/index.js')(app);
-
-
-var twilio = require('twilio');
-if (process.env.TWILIO_ACCOUNT_SID) {
-  var client = twilio(process.env.TWILIO_ACCOUNT_SID,process.env.TWILIO_AUTH_TOKEN);
-};
+var routes = require('./routes/index.js')(app)
 
 var sheets = require('./sheets/utils.js')
 
-
-require('./auth/index.js')(passport);
+require('./auth/index.js')(passport)
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  var err = new Error('Not Found');
+app.use((req, res, next) => {
+  var err = new Error('Not Found')
   err.status = 404;
-  next(err);
-});
+  next(err)
+})
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.message = err.message
+  res.locals.error = req.app.get('env') === 'development' ? err : {}
 
   // render the error page
-  res.status(err.status || 500);
-  res.send();
-});
+  res.status(err.status || 500)
+  res.send()
+})
 
-module.exports = app;
+module.exports = app

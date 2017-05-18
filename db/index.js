@@ -1,18 +1,9 @@
-var mysql = require('mysql');
+var mysql = require('mysql')
 
 // Create a database connection and export it from this file.
 // You will need to connect with the user "root", no password,
 // and to the database "chat".
-var options;
-
-var devOptions = {
-	  host:"localhost",
-    user:"root",
-	  password: "root",
-	  database: "ebdb"
-}
-
-
+var options
 
 if (process.env.RDS_HOSTNAME) {
 	options = {
@@ -21,7 +12,7 @@ if (process.env.RDS_HOSTNAME) {
 	  user : process.env.RDS_USERNAME,
 	  password : process.env.RDS_PASSWORD,
 	  database : process.env.RDS_DB_NAME
-	};
+	}
 } else {
 	options = {
 		host : 'aa4qb7hf7vsrnu.cvomhhylmjnk.us-west-2.rds.amazonaws.com',
@@ -29,8 +20,8 @@ if (process.env.RDS_HOSTNAME) {
 	  user : 'oocm',
 	  password : 'masterpass',
 	  database : 'ebdb'
-	};
-};
+	}
+}
 
 
-module.exports = mysql.createConnection(options);
+module.exports = mysql.createConnection(options)
