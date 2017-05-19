@@ -5,18 +5,19 @@ var SHA256 = require("crypto-js/sha256")
 
 module.exports = {
 	sendNumbers: function () {
+		var self = this
 		db.query('SELECT id, districtId, name FROM areas', (error, results) => {
 			var tasksToGo = max = results.length
 			var messages = {}
 
 			if(!tasksToGo) { console.log('done') } else {
 				for (var i = 0; i < max; i++) {
-					this.getAreaNums(results[i].id, results[i].districtId, results[i].name, (nums) => {
+					self.getAreaNums(results[i].id, results[i].districtId, results[i].name, (nums) => {
 
 						messages[nums.districtId] = messages[nums.districtId] || ''
 						messages[nums.districtId] = messages[nums.districtId] + 'Numbers for ' + nums.name + ' ni:' + nums.counts.ni + ', b/c:' + nums.counts.bap + ', bd:' + nums.counts.bd + '; '
 						
-						this.insertNums(nums.areaId, nums.counts, () => {
+						self.insertNums(nums.areaId, nums.counts, () => {
 							if(--tasksToGo === 0) {
 								db.query('SELECT a.districtId, a.phone FROM areas a '+
 									'INNER JOIN missionaries m ON a.id = m.areaId '+
@@ -37,12 +38,13 @@ module.exports = {
 		num.getInv( () => num.getBap( () => num.getChurch( () => cb( num ))))
 	},
 	findInvOrRc: function (name, areaId, invCb, rcCb) {
-		this.findInv(name, areaId, (error, results) => {	
+		var self = this
+		self.findInv(name, areaId, (error, results) => {	
 			if(results.length) {
 				invCb(error, results)
 			} else {
-				this.findUnits(areaId, (error, results) => {
-					this.findRc(name, results[0].unitId, rcCb)
+				self.findUnits(areaId, (error, results) => {
+					self.findRc(name, results[0].unitId, rcCb)
 				})
 			}
 		})
@@ -119,7 +121,7 @@ module.exports = {
 				// 				cb(error, results)
 				// 			}
 				// 		})
-				// };
+				// }
 				cb(error, results)
 			})},
 	findArea: function (from, cb) {
@@ -238,23 +240,25 @@ module.exports = {
 		db.query('INSERT INTO inv (name, phoneNumber, address, areaId) VALUES (?,?,?,?)',
 			[name, phoneNumber, address, areaId], cb)},
 	dropInv: function (inv, reason, cb) {
+		var self = this
 		db.query('INSERT INTO former (name, nickName, dropReason, address, phoneNumber, areaId, gender) VALUES (?, ?, ?, ?, ?, ?, ?)',
 			[inv.name, inv.nickName, reason, inv.address, inv.phoneNumber, inv.areaId, inv.gender], (error, results) => {
 				var formerId = results.insertId;
 				db.query('UPDATE lessons SET formerId = ?  WHERE invId = ?', [formerId, inv.id], (error, results) => {
 					db.query('UPDATE lessons SET invId = null WHERE formerId = ?', [formerId], (error, results) => {
-						this.deleteInv(inv.id, cb)
+						self.deleteInv(inv.id, cb)
 					})
 				})
 			}) },
 	pickupInv: function (former, cb) {
+		var self = this
 		db.query('INSERT INTO inv (name, nickName, address, phoneNumber, areaId, gender) VALUES (?, ?, ?, ?, ?, ?)',
 			[former.name, former.nickName, former.address, former.phoneNumber, former.areaId, former.gender],
 			(error, results) => {
 				var invId = results.insertId;
 				db.query('UPDATE lessons SET invId = ?  WHERE formerId = ?', [invId, former.id], (error, results) => {
 					db.query('UPDATE lessons SET formerId = null WHERE invId = ?', [invId], (error, results) => {
-						this.deleteFormer(former.id, cb)
+						self.deleteFormer(former.id, cb)
 					})
 				})
 			})},
@@ -262,13 +266,14 @@ module.exports = {
 		db.query('UPDATE inv SET nickName = ?, name = ?, bd = ?, gender = ?, areaId = ? WHERE id = ?',
 			[inv.nickName, inv.name, inv.bd, inv.gender, inv.areaId, inv.id], cb)},
 	bapInv: function (inv, from, cb) {
-		this.findUnits(from, (error, results) => {
+		var self = this
+		self.findUnits(from, (error, results) => {
 			// Inserts into correct unit
-			this.newRc(inv.name, inv.bd, results[0].unitId, inv.age, inv.gender,
+			self.newRc(inv.name, inv.bd, results[0].unitId, inv.age, inv.gender,
 				(error, results) => {
 					console.log(error, results)
-					this.updateLesson(null, results.insertId, null, 'invId', inv.id, cb)
-					this.deleteInv(inv.id, cb)
+					self.updateLesson(null, results.insertId, null, 'invId', inv.id, cb)
+					self.deleteInv(inv.id, cb)
 					db.query(
 						'INSERT INTO bap (areaId, rcId) VALUES (?,?)',
 							[from, results.insertId],
@@ -279,7 +284,7 @@ module.exports = {
 
 	// Functions for Managing Church Stakes
 	updateSheetId: function (stakeId, sheetId, cb) {
-		cb = cb || function() {};
+		cb = cb || function() {}
 		db.query('UPDATE stakes SET sheetId = ? WHERE id = ?', [sheetId, stakeId], cb)},
 	
 	// Functions for Creating and Managing Church Units
@@ -306,15 +311,15 @@ module.exports = {
 			[from, name, commitment], cb)
 	}
 
-};
+}
 
 function getDateForLastOccurence( dayInd ) {
 
-  var date = new Date(),
-			day = date.getDay() + (7 - dayInd),
-  		difference = day % 7 === 0 ? 7 : day;
+  var date = new Date()
+	var day = date.getDay() + (7 - dayInd)
+  var difference = day % 7 === 0 ? 7 : day
   date.setDate( date.getDate() - difference )
   date.setUTCHours(23)
   date.setUTCMinutes(59)
-  return date;
+  return date
 }
