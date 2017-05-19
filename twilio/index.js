@@ -26,7 +26,7 @@ module.exports =  {
 			})
 		}
 	},
-	lessons: function (params, from, cb) {
+	lesson: function (params, from, cb) {
 		dbUtils.findInvOrRc(params[0], from,
 		(error, results) => {
 			if (error) {
@@ -131,9 +131,6 @@ module.exports =  {
 				for (var i = 0; i < results.length; i++) {
 					message = message + results[i].name + ', ' + results[i].commitment + ', ' + results[i].followUp + '; ' 
 				};
-
-				var twiml = new twilio.TwimlResponse();
-		  	twiml.message(message);
 
 				cb(null, message)
 			})
