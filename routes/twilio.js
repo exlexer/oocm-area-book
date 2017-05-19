@@ -8,8 +8,13 @@ module.exports = function(app) {
 			var params = req.body.Body.split('! ')
 			dbUtils.findArea(req.body.From, (error, results) => {
 				var action = params.shift().toLowerCase()
-				twilioRoute[action](params, results[0].id, (error, response) => {
+				twilioRoute[action](params, results[0].id, req.body.From, (error, response) => {
 					if (error) { console.error(error) }
+					if (response) {	
+						var twiml = new twilio.TwimlResponse()
+				  	twiml.message(response)
+				  	response = twiml.toString()
+					}
 					res.send(response)
 				})
 			})

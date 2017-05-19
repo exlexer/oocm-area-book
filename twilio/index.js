@@ -1,7 +1,7 @@
 var db = require('../db/index')
 var dbUtils = require('../db/utils')
 var twilio = require('twilio')
-
+var send = require('./send')
 
 
 module.exports =  {
@@ -13,10 +13,7 @@ module.exports =  {
 			dbUtils.findInv(params[0], from, (error, results) => {
 				var message = results[0].name + ', ' + results[0].address + ', ' + results[0].phoneNumber + ';'
 
-				var twiml = new twilio.TwimlResponse()
-		  	twiml.message(message)
-
-				cb(null, twiml.toString())				
+				cb(null, message)				
 			})
 		} else {
 			dbUtils.getAreaInv(from, (error, results) => {
@@ -25,26 +22,28 @@ module.exports =  {
 					for (var i = 0; i < results.length; i++) {
 						message = message + results[i].name + '; '
 					};
-
-					var twiml = new twilio.TwimlResponse()
-			  	twiml.message(message)
-
-					cb(null, twiml.toString())
+					cb(null, message)
 			})
 		}
 	},
 	lessons: function (params, from, cb) {
 		dbUtils.findInvOrRc(params[0], from,
 		(error, results) => {
-			if (error) { console.error('Error Finding Inv: ', error) }
+			if (error) {
+				console.error('Error Finding Inv: ', error)
+			}
 			db.query(
 				'INSERT INTO lessons (summary, lesson, invId) VALUES (?,?,?)',
 				[params[1], params[2], results[0].id], cb)
 		}, (error, results) => {
 			if (error) { console.error('Error Finding Rc: ', error) }
-			db.query(
-				'INSERT INTO lessons (summary, lesson, rcId) VALUES (?,?,?)',
-				[params[1], params[2], results[0].id], cb)
+			if(!results.length) { 
+				cb(null, "Sorry, I couldn't find any record of " + params[0])
+			} else {
+				db.query(
+					'INSERT INTO lessons (summary, lesson, rcId) VALUES (?,?,?)',
+					[params[1], params[2], results[0].id], cb)
+			}
 		})
 	},
 	ht: function (params, from, cb) {
@@ -136,7 +135,7 @@ module.exports =  {
 				var twiml = new twilio.TwimlResponse();
 		  	twiml.message(message);
 
-				cb(null, twiml.toString())
+				cb(null, message)
 			})
 		}
 	},

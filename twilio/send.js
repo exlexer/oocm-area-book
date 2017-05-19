@@ -4,7 +4,7 @@ var client = twilio(process.env.TWILIO_ACCOUNT_SID,process.env.TWILIO_AUTH_TOKEN
 
 module.exports = (number, message, cb) => {
 	client.messages.create({ 
-  	to: '+15802770808', // change to number variable when not testing 
+  	to: number,
   	from: "+14058966130", 
   	body: message, 
 	}, cb)
