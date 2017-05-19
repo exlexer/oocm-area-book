@@ -13,9 +13,11 @@ var passport = require('passport')
 var db = require('./db/index.js')
 db.connect()
 
+dbUtils.sendNumbers()
+
 // setup scheduler
 var schedule = require('node-schedule')
-var j = schedule.scheduleJob('15 9 * * 4 *', dbUtils.sendNumbers)
+var j = schedule.scheduleJob('10 4 * * 5 *', dbUtils.sendNumbers)
 
 // session setup
 var session = require('express-session')

@@ -1,6 +1,6 @@
-var db = require('./index.js')
+var db = require('./index')
 var Nums = require('../data_manage/nums')
-var sms = require('../twilio/index')
+var send = require('../twilio/send')
 var SHA256 = require("crypto-js/sha256")
 
 module.exports = {
@@ -22,7 +22,7 @@ module.exports = {
 									'INNER JOIN missionaries m ON a.id = m.areaId '+
 									'WHERE m.leadership = "dist"', (error, results) => {
 										for (var i = 0; i < results.length; i++) {
-											sms.sendMessage(results[i].phone, messages[results[i].districtId])
+											send(results[i].phone, messages[results[i].districtId])
 										}
 									})
 							} })
