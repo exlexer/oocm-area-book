@@ -14,21 +14,21 @@ var passport = require('passport')
 var db = require('./db/index.js')
 db.connect()
 
-function resendText () {
-var params = text.split('! ')
-  dbUtils.findArea(req.body.From, (error, results) => {
-    var action = params.shift().toLowerCase()
-    twilioRoute[action](params, results[0].id, req.body.From, (error, response) => {
-      if (error) { console.error(error) }
-      if (response) { 
-        var twiml = new twilio.TwimlResponse()
-        twiml.message(response)
-        response = twiml.toString()
-      }
-      res.send(response)
-    })
-  })
-}
+// function resendText () {
+// var params = text.split('! ')
+//   dbUtils.findArea(req.body.From, (error, results) => {
+//     var action = params.shift().toLowerCase()
+//     twilioRoute[action](params, results[0].id, req.body.From, (error, response) => {
+//       if (error) { console.error(error) }
+//       if (response) { 
+//         var twiml = new twilio.TwimlResponse()
+//         twiml.message(response)
+//         response = twiml.toString()
+//       }
+//       res.send(response)
+//     })
+//   })
+// }
 
 
 
