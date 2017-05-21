@@ -33,23 +33,6 @@ module.exports = {
     })
   },
 
-  /**
-   * Get and store new token after prompting for user authorization, and then
-   * execute the given callback with the authorized OAuth2 client.
-   *
-   * @param {google.auth.OAuth2} oauth2Client The OAuth2 client to get token for.
-   * @param {getEventsCallback} callback The callback to call with the authorized
-   *     client.
-   */
-  getNewToken: function (oauth2Client, cb) {
-    var authUrl = oauth2Client.generateAuthUrl({
-      access_type: 'offline',
-      scope: SCOPES
-    })
-
-    cb(authUrl)
-  },
-
   recieveToken: function (code) {
     var self = this;
 
@@ -83,6 +66,19 @@ module.exports = {
     console.log('Token stored to ' + TOKEN_PATH)
   }
 }
+
+
+
+function getNewToken (oauth2Client, cb) {
+  var authUrl = oauth2Client.generateAuthUrl({
+    access_type: 'offline',
+    scope: SCOPES
+  })
+
+  cb(authUrl)
+}
+
+
 
 function getClient () {
   var clientId = process.env.OAUTH_CLIENT_SECRET || "980683034451-l7k9t1h6sr82v4il32rruks7sh5gmkvj.apps.googleusercontent.com"
