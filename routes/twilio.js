@@ -15,10 +15,6 @@ var params = text.split('! ')
   })
 }
 
-resendText("lesson! Merlin Johnson! Taught DoC and shared a lot of experiences. He still doesnt thing theres only one church! 3", '+19402245103');
-resendText("Lesson! Luke Noel! Read alma 32 with him. He really connect with the humility part. Wants to keep meeting with us and will read. Left Ether 12", '+19402245103');
-
-
 
 
 
