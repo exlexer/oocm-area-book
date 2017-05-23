@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('areaBook',[
   'ui.router',
   'areaBook.resize',
@@ -12,15 +10,15 @@ angular.module('areaBook',[
   .run(['$rootScope','$location','$http','$state', function ($rootScope, $location, $http, $state) {
     // Not currently Working, Statechangestart is depricated
     $rootScope.$on('$stateChangeStart', function (e, toState) {
-      var check = false;
+      var check = false
       if (toState && toState.auth) {
         $http.get('auth/isAuthenticated').then(function (resp) {
           if (!resp.data.auth) {
-            $state.go('/auth');
+            $state.go('/auth')
           }
-        });
-      };
-    });
+        })
+      }
+    })
   }])
   .config(['$stateProvider','$urlRouterProvider', function($stateProvider,$urlRouterProvider) {
 
@@ -75,7 +73,7 @@ angular.module('areaBook',[
                 }
             },
             auth: true
-          });
+          })
 
-		$urlRouterProvider.otherwise('/app/menu');
-	}]);
+		$urlRouterProvider.otherwise('/app/menu')
+	}])

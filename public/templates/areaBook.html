@@ -6,8 +6,10 @@
 		<div class='main row'>
 			<h2>Investigators</h2>
 		</div>
-		<div ng-repeat='(key, value) in inv' class='secondary row' ng-click='openInv(key)'>
-			{{ value.name }}
+		<div class='secondary'>
+			<div ng-repeat='(key, value) in inv' class='row' ng-click='openInv(key)'>
+				{{ value.name }}
+			</div>
 		</div>
 
 		<!-- Recent Converts -->
@@ -36,12 +38,16 @@
 			<p ng-show='!focusEdit'>
 				<span ng-show='current.age'><b>Age:</b> {{ current.age }}</span>
 				<span ng-show='current.gender'><b>Gender:</b> {{ current.gender }}</span>
+				<span ng-show='current.phoneNumber'><b>Phone Number:</b> {{ current.phoneNumber }}</span>
+				<span ng-show='current.address'><b>Address:</b> {{ current.address }}</span>
 				<span ng-show='current.bd'><b>Baptismal Date:</b> {{ current.bd }}</span>
 				<span ng-show='current.nickName'><b>Nick Name:</b> {{ current.nickName }}</span>
 				<span ng-show='current.reason'><b>Drop Reason:</b> {{ current.reason }}</span>
 			</p>
 				<p ng-show='focusEdit'><b>Age:</b><input ng-model='current.age'></p>
 				<p ng-show='focusEdit'><b>Gender:</b><input ng-model='current.gender'></p>
+				<p ng-show='focusEdit'><b>Phone Number:</b><input ng-model='current.phoneNumber'></p>
+				<p ng-show='focusEdit'><b>Address:</b><input ng-model='current.address'></p>
 				<p ng-show='focusEdit'><b>Baptismal Date:</b><input ng-model='current.bd'></p>
 				<p ng-show='focusEdit'><b>Nick Name:</b><input ng-model='current.nickName'></p>
 		</div>
