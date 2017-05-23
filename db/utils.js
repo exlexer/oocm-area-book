@@ -236,9 +236,9 @@ module.exports = {
 	findInv: function (name, areaId, cb) {
 		db.query('SELECT * FROM inv WHERE name = ? OR nickName = ? AND areaId = ?',
 			[name, name, areaId], cb)},
-	newInv: function (name, phoneNumber, address, areaId, cb) {
-		db.query('INSERT INTO inv (name, phoneNumber, address, areaId) VALUES (?,?,?,?)',
-			[name, phoneNumber, address, areaId], cb)},
+	newInv: function (name, summary, phoneNumber, address, areaId, cb) {
+		db.query('INSERT INTO inv (name, summary, phoneNumber, address, areaId) VALUES (?,?,?,?,? )',
+			[name, summary, phoneNumber, address, areaId], cb)},
 	dropInv: function (inv, reason, cb) {
 		var self = this
 		db.query('INSERT INTO former (name, nickName, dropReason, address, phoneNumber, areaId, gender) VALUES (?, ?, ?, ?, ?, ?, ?)',

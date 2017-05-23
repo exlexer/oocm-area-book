@@ -95,10 +95,12 @@ angular.module('areaBook.areaBook',[])
 
 			doc.fontSize(12)
 
-			doc.text('Phone Number: ' + $scope.current.phoneNumber)
+			doc.text('Phone Number: ' + ($scope.current.phoneNumber || ''))
+				.text('Address: ' + ($scope.current.address || ''))
+				.text('Summary: ' + ($scope.current.summary || ''))
 
 			for (var i = 0; i < $scope.lessons.length; i++) {
-				if ($scope.lessons[i].id === $scope.current.id || $scope.lessons[i].name === $scope.current.name) {
+				if ($scope.lessons[i].id === $scope.current.id && $scope.lessons[i].name === $scope.current.name) {
 
 					var lesson = $scope.lessons[i]
 

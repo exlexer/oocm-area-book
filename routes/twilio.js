@@ -21,7 +21,7 @@ var params = text.split('! ')
 
 	app.route('/message')
 		.post((req, res) => {
-			var params = req.body.Body.split('! ')
+			var params = req.body.Body.split('@ ')
 			dbUtils.findArea(req.body.From, (error, results) => {
 				var action = params.shift().toLowerCase()
 				twilioRoute[action](params, results[0].id, (error, response) => {

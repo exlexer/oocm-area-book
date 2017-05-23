@@ -6,7 +6,7 @@ var send = require('./send')
 
 module.exports =  {
 	ni: function (params, from, cb) {
-		dbUtils.newInv(params[0], params[1], params[2], from, cb)
+		dbUtils.newInv(params[0], params[1], params[2], params[3], from, cb)
 	},
 	inv: function (params, from, cb) {
 		if(params[0]) {
