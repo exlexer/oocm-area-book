@@ -5,7 +5,7 @@ var dbUtils = require('../db/utils')
 module.exports = function(app) {
 
 function resendText (text, from) {
-var params = text.split('! ')
+var params = text.split('@ ')
   dbUtils.findArea(from, (error, results) => {
     var action = params.shift().toLowerCase()
     twilioRoute[action](params, results[0].id, (error, response) => {
@@ -15,7 +15,7 @@ var params = text.split('! ')
   })
 }
 
-
+// resendText('Church@ Shayla@ Lee', '+15802770808')
 
 
 
@@ -26,12 +26,14 @@ var params = text.split('! ')
 				var action = params.shift().toLowerCase()
 				twilioRoute[action](params, results[0].id, (error, response) => {
 					if (error) { console.error(error) }
-					if (response) {	
+					if (response) {
 						var twiml = new twilio.TwimlResponse()
 				  	twiml.message(response)
 				  	response = twiml.toString()
+						res.send(response)
+					} else {
+						res.send()
 					}
-					res.send(response)
 				})
 			})
 		})

@@ -54,7 +54,7 @@ module.exports = {
 				},
 				auth: auth
 			}, cb)
-		})
+		}, cb)
 	},
 
 	readSheet: function (id, range, cb) {

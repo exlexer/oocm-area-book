@@ -90,7 +90,8 @@ module.exports =  {
 	},
 	church: function (params, from, cb) {
 		// cycle through rest of params
-		for (var i = 1; i < params.length; i++) {
+		for (var i = 0; i < params.length; i++) {
+			console.log(params[i])
 			// add instance in church_attend as either RC or Inv
 			dbUtils.findInvOrRc(params[i], from,
 				(error, results) => {
