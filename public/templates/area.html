@@ -146,7 +146,7 @@
 			<p ng-show='newArea.type == 2'>
 				<label>Unit</label>
 				<select ng-model='newArea.unitId' multiple placeholder='Unit'>
-  				<option ng-repeat='(key, value) in units' value='{{ value.id }}'>{{ value.name }}</option>
+  				<option ng-repeat='(key, value) in units | orderBy:"value.name"' value='{{ value.id }}'>{{ value.name }}</option>
 				</select>
 			</p>
 			<p ng-show='newArea.type == 2'>

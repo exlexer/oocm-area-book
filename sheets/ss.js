@@ -3,8 +3,7 @@ var readline = require('readline')
 var google = require('googleapis')
 var googleAuth = require('google-auth-library')
 
-// If modifying these scopes, delete your previously saved credentials
-// at ~/.credentials/sheets.googleapis.com-nodejs-quickstart.json
+
 var SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 var TOKEN_DIR = (process.env.HOME || process.env.HOMEPATH ||
     process.env.USERPROFILE) + '/.credentials/'
@@ -70,21 +69,18 @@ module.exports = {
 
 
 function getNewToken (oauth2Client, cb) {
-  console.log(oauth2Client)
   var authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: SCOPES
   })
-  console.log(authUrl)
 
   cb(authUrl)
 }
 
-
-
+// Does not work in Dev
 function getClient () {
-  var clientId = process.env.OAUTH_CLIENT_ID || "980683034451-l7k9t1h6sr82v4il32rruks7sh5gmkvj.apps.googleusercontent.com"
-  var clientSecret = process.env.OAUTH_CLIENT_SECRET || "GQeQd6eoAEjD1RAMi-rMJXuh"
+  var clientId = process.env.OAUTH_CLIENT_ID
+  var clientSecret = process.env.OAUTH_CLIENT_SECRET
   var redirectUrl = process.env.SHEET_REDIRECT_URL
   var auth = new googleAuth()
   return new auth.OAuth2(clientId, clientSecret, redirectUrl)
