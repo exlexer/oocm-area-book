@@ -70,10 +70,12 @@ module.exports = {
 
 
 function getNewToken (oauth2Client, cb) {
+  console.log(oauth2Client)
   var authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: SCOPES
   })
+  console.log(authUrl)
 
   cb(authUrl)
 }
@@ -83,7 +85,7 @@ function getNewToken (oauth2Client, cb) {
 function getClient () {
   var clientId = process.env.OAUTH_CLIENT_SECRET || "980683034451-l7k9t1h6sr82v4il32rruks7sh5gmkvj.apps.googleusercontent.com"
   var clientSecret = process.env.OAUTH_CLIENT_SECRET || "GQeQd6eoAEjD1RAMi-rMJXuh"
-  var redirectUrl = process.env.SHEET_REDIRECT_URL || 'http://localhost:3000/redirectOAuth'
+  var redirectUrl = process.env.SHEET_REDIRECT_URL
   var auth = new googleAuth()
   return new auth.OAuth2(clientId, clientSecret, redirectUrl)
 }
