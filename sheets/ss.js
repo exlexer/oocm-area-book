@@ -83,7 +83,7 @@ function getNewToken (oauth2Client, cb) {
 
 
 function getClient () {
-  var clientId = process.env.OAUTH_CLIENT_SECRET || "980683034451-l7k9t1h6sr82v4il32rruks7sh5gmkvj.apps.googleusercontent.com"
+  var clientId = process.env.OAUTH_CLIENT_ID || "980683034451-l7k9t1h6sr82v4il32rruks7sh5gmkvj.apps.googleusercontent.com"
   var clientSecret = process.env.OAUTH_CLIENT_SECRET || "GQeQd6eoAEjD1RAMi-rMJXuh"
   var redirectUrl = process.env.SHEET_REDIRECT_URL
   var auth = new googleAuth()
