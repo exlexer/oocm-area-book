@@ -263,8 +263,8 @@ module.exports = {
 				})
 			})},
 	updateInv: function (inv, cb) {
-		db.query('UPDATE inv SET nickName = ?, name = ?, bd = ?, gender = ?, phoneNumber = ?, address = ?, areaId = ? WHERE id = ?',
-			[inv.nickName, inv.name, inv.bd, inv.gender, inv.phoneNumber, inv.address, inv.areaId, inv.id], cb)},
+		db.query('UPDATE inv SET nickName = ?, name = ?, bd = ?, gender = ?, phoneNumber = ?, address = ?, areaId = ?, summary = ? WHERE id = ?',
+			[inv.nickName, inv.name, inv.bd, inv.gender, inv.phoneNumber, inv.address, inv.areaId, inv.summary, inv.id], cb)},
 	bapInv: function (inv, from, cb) {
 		var self = this
 		self.findUnits(from, (error, results) => {
@@ -276,7 +276,7 @@ module.exports = {
 					self.deleteInv(inv.id, cb)
 					db.query(
 						'INSERT INTO bap (areaId, rcId) VALUES (?,?)',
-							[from, results.insertId],
+						[from, results.insertId],
 						cb)
 				}
 			)
