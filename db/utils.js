@@ -238,7 +238,7 @@ module.exports = {
 			[name, name, areaId], cb)},
 	newInv: function (name, summary, phoneNumber, address, areaId, cb) {
 		db.query('INSERT INTO inv (name, summary, phoneNumber, address, areaId) VALUES (?,?,?,?,? )',
-			[name, summary, phoneNumber, address, areaId], cb)},
+			[name, summary, phoneNumber, address, areaId], (error, results) => cb(error, 'New Investigator Recieved'))},
 	dropInv: function (inv, reason, cb) {
 		var self = this
 		db.query('INSERT INTO former (name, nickName, dropReason, address, phoneNumber, areaId, gender) VALUES (?, ?, ?, ?, ?, ?, ?)',

@@ -34,7 +34,7 @@ module.exports =  {
 			}
 			db.query(
 				'INSERT INTO lessons (summary, lesson, invId) VALUES (?,?,?)',
-				[params[1], params[2], results[0].id], cb)
+				[params[1], params[2], results[0].id],  (error, results) => cb(error, 'New Investigator Lesson Recieved'))
 		}, (error, results) => {
 			if (error) { console.error('Error Finding Rc: ', error) }
 			if(!results.length) { 
@@ -42,7 +42,7 @@ module.exports =  {
 			} else {
 				db.query(
 					'INSERT INTO lessons (summary, lesson, rcId) VALUES (?,?,?)',
-					[params[1], params[2], results[0].id], cb)
+					[params[1], params[2], results[0].id], (error, results) => cb(error, 'New Recent Convert Lesson Recieved'))
 			}
 		})
 	},
@@ -53,7 +53,7 @@ module.exports =  {
 			db.query(
 				'UPDATE rc SET hters = ? WHERE name = ? AND unitId = ?',
 				[params[1], params[0], results[0].unitId],
-				cb
+				(error, results) => cb(error, 'Home Teachers Recieved')
 			)
 		})
 	},
@@ -64,7 +64,7 @@ module.exports =  {
 			db.query(
 				'UPDATE rc SET vters = ? WHERE name = ? AND unitId = ?',
 				[params[1], params[0], results[0].unitId],
-				cb
+				(error, results) => cb(error, 'Visiting Teachers Recieved')
 			)
 		})		
 	},
@@ -73,6 +73,7 @@ module.exports =  {
 			if (error) { console.error('Error Finding Inv: ', error) }
 			dbUtils.bapInv(results[0], from, (error, results) => {
 				if (error) { console.error('Error Saving Baptism: ', error) }
+				cb(error, 'Congrats on the Baptism!')
 			})
 		})
 	},
@@ -83,7 +84,7 @@ module.exports =  {
 			db.query(
 				'UPDATE inv SET bd = ? WHERE id = ?',
 				[params[1], results[0].id],
-				cb);
+				cb(error, 'Baptism Date Recieved'));
 		})
 	},
 	temple: function (params, from, cb) {
@@ -108,6 +109,7 @@ module.exports =  {
 			if (error) { console.error('Error Finding Inv: ', error) }
 			dbUtils.dropInv(results[0], params[1], (error, results) => {
 				if (error) { console.error('Error Dropping Inv: ', error) }
+				(error, results) => cb(error, 'Investigator Dropped')
 			})
 		})
 	},
@@ -116,7 +118,7 @@ module.exports =  {
 				if (error) { console.error('Error Finding Former: ', error) }
 			dbUtils.pickupInv(results[0], params[1], (error, results) => {
 				if (error) { console.error('Error Picking Up Inv: ', error) }
-				console.log(results);
+				cb(error, 'Investigator Picked Up!')
 			})
 		})
 	},
@@ -124,14 +126,15 @@ module.exports =  {
 		if (params[0]) {
 			dbUtils.addCommitment(params[0], from, params[1], params[2], (error, results) => {
 				if (error) { console.error('Error Saving Commitment: ', error) }
+				cb(error, 'Commitment Recieved')
 			})
 		} else {
 			dbUtils.getCommitments(from, (error, results) => {
 				if (error) { console.error('Error Getting Commitments: ', error) }
-				var message = '';
+				var message = ''
 				for (var i = 0; i < results.length; i++) {
 					message = message + results[i].name + ', ' + results[i].commitment + ', ' + results[i].followUp + '; ' 
-				};
+				}
 
 				cb(null, message)
 			})
@@ -140,6 +143,7 @@ module.exports =  {
 	followup: function (params, from, cb) {
 		dbUtils.followUp(params[0], params[1], from, (error, results) => {
 			if (error) { console.error('Error Following Up: ', error) }
+			cb(error, 'Way to Follow Up!')
 		})
 	}
 

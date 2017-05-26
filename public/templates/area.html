@@ -5,7 +5,7 @@
 
 
 		<!-- Zone Div -->
-		<div ng-repeat='(key, val) in zones' class='row-box'>
+		<div ng-repeat='(key, val) in zones | orderBy:"val.name"' class='row-box'>
 			<div class='main row'>
 				<div>
 					{{ val.name }} Zone
@@ -18,7 +18,7 @@
 
 
 				<!-- District Div -->
-				<div ng-repeat='val in districts | filter:subset(activeZone, "zoneId")'>
+				<div ng-repeat='val in districts | filter:subset(activeZone, "zoneId") | orderBy:"val.name"'>
 					<div class='secondary row'>
 						{{ val.name }} District
 						<button class='ui-buttons small lighter' ng-class='{flip: activeDistrict === val.id}' ng-click='showDistrict(val.id)'>
@@ -29,7 +29,7 @@
 
 
 						<!-- Area Div -->
-						<div ng-repeat='val in areas | filter:subset(activeDistrict, "districtId")' class='third row flex'>
+						<div ng-repeat='val in areas | filter:subset(activeDistrict, "districtId") | orderBy:"val.name"' class='third row flex'>
 							<span class='area-name' ng-show='editingArea.id !== val.id'>{{ val.name }}</span>
 							<span class='area-name' ng-show='editingArea.id === val.id'><input ng-model='val.name' placeholder='Area Name'></span>
 							<span class='area-phone' ng-show='editingArea.id !== val.id'>{{ val.phone }}</span>
@@ -67,7 +67,7 @@
 		</div>
 
 		<div class='unassigned flex'>
-			<div ng-repeat='(key, val) in miss | filter:unassigned()' class='missionary'>
+			<div ng-repeat='(key, val) in miss | filter:unassigned()' class='missionary' ng-show='val.leadership !== "pres"'>
 				<span ng-show='editing.id !== val.id'>{{val.name}}</span>
 					<i class='edit material-icons accent' ng-click='editMiss(val)' ng-show='editing.id !== val.id'>edit</i>
 					<input ng-model='val.name' class='first-input' ng-show='editing.id === val.id'>
@@ -87,7 +87,7 @@
 
 		<h1>Church Units</h1>
 	
-		<div ng-repeat='(key, val) in stakes' class='row-box'>
+		<div ng-repeat='(key, val) in stakes | orderBy:"val.name"' class='row-box'>
 			<div class='main row'>
 				<div>
 					{{ val.name }} Stake
@@ -100,7 +100,7 @@
 				</div>
 			</div>
 			<div ng-show='activeStake === val.id'>
-				<div ng-repeat='value in units | filter:subset(activeStake, "stakeId")' class='secondary row'>
+				<div ng-repeat='value in units | filter:subset(activeStake, "stakeId") | orderBy:"value.name"' class='secondary row'>
 					{{ value.name }} Unit
 				</div>
 			</div>
@@ -128,19 +128,19 @@
 			<p ng-show='newArea.type == 0 || newArea.type == 4'>
 				<label>Stake</label>
 				<select ng-model='newArea.stakeId' placeholder='Stake'>
-  				<option ng-repeat='(key, value) in stakes' value='{{ value.id  }}'>{{ value.name }}</option>
+  				<option ng-repeat='(key, value) in stakes | orderBy:"value.name"' value='{{ value.id  }}'>{{ value.name }}</option>
 				</select>
 			</p>
 			<p ng-show='newArea.type == 1'>
 				<label>Zone</label>
 				<select ng-model='newArea.zoneId' placeholder='Zone'>
-  				<option ng-repeat='(key, value) in zones' value='{{ value.id }}'>{{ value.name }}</option>
+  				<option ng-repeat='(key, value) in zones | orderBy:"value.name"' value='{{ value.id }}'>{{ value.name }}</option>
 				</select>
 			</p>
 			<p ng-show='newArea.type == 2'>
 				<label>District</label>
 				<select ng-model='newArea.districtId' placeholder='District'>
-  				<option ng-repeat='(key, value) in districts' value='{{ value.id }}'>{{ value.name }}</option>
+  				<option ng-repeat='(key, value) in districts | orderBy:"value.name"' value='{{ value.id }}'>{{ value.name }}</option>
 				</select>
 			</p>
 			<p ng-show='newArea.type == 2'>
