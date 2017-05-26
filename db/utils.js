@@ -222,7 +222,7 @@ module.exports = {
 	// Functions for Creating and Managing Investigators
 	getInv: function (missionaryId, cb) {
 		db.query(
-			'SELECT inv.name, inv.bd, inv.id, inv.address, inv.areaId, inv.nickName, inv.OrderDate, inv.gender, inv.phoneNumber FROM inv '+
+			'SELECT inv.name, inv.bd, inv.id, inv.address, inv.areaId, inv.nickName, inv.OrderDate, inv.gender, inv.phoneNumber, inv.summary FROM inv '+
 			'LEFT JOIN missionaries m ON inv.areaId = m.areaId '+
 			'WHERE m.id = ?',
 			[missionaryId], cb)},
@@ -263,8 +263,8 @@ module.exports = {
 				})
 			})},
 	updateInv: function (inv, cb) {
-		db.query('UPDATE inv SET nickName = ?, name = ?, bd = ?, gender = ?, areaId = ? WHERE id = ?',
-			[inv.nickName, inv.name, inv.bd, inv.gender, inv.areaId, inv.id], cb)},
+		db.query('UPDATE inv SET nickName = ?, name = ?, bd = ?, gender = ?, phoneNumber = ?, address = ?, areaId = ? WHERE id = ?',
+			[inv.nickName, inv.name, inv.bd, inv.gender, inv.phoneNumber, inv.address, inv.areaId, inv.id], cb)},
 	bapInv: function (inv, from, cb) {
 		var self = this
 		self.findUnits(from, (error, results) => {
