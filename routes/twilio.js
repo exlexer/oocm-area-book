@@ -5,7 +5,7 @@ var dbUtils = require('../db/utils')
 module.exports = function(app) {
 
 	function resendText (text, from) {
-	var params = text.split('@ ')
+	var params = text.split(/ *@ */g)
 	  dbUtils.findArea(from, (error, results) => {
 	    var action = params.shift().toLowerCase()
 	    twilioRoute[action](params, results[0].id, (error, response) => {
@@ -17,7 +17,7 @@ module.exports = function(app) {
 
 	app.route('/message')
 		.post((req, res) => {
-			var params = req.body.Body.split('@ ')
+			var params = req.body.Body.split(/ *@ */g)
 			dbUtils.findArea(req.body.From, (error, results) => {
 				var action = params.shift().toLowerCase()
 				twilioRoute[action](params, results[0].id, (error, response) => {

@@ -25,7 +25,7 @@ module.exports = {
 		ss.recieveToken(code, cb)
 	},
 
-	// only workswhen there are less actives
+	// only works when there are less actives
 	exportRc: function(stakeId, cb) {
 		dbUtils.getStakeRcs(stakeId, (error, response) => {
 			// If there is a spreadsheet made for stake, it updates sheet and

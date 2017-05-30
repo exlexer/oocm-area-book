@@ -1,22 +1,23 @@
 var db = require('../db/index')
 var dbUtils = require('../db/utils')
-var twilio = require('twilio')
-var send = require('./send')
+var inv = require('../db/inv')
+var rc = require('../db/rc')
+var lesson = require('../db/lesson')
 
 
 module.exports =  {
 	ni: function (params, from, cb) {
-		dbUtils.newInv(params[0], params[1], params[2], params[3], from, cb)
+		inv.new(params[0], params[1], params[2], params[3], from, cb)
 	},
 	inv: function (params, from, cb) {
 		if(params[0]) {
-			dbUtils.findInv(params[0], from, (error, results) => {
+			inv.find(params[0], from, (error, results) => {
 				var message = results[0].name + ', ' + results[0].address + ', ' + results[0].phoneNumber + ';'
 
 				cb(null, message)				
 			})
 		} else {
-			dbUtils.getAreaInv(from, (error, results) => {
+			inv.getArea(from, (error, results) => {
 					if (error) { console.error('Error Getting Commitments: ', error) }
 					var message = '';
 					for (var i = 0; i < results.length; i++) {
@@ -49,7 +50,6 @@ module.exports =  {
 	ht: function (params, from, cb) {
 		// insert hters names into recent converts
 		dbUtils.findUnits(from, (error, results) => {
-			console.log(params[1], results[0].unitId, params[0])
 			db.query(
 				'UPDATE rc SET hters = ? WHERE name = ? AND unitId = ?',
 				[params[1], params[0], results[0].unitId],
@@ -69,9 +69,9 @@ module.exports =  {
 		})		
 	},
 	bap: function (params, from, cb) {
-		dbUtils.findInv(params[0], from, (error, results) => {
+		inv.find(params[0], from, (error, results) => {
 			if (error) { console.error('Error Finding Inv: ', error) }
-			dbUtils.bapInv(results[0], from, (error, results) => {
+			inv.baptize(results[0], from, (error, results) => {
 				if (error) { console.error('Error Saving Baptism: ', error) }
 				cb(error, 'Congrats on the Baptism!')
 			})
@@ -79,7 +79,7 @@ module.exports =  {
 	},
 	bd: function (params, from, cb) {
 		// insert bd into inv
-		dbUtils.findInv(params[0], from, (error, results) => {
+		inv.find(params[0], from, (error, results) => {
 			if (error) { console.error('Error Finding Inv: ', error) }
 			db.query(
 				'UPDATE inv SET bd = ? WHERE id = ?',
@@ -92,22 +92,21 @@ module.exports =  {
 	church: function (params, from, cb) {
 		// cycle through rest of params
 		for (var i = 0; i < params.length; i++) {
-			console.log(params[i])
 			// add instance in church_attend as either RC or Inv
 			dbUtils.findInvOrRc(params[i], from,
 				(error, results) => {
 					if (error) { console.error('Error Finding Inv: ', error) }
-					dbUtils.invAtChurch(results[0].id, cb)
+					inv.church(results[0].id, cb)
 				}, (error, results) => {
 					if (error) { console.error('Error Finding Rc: ', error) }
-					dbUtils.rcAtChurch(results[0].id, cb);		
+					rc.church(results[0].id, cb);		
 				})
 			}
 	},
 	drop: function (params, from, cb) {
 		dbUtils.findInv(params[0], from, (error, results) => {
 			if (error) { console.error('Error Finding Inv: ', error) }
-			dbUtils.dropInv(results[0], params[1], (error, results) => {
+			inv.drop(results[0], params[1], (error, results) => {
 				if (error) { console.error('Error Dropping Inv: ', error) }
 				(error, results) => cb(error, 'Investigator Dropped')
 			})

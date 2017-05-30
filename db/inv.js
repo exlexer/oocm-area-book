@@ -1,0 +1,65 @@
+var db = require('./index')
+var rc = require('./rc')
+var lesson = require('./lesson')
+
+module.exports = {
+	church: function (invId, cb) {
+		db.query(
+			'INSERT INTO church_attend (invId) VALUES (?)',
+			[invId], cb
+		)
+	},
+	get: function (missionaryId, cb) {
+		db.query(
+			'SELECT inv.name, inv.bd, inv.id, inv.address, '+
+			'inv.areaId, inv.nickName, inv.OrderDate, inv.gender, '+
+			'inv.phoneNumber, inv.summary FROM inv '+
+			'LEFT JOIN missionaries m ON inv.areaId = m.areaId '+
+			'WHERE m.id = ?',
+			[missionaryId], cb
+		)
+	},
+	getArea: function (areaId, cb) {
+		db.query(
+			'SELECT name FROM inv WHERE areaId = ?', areaId, cb
+		)
+	},
+	delete: function (invId, cb) {
+		db.query('DELETE FROM inv WHERE id = ?',
+			[invId], cb)},
+	find: function (name, areaId, cb) {
+		db.query('SELECT * FROM inv WHERE name = ? OR nickName = ? AND areaId = ?',
+			[name, name, areaId], cb)},
+	new: function (name, summary, phoneNumber, address, areaId, cb) {
+		db.query('INSERT INTO inv (name, summary, phoneNumber, address, areaId) VALUES (?,?,?,?,?)',
+			[name, summary, phoneNumber, address, areaId], (error, results) => cb(error, 'New Investigator Recieved'))},
+	drop: function (inv, reason, cb) {
+		var self = this
+		db.query('INSERT INTO former (name, nickName, dropReason, address, phoneNumber, areaId, gender) VALUES (?,?,?,?,?,?,?)',
+			[inv.name, inv.nickName, reason, inv.address, inv.phoneNumber, inv.areaId, inv.gender], (error, results) => {
+				var formerId = results.insertId;
+				db.query('UPDATE lessons SET formerId = ?  WHERE invId = ?', [formerId, inv.id], (error, results) => {
+					db.query('UPDATE lessons SET invId = null WHERE formerId = ?', [formerId], (error, results) => {
+						self.delete(inv.id, cb)
+					})
+				})
+			})},
+	update: function (inv, cb) {
+		db.query('UPDATE inv SET nickName = ?, name = ?, bd = ?, gender = ?, phoneNumber = ?, address = ?, areaId = ?, summary = ? WHERE id = ?',
+			[inv.nickName, inv.name, inv.bd, inv.gender, inv.phoneNumber, inv.address, inv.areaId, inv.summary, inv.id], cb)},
+	baptize: function (inv, from, cb) {
+		var self = this
+		self.findUnits(from, (error, results) => {
+			// Inserts into correct unit
+			rc.new(inv.name, inv.bd, results[0].unitId, inv.age, inv.gender,
+				(error, results) => {
+					lesson.update(null, results.insertId, null, 'invId', inv.id, cb)
+					self.delete(inv.id, cb)
+					db.query(
+						'INSERT INTO bap (areaId, rcId) VALUES (?,?)',
+						[from, results.insertId],
+						cb)
+				}
+			)
+		})}
+}
