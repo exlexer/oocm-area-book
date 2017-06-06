@@ -4,6 +4,7 @@ var churchRoutes = require('./church.js')
 var ssRoutes = require('./ss.js')
 var twilioRoutes = require('./twilio.js')
 var missionRoutes = require('./mission.js')
+var user = require('../db/user')
 
 module.exports = function(app) {
 
@@ -15,14 +16,14 @@ module.exports = function(app) {
 
 	app.route('/user')
 		.get((req, res) => {
-			dbUtils.getUser(req.session.passport.user, (error, results) => {
+			user.get(req.session.passport.user, (error, results) => {
 				res.send(results)
 			})
 		})
 		.post((req, res) => {
 			if (req.body.newPassword) {
 				dbUtils.checkPass(req.body.password, req.session.passport.user, () => {
-					dbUtils.updateUser(req.body.name, req.body.email, req.body.newPassword, req.session.passport.user, (error, results) => {
+					user.update(req.body.name, req.body.email, req.body.newPassword, req.session.passport.user, (error, results) => {
 						res.send('Password Correct!')
 					})
 				}, () => {
