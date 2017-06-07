@@ -1,5 +1,4 @@
 var db = require('./index')
-var Nums = require('../data_manage/nums')
 var SHA256 = require("crypto-js/sha256")
 
 module.exports = {
@@ -10,7 +9,19 @@ module.exports = {
 		db.query(query, params, cb)
 	},
 	get: function (id, cb) {
-		db.query('SELECT name, email, leadership FROM missionaries WHERE id = ?',
+		db.query('SELECT name, email, leadership, areaId FROM missionaries WHERE id = ?',
 			[id], cb)
+	},
+	check: function (pw, id, passCb, failCb) {
+		db.query('SELECT password FROM missionaries WHERE id = ?',
+			[id], (error, results) => {
+				var userPW = SHA256(pw).toString()
+				if ( results[0].password === userPW ) {
+					passCb()
+				} else {
+					failCb()
+				}
+			}
+		)
 	}
 }

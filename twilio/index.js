@@ -2,13 +2,20 @@ var db = require('../db/index')
 var dbUtils = require('../db/utils')
 var inv = require('../db/inv')
 var rc = require('../db/rc')
+var unit = require('../db/unit')
 var lesson = require('../db/lesson')
+var former = require('../db/former')
+var commit = require('../db/commit')
 
-
+// Functions are run as first parameter of an incoming text
 module.exports =  {
+
+	// Creates a new investigator
 	ni: function (params, from, cb) {
 		inv.new(params[0], params[1], params[2], params[3], from, cb)
 	},
+
+	// Responds with a list of investigators or the info from a specific investigator, depending on parameters
 	inv: function (params, from, cb) {
 		if(params[0]) {
 			inv.find(params[0], from, (error, results) => {
@@ -27,6 +34,8 @@ module.exports =  {
 			})
 		}
 	},
+
+	// Creates a lesson for an Investigator or a Recent Convert
 	lesson: function (params, from, cb) {
 		dbUtils.findInvOrRc(params[0], from,
 		(error, results) => {
@@ -47,9 +56,10 @@ module.exports =  {
 			}
 		})
 	},
+
+	// Adds Home Teachers into Recent Convert
 	ht: function (params, from, cb) {
-		// insert hters names into recent converts
-		dbUtils.findUnits(from, (error, results) => {
+		unit.find(from, (error, results) => {
 			db.query(
 				'UPDATE rc SET hters = ? WHERE name = ? AND unitId = ?',
 				[params[1], params[0], results[0].unitId],
@@ -57,9 +67,11 @@ module.exports =  {
 			)
 		})
 	},
+
+	// Adds Visiting Teachers into Recent converts, as of right now it does not check gender
 	vt: function (params, from, cb) {
 		// insert vters names into recent converts
-		dbUtils.findUnits(from, (error, results) => {
+		unit.find(from, (error, results) => {
 			if (error) { console.error('Error Finding Units: ', error) }
 			db.query(
 				'UPDATE rc SET vters = ? WHERE name = ? AND unitId = ?',
@@ -68,6 +80,8 @@ module.exports =  {
 			)
 		})		
 	},
+
+	// Moves an Investigator to a Recent Convert, adds a baptism
 	bap: function (params, from, cb) {
 		inv.find(params[0], from, (error, results) => {
 			if (error) { console.error('Error Finding Inv: ', error) }
@@ -77,8 +91,9 @@ module.exports =  {
 			})
 		})
 	},
+
+	// Adds a Baptismal Date into an Investigator
 	bd: function (params, from, cb) {
-		// insert bd into inv
 		inv.find(params[0], from, (error, results) => {
 			if (error) { console.error('Error Finding Inv: ', error) }
 			db.query(
@@ -87,8 +102,12 @@ module.exports =  {
 				cb(error, 'Baptism Date Recieved'));
 		})
 	},
+
+	// Should add temple data to a Recent Convert
 	temple: function (params, from, cb) {
 	},
+
+	// Adds a church attendance row for all of the Recent Converts or Investigators in the text
 	church: function (params, from, cb) {
 		// cycle through rest of params
 		for (var i = 0; i < params.length; i++) {
@@ -103,6 +122,8 @@ module.exports =  {
 				})
 			}
 	},
+
+	// Moves an Investigator to a Former
 	drop: function (params, from, cb) {
 		dbUtils.findInv(params[0], from, (error, results) => {
 			if (error) { console.error('Error Finding Inv: ', error) }
@@ -112,23 +133,27 @@ module.exports =  {
 			})
 		})
 	},
+
+	// Moves a Former to an Investigator
 	pickup: function (params, from, cb) {
-		dbUtils.findFormer(params[0], from, (error, results) => {
+		former.find(params[0], from, (error, results) => {
 				if (error) { console.error('Error Finding Former: ', error) }
-			dbUtils.pickupInv(results[0], params[1], (error, results) => {
+			inv.pickup(results[0], params[1], (error, results) => {
 				if (error) { console.error('Error Picking Up Inv: ', error) }
 				cb(error, 'Investigator Picked Up!')
 			})
 		})
 	},
+
+	// Creates commitment or responds with commitments based on parameters send
 	commit: function (params, from, cb) {
 		if (params[0]) {
-			dbUtils.addCommitment(params[0], from, params[1], params[2], (error, results) => {
+			commit.new(params[0], from, params[1], params[2], (error, results) => {
 				if (error) { console.error('Error Saving Commitment: ', error) }
 				cb(error, 'Commitment Recieved')
 			})
 		} else {
-			dbUtils.getCommitments(from, (error, results) => {
+			commit.get(from, (error, results) => {
 				if (error) { console.error('Error Getting Commitments: ', error) }
 				var message = ''
 				for (var i = 0; i < results.length; i++) {
@@ -139,8 +164,10 @@ module.exports =  {
 			})
 		}
 	},
+
+	// Deletes a commitment
 	followup: function (params, from, cb) {
-		dbUtils.followUp(params[0], params[1], from, (error, results) => {
+		commit.followUp(params[0], params[1], from, (error, results) => {
 			if (error) { console.error('Error Following Up: ', error) }
 			cb(error, 'Way to Follow Up!')
 		})

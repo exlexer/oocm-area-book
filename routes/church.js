@@ -1,6 +1,7 @@
-'use strict'
-
 var db = require('../db/index.js')
+var area = require('../db/area.js')
+var rc = require('../db/rc.js')
+var unit = require('../db/unit.js')
 var dbUtils = require('../db/utils.js')
 
 module.exports = function(app) {
@@ -36,17 +37,17 @@ module.exports = function(app) {
 		.post(function (req, res) {
 			var data = req.body;
 			if (data.del) {
-				dbUtils.deleteUnit(data.id, (error, results) => {	res.send() })
+				unit.delete(data.id, (error, results) => {	res.send() })
 			} else {
-				dbUtils.updateUnit(data.name, data.stakeId, data.id, (error, results) => { res.send()	})
+				unit.update(data.name, data.stakeId, data.id, (error, results) => { res.send()	})
 			};
 		})
 
 	app.route('/rc')
 		.get(function (req, res) {
-			dbUtils.getAreaRcs(req.session.passport.user,	(error, results) => {	res.send(results)	})
+			area.getRcs(req.session.passport.user,	(error, results) => {	res.send(results)	})
 		})
 		.post(function (req, res) {
-			dbUtils.updateRc(req.body, (error, results) => { res.send() })
+			rc.update(req.body, (error, results) => { res.send() })
 		})
 }

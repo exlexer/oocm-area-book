@@ -12,5 +12,10 @@ module.exports = {
 	},
 	get: function (cb) {
 		db.query('SELECT * FROM districts', cb)
+	},
+	getAreas: function (missionaryId, cb) {
+		db.query('SELECT districtId FROM areas WHERE id = ?', [missionaryId], (error, results) => {
+			db.query('SELECT areaId FROM districts WHERE id = ?', [results[0].districtId], cb)
+		})
 	}
 }

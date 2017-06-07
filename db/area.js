@@ -1,5 +1,5 @@
 var db = require('./index')
-var Nums = require('../data_manage/nums')
+var Nums = require('./nums')
 
 module.exports = {
 
@@ -39,7 +39,12 @@ module.exports = {
 			})},
 	find: function (from, cb) {
 		db.query('SELECT id, name FROM areas WHERE phone = ? OR phoneTwo = ?',
-			[from, from], cb)},
+			[from, from], cb)
+	},
+	findUnits: function (areaId, cb) {
+		db.query('SELECT * FROM area_unit WHERE areaId = ?',
+			[areaId], cb)
+	},
 	get: function (cb) {
 		db.query('SELECT * FROM areas', cb)},
 

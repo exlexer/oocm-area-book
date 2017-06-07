@@ -27,12 +27,12 @@ module.exports = {
 
 	// only works when there are less actives
 	exportRc: function(stakeId, cb) {
-		dbUtils.getStakeRcs(stakeId, (error, response) => {
+		stake.getRcs(stakeId, (error, response) => {
 			// If there is a spreadsheet made for stake, it updates sheet and
 			// sends url. if there is no sheet, it creates sheet, updates it and sends it.
 			if (!response[0].sheetId) {
 				this.createSheet(response[0].stakeName, (err, res) => {
-					dbUtils.updateSheetId(stakeId, res.spreadsheetId)
+					stake.updateSheetId(stakeId, res.spreadsheetId)
 					this.updateSheet(res.spreadsheetId, 'A1', this.formatVals(response), cb)
 					cb(res.spreadsheetUrl)
 				}, cb)

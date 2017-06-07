@@ -22,7 +22,7 @@ module.exports = function(app) {
 		})
 		.post((req, res) => {
 			if (req.body.newPassword) {
-				dbUtils.checkPass(req.body.password, req.session.passport.user, () => {
+				user.check(req.body.password, req.session.passport.user, () => {
 					user.update(req.body.name, req.body.email, req.body.newPassword, req.session.passport.user, (error, results) => {
 						res.send('Password Correct!')
 					})

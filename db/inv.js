@@ -1,6 +1,8 @@
 var db = require('./index')
+var utils = require('./utils')
 var rc = require('./rc')
 var lesson = require('./lesson')
+var unit = require('./unit')
 
 module.exports = {
 	church: function (invId, cb) {
@@ -49,7 +51,7 @@ module.exports = {
 			[inv.nickName, inv.name, inv.bd, inv.gender, inv.phoneNumber, inv.address, inv.areaId, inv.summary, inv.id], cb)},
 	baptize: function (inv, from, cb) {
 		var self = this
-		self.findUnits(from, (error, results) => {
+		unit.find(from, (error, results) => {
 			// Inserts into correct unit
 			rc.new(inv.name, inv.bd, results[0].unitId, inv.age, inv.gender,
 				(error, results) => {

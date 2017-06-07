@@ -3,7 +3,7 @@ angular.module('areaBook.totals',[])
 
 		$http.post('/numbers', {leadership : $rootScope.leadership}).then(function (resp) {
 			console.log(resp)
-			$scope.data = resp.data
+			$scope.data = resp.data.counts
 		})
 
 	}])

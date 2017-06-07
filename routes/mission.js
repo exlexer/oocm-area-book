@@ -1,33 +1,40 @@
 var fs = require('fs')
 var dbUtils = require('../db/utils.js')
+var inv = require('../db/inv.js')
+var former = require('../db/former.js')
+var lesson = require('../db/lesson.js')
+var user = require('../db/user.js')
+var area = require('../db/area.js')
+var zone = require('../db/zone.js')
+var district = require('../db/district.js')
 
 module.exports = function(app) {
 
 	app.route('/zones')
 		.get((req, res) => {
-			dbUtils.getZones((error, results) => {
+			zone.get((error, results) => {
 				res.send(results)
 			})
 		})
 		.post((req, res) => {
-			dbUtils.newZone(req.body.name, req.body.stakeId, (error, results) => {
+			zone.new(req.body.name, req.body.stakeId, (error, results) => {
 				res.send(results)
 			})
 		})
 
 	app.route('/districts')
 		.get((req, res) => {
-			dbUtils.getDistricts((error, results) => {
+			district.get((error, results) => {
 				res.send(results)
 			})
 		})
 		.post((req, res) => {
 			if (req.body.update) {
-				dbUtils.updateDistrict(req.body.zoneId, req.body.id, (error, results) => {
+				district.update(req.body.zoneId, req.body.id, (error, results) => {
 						res.send(results)
 				})
 			} else {
-				dbUtils.newDistrict(req.body.name, req.body.zoneId, (error, results) => {
+				district.new(req.body.name, req.body.zoneId, (error, results) => {
 					res.send(results)
 				})
 			}
@@ -35,7 +42,7 @@ module.exports = function(app) {
 
 	app.route('/areas')
 		.get((req, res) => {
-			dbUtils.getAreas((error, results) => {
+			area.get((error, results) => {
 				res.send(results)
 			})
 		})
@@ -43,11 +50,11 @@ module.exports = function(app) {
 			var data = req.body;
 			var units = Array.isArray(data.unitId) ? data.unitId : [data.unitId];
 			if (!data.id) {
-				dbUtils.newArea(data.name, data.phone, data.phoneTwo, data.districtId, units, (error, results) => {
+				area.new(data.name, data.phone, data.phoneTwo, data.districtId, units, (error, results) => {
 					res.send()
 				})
 			} else {
-				dbUtils.updateArea(data.name, data.phone, data.phoneTwo, data.districtId, units, data.id, (error, results) => {
+				area.update(data.name, data.phone, data.phoneTwo, data.districtId, units, data.id, (error, results) => {
 					res.send()
 				})
 			};
@@ -55,55 +62,58 @@ module.exports = function(app) {
 
 	app.route('/inv')
 		.get((req, res) => {
-			dbUtils.getInv(req.session.passport.user, (error, results) => {
+			inv.get(req.session.passport.user, (error, results) => {
 				res.send(results)
 			})
 		})
 		.post((req, res) => {
-			dbUtils.updateInv(req.body, (error, results) => {
+			inv.update(req.body, (error, results) => {
 				res.send()
 			})
 		})
 
 	app.route('/former')
 		.get((req, res) => {
-			dbUtils.getFormer(req.session.passport.user, (error, results) => {
+			former.get(req.session.passport.user, (error, results) => {
 				res.send(results)
 			})
 		})
 
 	app.route('/lesson')
 		.get((req, res) => {
-			dbUtils.getLessons(req.session.passport.user, (error, results) => {
+			lesson.get(req.session.passport.user, (error, results) => {
 				res.send(results)
 			})
 		})
 
 	app.route('/numbers')
 		.post((req, res) => {
-			// dbUtils.getAreaNums(req.session.passport.user, (nums) => {
-				res.send()
+			user.get(req.session.passport.user, (error, results) => {
+				area.getNums(results[0].areaId, null, null, (nums) => {
+					res.send(nums)
+				
+			})
 			// })
 			// if (req.body.leadership !== 'miss' || undefined) {
 			// 	// get numbers for dominion
 			// 	// dbUtils.getDominionNums
-			// }
+			})
 		})
 
 	app.route('/miss')
 		.get((req, res) => {
-			dbUtils.getMissionaries((error, results) => {
+			miss.get((error, results) => {
 				res.send(results)
 			})
 		})
 		.post((req, res) => {
 			if(req.body.id) {
-				dbUtils.updateMissionary(req.body.name, req.body.email, req.body.leadership, req.body.areaId, req.body.id,
+				miss.update(req.body.name, req.body.email, req.body.leadership, req.body.areaId, req.body.id,
 					(error, results) => {
 						res.send(results)
 					})
 			} else {
-				dbUtils.newMissionary(req.body.name, req.body.email, (error, results) => {
+				miss.new(req.body.name, req.body.email, (error, results) => {
 					res.send(results)
 				})
 			}
