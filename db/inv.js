@@ -47,8 +47,9 @@ module.exports = {
 				})
 			})},
 	update: function (inv, cb) {
+		var bd = new Date(inv.bd);
 		db.query('UPDATE inv SET nickName = ?, name = ?, bd = ?, gender = ?, phoneNumber = ?, address = ?, areaId = ?, summary = ? WHERE id = ?',
-			[inv.nickName, inv.name, inv.bd, inv.gender, inv.phoneNumber, inv.address, inv.areaId, inv.summary, inv.id], cb)},
+			[inv.nickName, inv.name, bd, inv.gender, inv.phoneNumber, inv.address, inv.areaId, inv.summary, inv.id], cb)},
 	baptize: function (inv, from, cb) {
 		var self = this
 		unit.find(from, (error, results) => {
