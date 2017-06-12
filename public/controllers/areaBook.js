@@ -91,9 +91,9 @@ angular.module('areaBook.areaBook',[])
 				// .image('img/logo.jpeg')
 				.text($scope.current.name, {align: 'center'})
 				.fontSize(18)
-				.text(str)
 
 			doc.fontSize(12)
+				.text(str)
 
 			doc.text('Phone Number: ' + ($scope.current.phoneNumber || ''))
 				.text('Address: ' + ($scope.current.address || ''))
