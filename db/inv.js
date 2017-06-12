@@ -36,7 +36,6 @@ module.exports = {
 		db.query('INSERT INTO inv (name, summary, phoneNumber, address, areaId) VALUES (?,?,?,?,?)',
 			[name, summary, phoneNumber, address, areaId], (error, results) => cb(error, 'New Investigator Recieved'))},
 	drop: function (inv, reason, cb) {
-		console.log('INVESTIGATOR TO BE DROPPED!',inv)
 		var self = this
 		db.query('INSERT INTO former (name, nickName, dropReason, address, phoneNumber, areaId, gender) VALUES (?,?,?,?,?,?,?)',
 			[inv.name, inv.nickName, reason, inv.address, inv.phoneNumber, inv.areaId, inv.gender], (error, results) => {
