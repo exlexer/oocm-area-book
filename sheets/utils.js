@@ -84,7 +84,7 @@ module.exports = {
 
 		for (var i = 0; i < rcs.length; i++) {
 			var rc = rcs[i]
-			vals.push([rc.unit, rc.name,, rc.age, rc.gender, rc.bd,,, rc.hters, rc.vters,])
+			vals.push([rc.unit, rc.name,, rc.age, rc.gender, rc.bd,,,rc.calling, rc.hters, rc.vters,])
 		};
 		return vals
 	}
