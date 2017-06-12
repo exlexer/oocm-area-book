@@ -125,6 +125,7 @@ module.exports =  {
 
 	// Moves an Investigator to a Former
 	drop: function (params, from, cb) {
+		console.log('PARAMETERS', params)
 		inv.find(params[0], from, (error, results) => {
 			if (error) { console.error('Error Finding Inv: ', error) }
 				console.log('RESULTS FROM FINDING INV: ',results)
