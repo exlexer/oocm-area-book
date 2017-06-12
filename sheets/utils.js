@@ -1,5 +1,6 @@
 var ss = require('./ss.js')
 var dbUtils = require('../db/utils.js')
+var stake = require('../db/stake.js')
 var fs = require('fs')
 var google = require('googleapis')
 var googleAuth = require('google-auth-library')
