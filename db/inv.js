@@ -2,6 +2,7 @@ var db = require('./index')
 var utils = require('./utils')
 var rc = require('./rc')
 var lesson = require('./lesson')
+var former = require('./former')
 var unit = require('./unit')
 
 module.exports = {
@@ -46,6 +47,20 @@ module.exports = {
 					})
 				})
 			})},
+
+	pickup: function (former, cb) {
+		db.query('INSERT INTO inv (name, nickName, address, phoneNumber, areaId, gender) VALUES (?, ?, ?, ?, ?, ?)',
+			[former.name, former.nickName, former.address, former.phoneNumber, former.areaId, former.gender],
+			function (error, results) {
+				var invId = results.insertId;
+				db.query('UPDATE lessons SET invId = ?  WHERE formerId = ?', [invId, former.id], function (error, results) {
+					db.query('UPDATE lessons SET formerId = null WHERE invId = ?', [invId], function (error, results) {
+						former.delete(former.id, cb);
+					})
+				})
+			})},
+
+
 	update: function (inv, cb) {
 		var bd = new Date(inv.bd);
 		db.query('UPDATE inv SET nickName = ?, name = ?, bd = ?, gender = ?, phoneNumber = ?, address = ?, areaId = ?, summary = ? WHERE id = ?',
