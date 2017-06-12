@@ -15,6 +15,7 @@ module.exports = function(app) {
 
 	app.route('/redirectOAuth')
 		.get((req, res) => {
+			console.log(req.query['code'])
 			ssUtils.storeToken(req.query['code'])
 			res.send()
 		})

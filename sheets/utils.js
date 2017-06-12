@@ -11,15 +11,18 @@ var sheets = google.sheets('v4')
 module.exports = {
 	createSheet: function (title, cb, authCb) {
 		ss.auth((auth) => {
-				sheets.spreadsheets.create({
+
+			var request = {
 				resource: {
 					properties: {
 						title: title
 					}
 				},
 				auth: auth
-				}, cb)
-	  	}, authCb)
+			}
+
+			sheets.spreadsheets.create(request, cb);
+  	}, authCb)
 	},
 
 	storeToken: function (code, cb) {
@@ -28,17 +31,19 @@ module.exports = {
 
 	// only works when there are less actives
 	exportRc: function(stakeId, cb) {
+		var self = this
 		stake.getRcs(stakeId, (error, response) => {
 			// If there is a spreadsheet made for stake, it updates sheet and
 			// sends url. if there is no sheet, it creates sheet, updates it and sends it.
 			if (!response[0].sheetId) {
-				this.createSheet(response[0].stakeName, (err, res) => {
+				self.createSheet(response[0].stakeName, (err, res) => {
+					console.log(err)
 					stake.updateSheetId(stakeId, res.spreadsheetId)
-					this.updateSheet(res.spreadsheetId, 'A1', this.formatVals(response), cb)
+					self.updateSheet(res.spreadsheetId, 'A1', self.formatVals(response), cb)
 					cb(res.spreadsheetUrl)
 				}, cb)
 			} else {
-				this.updateSheet(response[0].sheetId, 'A1', this.formatVals(response), cb)
+				self.updateSheet(response[0].sheetId, 'A1', self.formatVals(response), cb)
 	  		cb('https://docs.google.com/spreadsheets/d/' + response[0].sheetId + '/edit')
 			}
 		})
