@@ -125,7 +125,7 @@ module.exports =  {
 
 	// Moves an Investigator to a Former
 	drop: function (params, from, cb) {
-		dbUtils.findInv(params[0], from, (error, results) => {
+		inv.find(params[0], from, (error, results) => {
 			if (error) { console.error('Error Finding Inv: ', error) }
 			inv.drop(results[0], params[1], (error, results) => {
 				if (error) { console.error('Error Dropping Inv: ', error) }
