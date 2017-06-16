@@ -92,12 +92,7 @@ module.exports = function(app) {
 			user.get(req.session.passport.user, (error, results) => {
 				area.getNums(results[0].areaId, null, null, (nums) => {
 					res.send(nums)
-				
-			})
-			// })
-			// if (req.body.leadership !== 'miss' || undefined) {
-			// 	// get numbers for dominion
-			// 	// dbUtils.getDominionNums
+				})
 			})
 		})
 

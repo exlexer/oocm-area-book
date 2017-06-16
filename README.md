@@ -1,27 +1,27 @@
 # AreaBook
 
-Sections of the Repo
+## Sections of the Repo
 
-## auth
+### auth
 
-local copy of passport-local
+local copy of passport-local as well as index.js, which sets up two passport strategies, one for Signup and one for Signin
 
-## db
+### db
 
-Database queries by data-type
+Database queries by data-type, these are exported and used in routes and sms actions
 
-## public
+### public
 
-Front-End built in Angular
+Front-End built in Angular using states to view menu and personalized dashboard
 
-## routes
+### routes
 
-Routes by info-type
+Routes by info-type that send the front end or query the database using the db folder
 
-## sheets
+### sheets
 
-utilities for creating and updating google sheets
+utilities for creating and updating google sheets with recent convert information
 
-## twilio
+### twilio
 
 utilities for recieving and sending messages from twilio
