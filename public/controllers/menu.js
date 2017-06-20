@@ -8,7 +8,8 @@ angular.module('areaBook.menu',[])
 
 		var area = ['Areas', 'areas'],
 				total = ['Totals', 'totals'],
-				areaBook = ['Area Book', 'areaBook']
+				areaBook = ['Area Book', 'areaBook'],
+				info = ['Information', 'info']
 
 		var leadership = {
 			pres : [area, total],
@@ -16,7 +17,7 @@ angular.module('areaBook.menu',[])
 			zone : [total, areaBook],
 			dist : [total, areaBook],
 			estl : [total, areaBook],
-			miss : [total, areaBook]
+			miss : [total, areaBook, info]
 		}
 
 

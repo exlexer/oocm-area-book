@@ -5,6 +5,7 @@ angular.module('areaBook',[
   'areaBook.totals',
   'areaBook.area',
   'areaBook.areaBook',
+  'areaBook.info',
 	'areaBook.main',
   'areaBook.menu'])
   .run(['$rootScope','$location','$http','$state', function ($rootScope, $location, $http, $state) {
@@ -60,6 +61,16 @@ angular.module('areaBook',[
                 'content': {
                   templateUrl: 'templates/totals.html',
                   controller: 'totalsController'
+                }
+            },
+            auth: true
+          })
+      .state('app.menu.info', {
+            url: '/info',
+            views: {
+                'content': {
+                  templateUrl: 'templates/info.html',
+                  controller: 'infoController'
                 }
             },
             auth: true
