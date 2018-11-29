@@ -38,6 +38,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use('/', express.static(path.join(__dirname, 'public')))
 app.use(session({
+  // Update on live
   secret: 'keyboard cat',
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 7
