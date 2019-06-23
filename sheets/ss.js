@@ -79,9 +79,9 @@ function getNewToken (oauth2Client, cb) {
 
 // Does not work in Dev
 function getClient () {
-  var clientId = process.env.OAUTH_CLIENT_ID || '980683034451-ifotvf7fq1sh616suak8op8uta0b8gg0.apps.googleusercontent.com'
-  var clientSecret = process.env.OAUTH_CLIENT_SECRET || 'risyJJVIpCx4NpUdOmydqED0'
-  var redirectUrl = process.env.SHEET_REDIRECT_URL || 'http://localhost:3000/redirectOAuth'
+  var clientId = process.env.OAUTH_CLIENT_ID
+  var clientSecret = process.env.OAUTH_CLIENT_SECRET
+  var redirectUrl = process.env.SHEET_REDIRECT_URL
   var auth = new googleAuth()
   return new auth.OAuth2(clientId, clientSecret, redirectUrl)
 }
