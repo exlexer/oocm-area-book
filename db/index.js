@@ -12,11 +12,11 @@ if (process.env.RDS_HOSTNAME) {
 	}
 } else {
 	options = {
-		host : 'aa4qb7hf7vsrnu.cvomhhylmjnk.us-west-2.rds.amazonaws.com',
-	  port : '3306',
-	  user : 'oocm',
-	  password : 'masterpass',
-	  database : 'ebdb'
+		host : 'HOST HERE',
+	  	port : '3306',
+	  	user : 'USER HERE',
+	  	password : 'PASSWORD HERE',
+	  	database : 'DATABASE HERE'
 	}
 }
 
